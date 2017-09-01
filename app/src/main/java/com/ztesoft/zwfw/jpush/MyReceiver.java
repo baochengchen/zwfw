@@ -8,10 +8,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.ztesoft.zwfw.Config;
-import com.ztesoft.zwfw.WorkChatActivity;
 import com.ztesoft.zwfw.moudle.MainActivity;
-import com.ztesoft.zwfw.utils.APPPreferenceManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;

@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.bigkoo.pickerview.TimePickerView;
 import com.ztesoft.zwfw.base.BaseActivity;
@@ -34,8 +35,16 @@ public class TaskQueryActivity extends BaseActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task_query);
-        mSpinner = (Spinner) findViewById(R.id.spinner);
+        TextView csTitile = (TextView) findViewById(R.id.cs_title);
+        csTitile.setText(getString(R.string.task_query));
+        findViewById(R.id.cs_back).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
 
+        mSpinner = (Spinner) findViewById(R.id.spinner);
         mCodeEdt = (EditText) findViewById(R.id.code_edit);
         mMutiLayout = (LinearLayout) findViewById(R.id.multiple_layout);
 

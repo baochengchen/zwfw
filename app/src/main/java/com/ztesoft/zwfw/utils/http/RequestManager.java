@@ -94,12 +94,8 @@ public class RequestManager {
     public LoadController postHeader(final String url, Object object, final RequestListener requestListener, int actionId) {
         HashMap<String, String> headers = new HashMap<>();
         headers.put("Content-Type", "application/json");
-       /* headers.put("Accept", "application/json");
-        headers.put("Referer", "http://www.cc");
-        headers.put("User-Agent", "www Spot");*/
         Log.d("bcc", APPPreferenceManager.getInstance().getString(context,"session"));
         headers.put("Cookie",APPPreferenceManager.getInstance().getString(context,"session"));
-        //context.startActivity(new Intent(context, LoginActivity.class));
         return this.request(Method.POST, url, object, requestListener, actionId, headers);
     }
 

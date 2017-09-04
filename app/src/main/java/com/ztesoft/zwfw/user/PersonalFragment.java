@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,15 +24,21 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.alibaba.fastjson.JSONArray;
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.ztesoft.zwfw.Config;
+import com.ztesoft.zwfw.domain.HeaderPic;
 import com.ztesoft.zwfw.moudle.LoginActivity;
 import com.ztesoft.zwfw.R;
 import com.ztesoft.zwfw.base.BaseFragment;
 import com.ztesoft.zwfw.utils.APPPreferenceManager;
+import com.ztesoft.zwfw.utils.http.RequestManager;
+import com.ztesoft.zwfw.utils.http.RequestMap;
 import com.ztesoft.zwfw.widget.CircleImageView;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.List;
 
 /**
  * Created by BaoChengchen on 2017/8/17.
@@ -85,15 +92,41 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
 
         mHeaderView = (CircleImageView) mView.findViewById(R.id.header_img);
         mHeaderView.setOnClickListener(this);
-        //mHeaderView.set
+        if(TextUtils.isEmpty(APPPreferenceManager.getInstance().getString(getActivity(),"headerURL"))){
+            //调用头像接口
+        }else{
+            ImageLoader.getInstance().displayImage(APPPreferenceManager.getInstance().getString(getActivity(),"headerURL"),mHeaderView);
+        }
+
 
         mLogoffBt = (Button) mView.findViewById(R.id.logoff_btn);
         mLogoffBt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                APPPreferenceManager.getInstance().saveObject(getActivity(), Config.IS_LOGIN, false);
-                startActivity(new Intent(getActivity(), LoginActivity.class));
-                getActivity().finish();
+
+                RequestManager.getInstance().postHeader(Config.BASE_URL + Config.URL_LOGOUT, "{}", new RequestManager.RequestListener() {
+                    @Override
+                    public void onRequest(String url, int actionId) {
+
+                    }
+
+                    @Override
+                    public void onSuccess(String response, String url, int actionId) {
+                        APPPreferenceManager.getInstance().saveObject(getActivity(), Config.IS_LOGIN, false);
+                        startActivity(new Intent(getActivity(), LoginActivity.class));
+                        getActivity().finish();
+                    }
+
+                    @Override
+                    public void onError(String errorMsg, String url, int actionId) {
+                        if(TextUtils.equals("Server Response Error (400)",errorMsg)){
+                            Toast.makeText(getActivity(),"会话超时",Toast.LENGTH_SHORT).show();
+                            APPPreferenceManager.getInstance().saveObject(getActivity(), Config.IS_LOGIN, false);
+                            startActivity(new Intent(getActivity(),LoginActivity.class));
+                            getActivity().finish();
+                        }
+                    }
+                },0);
             }
         });
 
@@ -234,6 +267,7 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
             try {
                 b = new FileOutputStream(headImgPath);
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, b);// 把数据写入文件
+                savePictoServer();
             } catch (Exception e) {
                 // TODO: handle exception
                 e.printStackTrace();
@@ -248,6 +282,31 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
                 mHeaderView.setImageBitmap(bitmap);
             }
         }
+    }
+
+    private void savePictoServer() {
+        RequestMap map = new RequestMap();
+        map.put("FILE",new File(headImgPath));
+        RequestManager.getInstance().upload(Config.BASE_URL+Config.URL_ATTACHMENT, map, new RequestManager.RequestListener() {
+            @Override
+            public void onRequest(String url, int actionId) {
+            }
+
+            @Override
+            public void onSuccess(String response, String url, int actionId) {
+                List<HeaderPic> headerPics = JSONArray.parseArray(response,HeaderPic.class);
+                if(headerPics!=null&&headerPics.size()>0){
+                    APPPreferenceManager.getInstance().saveObject(getActivity(),"headerURL",Config.BASE_URL+Config.URL_ATTACHMENT+"/"+headerPics.get(0).getId());
+                }else{
+                    Toast.makeText(getActivity(),"上传头像失败",Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onError(String errorMsg, String url, int actionId) {
+                Toast.makeText(getActivity(),"上传头像失败",Toast.LENGTH_SHORT).show();
+            }
+        },0);
     }
 
     public void startPhotoZoom(Uri uri) {

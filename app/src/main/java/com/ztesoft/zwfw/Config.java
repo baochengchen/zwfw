@@ -16,5 +16,9 @@ public class Config {
 
     public static final String URL_QRYSUPERVISE="portal/rest/supervision/supervisionwork/queryMySupervisionList";
 
+    public static final String URL_ATTACHMENT="portal/rest/attachment";
+
+    public static final String URL_LOGOUT="portal/logout";
+
     public static final String IS_LOGIN = "islogin";
 }

@@ -98,6 +98,7 @@
         android:padding="3dp"
         android:textSize="@dimen/normal_text_size"
         android:textColor="@color/white"
+        android:visibility="gone"
         android:text="@string/forget_pwd"/>
 
 </LinearLayout>

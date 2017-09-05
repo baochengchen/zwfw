@@ -73,6 +73,8 @@ public class RequestManager {
     }
 
     public LoadController getHeader(final String url, final RequestListener requestListener, int actionId, HashMap<String, String> headers) {
+        headers.put("Content-Type", "application/json");
+        headers.put("Cookie",APPPreferenceManager.getInstance().getString(context,"session"));
         return this.request(Method.GET, url, null, requestListener, actionId, headers);
     }
 

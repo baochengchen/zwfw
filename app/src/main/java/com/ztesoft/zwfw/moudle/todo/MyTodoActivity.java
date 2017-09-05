@@ -15,10 +15,12 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
+import com.ztesoft.zwfw.Config;
 import com.ztesoft.zwfw.R;
 import com.ztesoft.zwfw.TaskDetailActivity;
 import com.ztesoft.zwfw.base.BaseActivity;
 import com.ztesoft.zwfw.domain.Task;
+import com.ztesoft.zwfw.utils.APPPreferenceManager;
 import com.ztesoft.zwfw.widget.PagerSlidingTabStrip;
 
 import java.util.ArrayList;
@@ -52,12 +54,26 @@ public class MyTodoActivity extends BaseActivity {
     private void initViews() {
 
         mFragments = new ArrayList<>();
-        TaskFragment taskFragment = TaskFragment.newInstance();
-        ConsultFragment consultFragment = ConsultFragment.newInstance();
-        SuperviseFragment superviseFragment = SuperviseFragment.newInstance();
-        mFragments.add(taskFragment);
-        mFragments.add(consultFragment);
-        mFragments.add(superviseFragment);
+        String role = APPPreferenceManager.getInstance().getString(mContext,Config.CURRENT_ROLE);
+        if(role.equals(Config.RoleType.OSP.getName())){
+           mPagerTitles = new String[]{"办件待处理","咨询投诉待回复","催/督办件待处理"};
+            TaskFragment taskFragment = TaskFragment.newInstance();
+            ConsultFragment consultFragment = ConsultFragment.newInstance();
+            SuperviseFragment superviseFragment = SuperviseFragment.newInstance();
+            mFragments.add(taskFragment);
+            mFragments.add(consultFragment);
+            mFragments.add(superviseFragment);
+        }else if(role.equals(Config.RoleType.OJD.getName())){
+            mPagerTitles = new String[]{"咨询投诉待回复","催/督办件待处理"};
+            ConsultFragment consultFragment = ConsultFragment.newInstance();
+            SuperviseFragment superviseFragment = SuperviseFragment.newInstance();
+            mFragments.add(consultFragment);
+            mFragments.add(superviseFragment);
+
+        }
+
+
+
 
         mPagerStrip = (PagerSlidingTabStrip) findViewById(R.id.pager_strip);
         mViewPager = (ViewPager) findViewById(R.id.view_pager);

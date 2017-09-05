@@ -1,10 +1,12 @@
 package com.ztesoft.zwfw.domain;
 
+import java.io.Serializable;
+
 /**
  * Created by BaoChengchen on 2017/8/31.
  */
 
-public class Type {
+public class Type implements Serializable{
 
     public String code;
     public String title;

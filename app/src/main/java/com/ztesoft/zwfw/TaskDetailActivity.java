@@ -9,18 +9,23 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
+import com.ztesoft.zwfw.domain.Consult;
 import com.ztesoft.zwfw.domain.Task;
 import com.ztesoft.zwfw.widget.SegmentView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class TaskDetailActivity extends AppCompatActivity implements SegmentView.OnSegmentViewClickListener{
+public class TaskDetailActivity extends AppCompatActivity implements SegmentView.OnSegmentViewClickListener {
+
+    public static final String TYPE_TASK = "type_task";
+    public static final String TYPE_CONSULT = "type_consult";
+    public static final String TYPE_SUPERVISE = "type_supervise";
 
     SegmentView mSegView;
     ViewPager mViewPager;
     private List<Fragment> mFragments;
-    private Task mtask;
+    private Object mData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,15 +42,18 @@ public class TaskDetailActivity extends AppCompatActivity implements SegmentView
         });
 
 
-        mtask = (Task) getIntent().getSerializableExtra("task");
+
+        mData =  getIntent().getSerializableExtra("data");
+
         mSegView = (SegmentView) findViewById(R.id.seg_task_detail);
-        mSegView.setSegmentText("申请信息", "流程痕迹");
+        mSegView.setSegmentText("申请信息", "流转痕迹");
         mSegView.setOnSegmentViewClickListener(this);
         mViewPager = (ViewPager) findViewById(R.id.view_pager);
 
         mFragments = new ArrayList<>();
-        ApplyInfoFragment applyInfoFragment = ApplyInfoFragment.newInstance(mtask);
-        ProcessTraceFragment processTraceFragment = ProcessTraceFragment.newInstance();
+
+        ApplyInfoFragment applyInfoFragment = ApplyInfoFragment.newInstance(mData);
+        ProcessTraceFragment processTraceFragment = ProcessTraceFragment.newInstance(mData);
         mFragments.add(applyInfoFragment);
         mFragments.add(processTraceFragment);
         mViewPager.setAdapter(new TaskDetailFragmentPagerAdapter(getSupportFragmentManager()));
@@ -66,8 +74,8 @@ public class TaskDetailActivity extends AppCompatActivity implements SegmentView
             }
         });
 
-
         mViewPager.setCurrentItem(0);
+
     }
 
     @Override
@@ -76,7 +84,7 @@ public class TaskDetailActivity extends AppCompatActivity implements SegmentView
     }
 
 
-    class TaskDetailFragmentPagerAdapter extends FragmentPagerAdapter{
+    class TaskDetailFragmentPagerAdapter extends FragmentPagerAdapter {
 
         public TaskDetailFragmentPagerAdapter(FragmentManager fm) {
             super(fm);

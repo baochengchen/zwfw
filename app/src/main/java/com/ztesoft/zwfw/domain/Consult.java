@@ -3,7 +3,7 @@ package com.ztesoft.zwfw.domain;
 import java.io.Serializable;
 
 /**
- * Created by 董睿 on 2017/8/31.
+ * Created by BaoChengchen on 2017/8/31.
  */
 
 public class Consult implements Serializable {
@@ -18,15 +18,8 @@ public class Consult implements Serializable {
     private String webUserId;
     private String webUserName;
     private String phone;
-    private InteractionType interactionType;
+    private Type interactionType;
     private String createDate;
-
-    class InteractionType {
-        String code;
-        String title;
-    }
-
-
 
 
     public String getId() {
@@ -117,11 +110,11 @@ public class Consult implements Serializable {
         this.phone = phone;
     }
 
-    public InteractionType getInteractionType() {
+    public Type getInteractionType() {
         return interactionType;
     }
 
-    public void setInteractionType(InteractionType interactionType) {
+    public void setInteractionType(Type interactionType) {
         this.interactionType = interactionType;
     }
 

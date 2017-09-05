@@ -10,6 +10,7 @@
         android:orientation="vertical">
 
         <LinearLayout
+            android:id="@+id/apply_info_task_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -17,11 +18,10 @@
             android:padding="@dimen/activity_horizontal_margin">
             
             <TextView
-                android:id="@+id/title_tv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textStyle="bold"
-                android:textColor="@color/black"
+                android:text="办件人基本信息"
                 android:textSize="@dimen/large_text_size"/>
 
             <TextView
@@ -39,10 +39,12 @@
             <include
                 layout="@layout/apply_info_merge"/>
 
-
-            
         </LinearLayout>
 
+
+        <include
+            android:id="@+id/apply_info_web_layout"
+            layout="@layout/fragment_apply_info_web"/>
 
     </LinearLayout>
 

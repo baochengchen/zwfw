@@ -1,25 +1,16 @@
 package com.ztesoft.zwfw.moudle.todo;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.BaseAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
 
-import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.ztesoft.zwfw.Config;
 import com.ztesoft.zwfw.R;
-import com.ztesoft.zwfw.TaskDetailActivity;
 import com.ztesoft.zwfw.base.BaseActivity;
-import com.ztesoft.zwfw.domain.Task;
 import com.ztesoft.zwfw.utils.APPPreferenceManager;
 import com.ztesoft.zwfw.widget.PagerSlidingTabStrip;
 

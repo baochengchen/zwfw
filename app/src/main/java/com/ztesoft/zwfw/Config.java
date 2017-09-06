@@ -13,13 +13,19 @@ public class Config {
 
     public static final String URL_QRYWORKLIST = "portal/rest/sgsp/mywork/qryMyWorkList";
 
+    public static final String URL_SEARCHFLOWBUTTONDTO = "/portal/rest/commons/searchFlowButtonDto";
+
+    public static final String URL_EXCUTEBIZPROCESS="/portal/rest/commons/excuteBizProcess";
+
     public static final String URL_QRYINTERACTION = "portal/rest/web/websiteinteraction/queryInterAction";
 
     public static final String URL_QRYSUPERVISE = "portal/rest/supervision/supervisionwork/queryMySupervisionList";
 
-    public static final String URL_SEARCHFRONTSTARTINFO ="portal/rest/commons/searchFrontStartInfo";
+    public static final String URL_SEARCHFRONTSTARTINFO = "portal/rest/commons/searchFrontStartInfo";
 
-    public static final String URL_SEARCHFRONTEXCUTELIST ="portal/rest/commons/searchFrontExcuteList";
+    public static final String URL_SEARCHFRONTEXCUTELIST = "portal/rest/commons/searchFrontExcuteList";
+
+    public static final String URL_QUERYBIZINFOBYID = "portal/rest/supervision/supervisionwork/queryBizInfoById";
 
     public static final String URL_ATTACHMENT = "portal/rest/attachment";
 
@@ -30,12 +36,12 @@ public class Config {
     public static final String CURRENT_ROLE = "currentRole";
 
 
-
-    public static enum  RoleType{
-        OSP("OSP",1), OJD("OJD",2);
+    public static enum RoleType {
+        OSP("OSP", 1), OJD("OJD", 2);
 
         private String name;
         private int index;
+
         RoleType(String name, int index) {
             this.name = name;
             this.index = index;

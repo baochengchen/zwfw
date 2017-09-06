@@ -1,12 +1,14 @@
 package com.ztesoft.zwfw.moudle.todo;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -19,9 +21,7 @@ import com.ztesoft.zwfw.Config;
 import com.ztesoft.zwfw.R;
 import com.ztesoft.zwfw.base.BaseFragment;
 import com.ztesoft.zwfw.domain.Supervise;
-import com.ztesoft.zwfw.domain.Task;
 import com.ztesoft.zwfw.domain.resp.QuerySuperviseListResp;
-import com.ztesoft.zwfw.domain.resp.QueryTaskListResp;
 import com.ztesoft.zwfw.utils.http.RequestManager;
 
 import java.util.ArrayList;
@@ -82,6 +82,16 @@ public class SuperviseFragment extends BaseFragment {
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
                 curPage++;
                 requestData();
+            }
+        });
+
+
+        mSuperviseLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(getActivity(), TaskDetailActivity.class);
+                intent.putExtra("data",mSupervises.get(position-1));
+                startActivity(intent);
             }
         });
 

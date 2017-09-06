@@ -3,7 +3,6 @@ package com.ztesoft.zwfw.moudle.todo;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,18 +18,13 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.ztesoft.zwfw.Config;
 import com.ztesoft.zwfw.R;
-import com.ztesoft.zwfw.TaskDetailActivity;
 import com.ztesoft.zwfw.base.BaseFragment;
 import com.ztesoft.zwfw.domain.Task;
-import com.ztesoft.zwfw.domain.resp.BasePageResp;
 import com.ztesoft.zwfw.domain.resp.QueryTaskListResp;
-import com.ztesoft.zwfw.moudle.warning.EarlyWarningActivity;
 import com.ztesoft.zwfw.utils.http.RequestManager;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by BaoChengchen on 2017/8/30.

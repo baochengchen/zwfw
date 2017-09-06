@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.ztesoft.zwfw.TaskDetailActivity">
+    tools:context="com.ztesoft.zwfw.moudle.todo.TaskDetailActivity">
     <include
         layout="@layout/custom_title_bar"/>
 
@@ -20,6 +20,17 @@
     <android.support.v4.view.ViewPager
         android:id="@+id/view_pager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:layout_marginTop="10dp"/>
+
+    <LinearLayout
+        android:id="@+id/floatBtnContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="right"
+        android:padding="@dimen/activity_horizontal_margin"/>
+
+
 </LinearLayout>

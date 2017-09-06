@@ -3,7 +3,7 @@ package com.ztesoft.zwfw.domain;
 import java.io.Serializable;
 
 /**
- * Created by 董睿 on 2017/8/31.
+ * Created by BaoChengchen on 2017/8/31.
  */
 
 public class Supervise implements Serializable{

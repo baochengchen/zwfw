@@ -1,18 +1,21 @@
-package com.ztesoft.zwfw;
+package com.ztesoft.zwfw.moudle.todo;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
+import com.ztesoft.zwfw.Config;
+import com.ztesoft.zwfw.R;
 import com.ztesoft.zwfw.base.BaseFragment;
 import com.ztesoft.zwfw.domain.Consult;
 import com.ztesoft.zwfw.domain.Supervise;
@@ -21,8 +24,6 @@ import com.ztesoft.zwfw.domain.WebSiteInterAction;
 import com.ztesoft.zwfw.domain.Work;
 import com.ztesoft.zwfw.domain.resp.ApplyInfoResp;
 import com.ztesoft.zwfw.utils.http.RequestManager;
-
-import org.w3c.dom.Text;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -40,10 +41,12 @@ public class ApplyInfoFragment extends BaseFragment {
 
     TextView mNameTv, mMobileTv, mEmailTv, mAddrTv, mTitleTv, mOrgNameTv, mInteractionTypeTv, mContentTv;
 
-    LinearLayout mTaskLayout, mConsultLayout, mSuperviseLayout;
+    LinearLayout mTaskLayout, mConsultLayout;
+
 
     private Task mTask;
     private Consult mConsult;
+    private Supervise mSupervise;
     private String mType;
 
     @Override
@@ -70,6 +73,7 @@ public class ApplyInfoFragment extends BaseFragment {
 
         mTask = (Task) getArguments().getSerializable("task");
         mConsult = (Consult) getArguments().getSerializable("consult");
+        mSupervise = (Supervise) getArguments().getSerializable("supervise");
         mType = getArguments().getString("type");
         mTaskLayout = (LinearLayout) rootView.findViewById(R.id.apply_info_task_layout);
         mConsultLayout = (LinearLayout) rootView.findViewById(R.id.apply_info_web_layout);
@@ -78,12 +82,10 @@ public class ApplyInfoFragment extends BaseFragment {
         }else if(mType.equals(TaskDetailActivity.TYPE_CONSULT)){
             initConsultView();
         }else if(mType.equals(TaskDetailActivity.TYPE_SUPERVISE)){
-
+            initTaskView();
         }
         requestData();
     }
-
-
 
     private void initTaskView() {
         mConsultLayout.setVisibility(View.GONE);
@@ -107,6 +109,7 @@ public class ApplyInfoFragment extends BaseFragment {
         mOrgNameTv = (TextView) rootView.findViewById(R.id.orgname_tv);
         mInteractionTypeTv = (TextView) rootView.findViewById(R.id.interaction_type_tv);
         mContentTv = (TextView) rootView.findViewById(R.id.consult_content_tv);
+
     }
 
 
@@ -120,7 +123,8 @@ public class ApplyInfoFragment extends BaseFragment {
             map.put("keyId", mConsult.getId());
             map.put("stateCode", "IA-01");
         }else if(mType.equals(TaskDetailActivity.TYPE_SUPERVISE)){
-
+            map.put("keyId", mSupervise.getBizId());
+            map.put("servicePath", "WorkProcessService");
         }
 
 
@@ -140,7 +144,7 @@ public class ApplyInfoFragment extends BaseFragment {
                     }else if(mType.equals(TaskDetailActivity.TYPE_CONSULT)){
                         updateConsultView(applyInfoResp);
                     }else if(mType.equals(TaskDetailActivity.TYPE_SUPERVISE)){
-
+                        updateTaskView(applyInfoResp);
                     }
 
                 }else{
@@ -185,11 +189,6 @@ public class ApplyInfoFragment extends BaseFragment {
 
 
 
-
-
-
-
-
     public static ApplyInfoFragment newInstance(Object object) {
 
         Bundle args = new Bundle();
@@ -200,7 +199,8 @@ public class ApplyInfoFragment extends BaseFragment {
             args.putSerializable("consult", (Serializable) object);
             args.putString("type",TaskDetailActivity.TYPE_CONSULT);
         }else if(object instanceof Supervise){
-
+            args.putSerializable("supervise", (Serializable) object);
+            args.putString("type",TaskDetailActivity.TYPE_SUPERVISE);
         }
         ApplyInfoFragment fragment = new ApplyInfoFragment();
         fragment.setArguments(args);

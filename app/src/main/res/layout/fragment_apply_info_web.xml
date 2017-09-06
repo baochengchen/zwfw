@@ -42,4 +42,5 @@
         android:textSize="@dimen/normal_text_size" />
 
     <include layout="@layout/apply_info_theme_merge" />
+
 </LinearLayout>

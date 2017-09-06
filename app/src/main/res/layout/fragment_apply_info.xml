@@ -46,6 +46,7 @@
             android:id="@+id/apply_info_web_layout"
             layout="@layout/fragment_apply_info_web"/>
 
+
     </LinearLayout>
 
 </com.ztesoft.zwfw.widget.ElasticScrollView>

@@ -16,4 +16,5 @@ public class DynamicDatas {
     public String getHolderNo() {
         return holderNo;
     }
+
 }

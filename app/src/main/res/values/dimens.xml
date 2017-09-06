@@ -14,8 +14,10 @@
 
 
     <dimen name="px2dp_10">5dp</dimen>
+    <dimen name="px2dp_20">10dp</dimen>
     <dimen name="px2dp_32">16dp</dimen>
     <dimen name="px2dp_48">24dp</dimen>
+    <dimen name="px2dp_76">38dp</dimen>
     <dimen name="px2dp_128">64dp</dimen>
 
 </resources>

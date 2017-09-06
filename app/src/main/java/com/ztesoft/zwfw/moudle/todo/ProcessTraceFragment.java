@@ -1,16 +1,17 @@
-package com.ztesoft.zwfw;
+package com.ztesoft.zwfw.moudle.todo;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
+import com.ztesoft.zwfw.Config;
+import com.ztesoft.zwfw.R;
 import com.ztesoft.zwfw.base.BaseFragment;
 import com.ztesoft.zwfw.domain.Consult;
 import com.ztesoft.zwfw.domain.DynamicDatas;
@@ -19,6 +20,9 @@ import com.ztesoft.zwfw.domain.Task;
 import com.ztesoft.zwfw.domain.TaskProcess;
 import com.ztesoft.zwfw.utils.http.RequestManager;
 import com.ztesoft.zwfw.widget.NoScrollListView;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -83,36 +87,65 @@ public class ProcessTraceFragment extends BaseFragment {
         if(mType.equals(TaskDetailActivity.TYPE_TASK)){
             map.put("dynamicDatas", new DynamicDatas(mTask.getHolderNo()));
             map.put("keyId", mTask.getId());
+            RequestManager.getInstance().postHeader(Config.BASE_URL + Config.URL_SEARCHFRONTEXCUTELIST, JSON.toJSONString(map),requestProcessListener, 0);
         }else if(mType.equals(TaskDetailActivity.TYPE_CONSULT)){
             map.put("dynamicDatas", new DynamicDatas(mConsult.getHolderNo()));
             map.put("keyId", mConsult.getId());
+            RequestManager.getInstance().postHeader(Config.BASE_URL + Config.URL_SEARCHFRONTEXCUTELIST, JSON.toJSONString(map),requestProcessListener, 0);
         }else if(mType.equals(TaskDetailActivity.TYPE_SUPERVISE)){
-            map.put("dynamicDatas", new DynamicDatas(mSupervise.getSupervisionHolderNo()));
-            map.put("keyId", mConsult.getId());
+            getSupHolderNoAndRequest(map,mSupervise.getBizId(),mSupervise.getBizType().getCode());
         }
 
-        RequestManager.getInstance().postHeader(Config.BASE_URL + Config.URL_SEARCHFRONTEXCUTELIST, JSON.toJSONString(map), new RequestManager.RequestListener() {
-            @Override
-            public void onRequest(String url, int actionId) {
+    }
 
+    RequestManager.RequestListener requestProcessListener = new RequestManager.RequestListener() {
+        @Override
+        public void onRequest(String url, int actionId) {
+
+        }
+
+        @Override
+        public void onSuccess(String response, String url, int actionId) {
+            List<TaskProcess> taskProcesses = JSON.parseArray(response, TaskProcess.class);
+            if (null != taskProcesses) {
+                mTaskProcesses.clear();
+                mTaskProcesses.addAll(taskProcesses);
+                mProcessAdapter.notifyDataSetChanged();
             }
+        }
 
-            @Override
-            public void onSuccess(String response, String url, int actionId) {
-                List<TaskProcess> taskProcesses = JSON.parseArray(response, TaskProcess.class);
-                if (null != taskProcesses) {
-                    mTaskProcesses.clear();
-                    mTaskProcesses.addAll(taskProcesses);
-                    mProcessAdapter.notifyDataSetChanged();
-                }
+        @Override
+        public void onError(String errorMsg, String url, int actionId) {
 
-            }
+            Toast.makeText(getContext(),errorMsg,Toast.LENGTH_SHORT).show();
 
-            @Override
-            public void onError(String errorMsg, String url, int actionId) {
+        }
+    };
 
-            }
-        }, 0);
+    private void getSupHolderNoAndRequest(final Map<String, Object> map, String bizId, String bizTypeCode) {
+         RequestManager.getInstance().getHeader(Config.BASE_URL + Config.URL_QUERYBIZINFOBYID + "/" + bizId + "/" + bizTypeCode, new RequestManager.RequestListener() {
+             @Override
+             public void onRequest(String url, int actionId) {
+
+             }
+
+             @Override
+             public void onSuccess(String response, String url, int actionId) {
+                 try {
+                     JSONObject jsonObject = new JSONObject(response);
+                     String holderNo = jsonObject.optString("holderNo");
+                     map.put("dynamicDatas", new DynamicDatas(holderNo));
+                     RequestManager.getInstance().postHeader(Config.BASE_URL + Config.URL_SEARCHFRONTEXCUTELIST, JSON.toJSONString(map),requestProcessListener, 0);
+                 } catch (JSONException e) {
+                     e.printStackTrace();
+                 }
+             }
+
+             @Override
+             public void onError(String errorMsg, String url, int actionId) {
+
+             }
+         },0,new HashMap<String, String>());
     }
 
 

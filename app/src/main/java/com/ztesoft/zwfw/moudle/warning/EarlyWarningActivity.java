@@ -11,10 +11,9 @@ import android.widget.TextView;
 
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.ztesoft.zwfw.R;
-import com.ztesoft.zwfw.TaskDetailActivity;
+import com.ztesoft.zwfw.moudle.todo.TaskDetailActivity;
 import com.ztesoft.zwfw.base.BaseActivity;
 import com.ztesoft.zwfw.domain.Task;
-import com.ztesoft.zwfw.moudle.todo.MyTodoActivity;
 
 import java.util.ArrayList;
 import java.util.List;

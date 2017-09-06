@@ -18,7 +18,6 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.ztesoft.zwfw.Config;
 import com.ztesoft.zwfw.R;
-import com.ztesoft.zwfw.TaskDetailActivity;
 import com.ztesoft.zwfw.base.BaseFragment;
 import com.ztesoft.zwfw.domain.Consult;
 import com.ztesoft.zwfw.domain.resp.QueryConsultListResp;
@@ -95,9 +94,13 @@ public class ConsultFragment extends BaseFragment {
             }
         });
 
-        requestData();
     }
 
+    @Override
+    public void onResume() {
+        requestData();
+        super.onResume();
+    }
 
     private void requestData() {
         RequestManager.getInstance().postHeader(Config.BASE_URL + Config.URL_QRYINTERACTION + "?page=" + curPage + "&size=20","{}", new RequestManager.RequestListener() {

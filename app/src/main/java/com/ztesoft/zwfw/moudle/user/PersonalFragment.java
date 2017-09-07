@@ -166,8 +166,14 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
             }
         });
 
-        requestData();
 
+        mUser = JSON.parseObject(APPPreferenceManager.getInstance().getString(getActivity(),Config.USERINFO), User.class);
+        if(TextUtils.isEmpty(APPPreferenceManager.getInstance().getString(getActivity(),"headerURL"))){
+            //调用头像接口
+            requestHead();
+        }else{
+            ImageLoader.getInstance().displayImage(APPPreferenceManager.getInstance().getString(getActivity(),"headerURL"),mHeaderView);
+        }
 
     }
 
@@ -186,12 +192,6 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
         mEmailTv.setText(mUser.getEmail());
         mAddrTv.setText(mUser.getAddress());
 
-        if(TextUtils.isEmpty(APPPreferenceManager.getInstance().getString(getActivity(),"headerURL"))){
-            //调用头像接口
-            requestHead();
-        }else{
-            ImageLoader.getInstance().displayImage(APPPreferenceManager.getInstance().getString(getActivity(),"headerURL"),mHeaderView);
-        }
 
     }
 
@@ -203,10 +203,6 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
         return fragment;
     }
 
-    private void requestData() {
-
-
-    }
 
     @Override
     public void onClick(View v) {

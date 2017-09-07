@@ -1,18 +1,24 @@
 package com.ztesoft.zwfw.domain;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by BaoChengchen on 2017/9/5.
  */
 
-public class User {
+public class User implements Serializable{
 
     String userId;
     String portalId;
+    String userCode;
+    String userPwd;
     String userName;
     String memo;
     String contactInfo;
+    String email;
+    String phone;
+    String address;
     List<String> userRoleType;
 
 
@@ -30,6 +36,22 @@ public class User {
 
     public void setPortalId(String portalId) {
         this.portalId = portalId;
+    }
+
+    public String getUserCode() {
+        return userCode;
+    }
+
+    public void setUserCode(String userCode) {
+        this.userCode = userCode;
+    }
+
+    public String getUserPwd() {
+        return userPwd;
+    }
+
+    public void setUserPwd(String userPwd) {
+        this.userPwd = userPwd;
     }
 
     public String getUserName() {
@@ -54,6 +76,30 @@ public class User {
 
     public void setContactInfo(String contactInfo) {
         this.contactInfo = contactInfo;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public List<String> getUserRoleType() {

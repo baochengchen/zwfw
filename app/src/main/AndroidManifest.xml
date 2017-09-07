@@ -67,9 +67,9 @@
             -->
         </activity>
         <activity android:name=".moudle.todo.TaskDetailActivity" />
-        <activity android:name=".user.MeInfoActivity" />
-        <activity android:name=".user.ResetPwdActivity" />
-        <activity android:name=".user.AboutActivity" />
+        <activity android:name=".moudle.user.MeInfoActivity" />
+        <activity android:name=".moudle.user.ResetPwdActivity" />
+        <activity android:name=".moudle.user.AboutActivity" />
         <activity
             android:name=".WorkChatActivity"
             android:screenOrientation="portrait"

@@ -6,28 +6,27 @@ import android.os.Bundle;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.ztesoft.zwfw.R;
-import com.ztesoft.zwfw.domain.Consult;
 
 /**
  * Created by BaoChengchen on 2017/9/6.
  */
 
-public class ConsultReplyDialog extends Dialog implements View.OnClickListener {
+public class CustomReplyDialog extends Dialog implements View.OnClickListener {
 
 
+    private TextView titleTv;
     private EditText replyEdt;
     private Button positiveBt, negativeBt;
 
     private String stateCode;
 
-    public ConsultReplyDialog(Context context, int themeResId) {
+    public CustomReplyDialog(Context context, int themeResId) {
         super(context, themeResId);
     }
 
@@ -46,12 +45,13 @@ public class ConsultReplyDialog extends Dialog implements View.OnClickListener {
         setContentView(R.layout.consult_reply_dialog);
 
         getWindow().setGravity(Gravity.CENTER);
-        WindowManager wm =getWindow().getWindowManager();
-        Display d= wm.getDefaultDisplay();
+        WindowManager wm = getWindow().getWindowManager();
+        Display d = wm.getDefaultDisplay();
         WindowManager.LayoutParams lp = getWindow().getAttributes();
-        lp.width = (int) (d.getWidth()*0.8);
-        lp.height = (int) (d.getHeight()*0.5);
+        lp.width = (int) (d.getWidth() * 0.8);
+        lp.height = (int) (d.getHeight() * 0.5);
         getWindow().setAttributes(lp);
+        titleTv = (TextView) findViewById(R.id.title_tv);
         replyEdt = (EditText) findViewById(R.id.reply_edt);
         positiveBt = (Button) findViewById(R.id.positive_bt);
         negativeBt = (Button) findViewById(R.id.negative_bt);
@@ -68,25 +68,30 @@ public class ConsultReplyDialog extends Dialog implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        if (null != onConsultDialogClickListener)
+        if (null != onCustomReplyClickListener)
             switch (v.getId()) {
                 case R.id.positive_bt:
-                    onConsultDialogClickListener.onConsultReplyClick(true,this);
+                    onCustomReplyClickListener.onCustomReplyClick(true, this);
                     break;
                 case R.id.negative_bt:
-                    onConsultDialogClickListener.onConsultReplyClick(false,this);
+                    onCustomReplyClickListener.onCustomReplyClick(false, this);
                     break;
             }
     }
 
-    private OnConsultReplyClickListener onConsultDialogClickListener;
+    private OnCustomReplyClickListener onCustomReplyClickListener;
 
-    public void setOnConsultDialogClickListener(OnConsultReplyClickListener onConsultDialogClickListener) {
-        this.onConsultDialogClickListener = onConsultDialogClickListener;
+    public void setOnConsultDialogClickListener(OnCustomReplyClickListener onCustomReplyClickListener) {
+        this.onCustomReplyClickListener = onCustomReplyClickListener;
     }
 
-    public interface OnConsultReplyClickListener {
+    public interface OnCustomReplyClickListener {
 
-        void onConsultReplyClick(boolean confirm, ConsultReplyDialog dialog);
+        void onCustomReplyClick(boolean confirm, CustomReplyDialog dialog);
+    }
+
+    public void setTiTleText(String title) {
+        if (null != titleTv)
+            titleTv.setText(title);
     }
 }

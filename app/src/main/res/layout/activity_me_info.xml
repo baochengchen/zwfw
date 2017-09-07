@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.ztesoft.zwfw.user.MeInfoActivity">
+    tools:context=".moudle.user.MeInfoActivity">
 
     <include layout="@layout/custom_title_bar" />
 
@@ -30,6 +30,7 @@
                 android:textSize="@dimen/normal_text_size" />
 
             <EditText
+                android:id="@+id/name_edt"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@null"
@@ -54,6 +55,7 @@
                 android:textSize="@dimen/normal_text_size" />
 
             <TextView
+                android:id="@+id/code_tv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/normal_text_size" />
@@ -75,9 +77,13 @@
                 android:textColor="@color/black"
                 android:textSize="@dimen/normal_text_size" />
 
-            <TextView
+            <EditText
+                android:id="@+id/phone_edt"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@null"
+                android:singleLine="true"
+                android:inputType="phone"
                 android:textSize="@dimen/normal_text_size" />
 
         </LinearLayout>
@@ -97,9 +103,12 @@
                 android:textColor="@color/black"
                 android:textSize="@dimen/normal_text_size" />
 
-            <TextView
+            <EditText
+                android:id="@+id/email_edt"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@null"
+                android:singleLine="true"
                 android:textSize="@dimen/normal_text_size" />
 
         </LinearLayout>
@@ -119,16 +128,13 @@
                 android:textColor="@color/black"
                 android:textSize="@dimen/normal_text_size" />
 
-            <TextView
-                android:layout_width="0dp"
+            <EditText
+                android:id="@+id/addr_edt"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:background="@null"
+                android:singleLine="true"
                 android:textSize="@dimen/normal_text_size" />
-
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:src="@mipmap/icon_arrow" />
 
         </LinearLayout>
 
@@ -147,16 +153,13 @@
                 android:textColor="@color/black"
                 android:textSize="@dimen/normal_text_size" />
 
-            <TextView
-                android:layout_width="0dp"
+            <EditText
+                android:id="@+id/memo_edt"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:background="@null"
+                android:singleLine="true"
                 android:textSize="@dimen/normal_text_size" />
-
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:src="@mipmap/icon_arrow" />
 
         </LinearLayout>
     </LinearLayout>

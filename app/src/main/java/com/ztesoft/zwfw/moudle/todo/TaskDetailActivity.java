@@ -1,7 +1,5 @@
 package com.ztesoft.zwfw.moudle.todo;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
@@ -30,7 +28,7 @@ import com.ztesoft.zwfw.domain.Task;
 import com.ztesoft.zwfw.domain.Type;
 import com.ztesoft.zwfw.domain.req.ReplyReq;
 import com.ztesoft.zwfw.utils.http.RequestManager;
-import com.ztesoft.zwfw.widget.ConsultReplyDialog;
+import com.ztesoft.zwfw.widget.CustomReplyDialog;
 import com.ztesoft.zwfw.widget.SegmentView;
 
 import java.util.ArrayList;
@@ -38,7 +36,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class TaskDetailActivity extends BaseActivity implements SegmentView.OnSegmentViewClickListener, View.OnClickListener, ConsultReplyDialog.OnConsultReplyClickListener {
+public class TaskDetailActivity extends BaseActivity implements SegmentView.OnSegmentViewClickListener, View.OnClickListener, CustomReplyDialog.OnCustomReplyClickListener {
 
     public static final String TYPE_TASK = "type_task";
     public static final String TYPE_CONSULT = "type_consult";
@@ -51,7 +49,7 @@ public class TaskDetailActivity extends BaseActivity implements SegmentView.OnSe
     private List<Fragment> mFragments;
     private Object mData;
 
-    private ConsultReplyDialog mConsultReplyDialog;
+    private CustomReplyDialog mCustomReplyDialog;
 
 
     @Override
@@ -71,8 +69,8 @@ public class TaskDetailActivity extends BaseActivity implements SegmentView.OnSe
         mData = getIntent().getSerializableExtra("data");
 
         mFloatBtnContainer = (LinearLayout) findViewById(R.id.floatBtnContainer);
-        mConsultReplyDialog = new ConsultReplyDialog(mContext, R.style.customDialog);
-        mConsultReplyDialog.setOnConsultDialogClickListener(this);
+        mCustomReplyDialog = new CustomReplyDialog(mContext, R.style.customDialog);
+        mCustomReplyDialog.setOnConsultDialogClickListener(this);
 
         mReplyEdt = (EditText) findViewById(R.id.reply_edt);
 
@@ -93,7 +91,7 @@ public class TaskDetailActivity extends BaseActivity implements SegmentView.OnSe
         mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
+                
             }
 
             @Override
@@ -114,12 +112,12 @@ public class TaskDetailActivity extends BaseActivity implements SegmentView.OnSe
     private void initFloatBtn() {
 
         Map<String, String> map = new HashMap<>();
-        if(mData instanceof Task){
-            map.put("templateId", ((Task)mData).getTemplateId());
-        }else if(mData instanceof Consult){
-            map.put("templateId", ((Consult)mData).getTemplateId());
-        }else if(mData instanceof Supervise){
-            map.put("templateId", ((Supervise)mData).getSupervisionTemplateId());
+        if (mData instanceof Task) {
+            map.put("templateId", ((Task) mData).getTemplateId());
+        } else if (mData instanceof Consult) {
+            map.put("templateId", ((Consult) mData).getTemplateId());
+        } else if (mData instanceof Supervise) {
+            map.put("templateId", ((Supervise) mData).getSupervisionTemplateId());
         }
 
         RequestManager.getInstance().postHeader(Config.BASE_URL + Config.URL_SEARCHFLOWBUTTONDTO, JSON.toJSONString(map), new RequestManager.RequestListener() {
@@ -137,7 +135,8 @@ public class TaskDetailActivity extends BaseActivity implements SegmentView.OnSe
                     LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, getResources().getDimensionPixelSize(R.dimen.px2dp_76));
                     lp.setMargins(getResources().getDimensionPixelSize(R.dimen.px2dp_10), 0, 0, 0);
                     button.setLayoutParams(lp);
-                    button.setBackgroundResource(R.drawable.custom_edit_corner_bg);
+                    button.setTextColor(getResources().getColorStateList(R.color.white));
+                    button.setBackgroundResource(R.drawable.blue_edit_corner_bg);
                     button.setText(bt.getBtnName());
                     button.setOnClickListener(TaskDetailActivity.this);
                     mFloatBtnContainer.addView(button);
@@ -157,68 +156,82 @@ public class TaskDetailActivity extends BaseActivity implements SegmentView.OnSe
         mViewPager.setCurrentItem(position);
     }
 
+
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onClick(View v) {
         FloatButton floatButton = (FloatButton) v.getTag();
         if (TextUtils.equals("回复", floatButton.getBtnName())) {
-            mConsultReplyDialog.setStateCode(floatButton.getStateCode());
-            mConsultReplyDialog.show();
+            mCustomReplyDialog.setStateCode(floatButton.getStateCode());
+            mCustomReplyDialog.show();
+            mCustomReplyDialog.setTiTleText(floatButton.getBtnName());
         } else if (TextUtils.equals("忽略", floatButton.getBtnName())) {
 
         } else if (TextUtils.equals("转发", floatButton.getBtnName())) {
 
+        } else if (TextUtils.equals("提交", floatButton.getBtnName())) {
+            mCustomReplyDialog.setStateCode(floatButton.getStateCode());
+            mCustomReplyDialog.show();
+            mCustomReplyDialog.setTiTleText(floatButton.getBtnName());
         }
 
     }
 
-    private boolean relpy(ConsultReplyDialog dialog) {
-
-        if (mData instanceof Consult) {
-            final Consult consult = (Consult) mData;
-            ReplyReq replyReq = new ReplyReq();
+    private boolean excuteBizProcess(CustomReplyDialog dialog) {
+        ReplyReq replyReq = new ReplyReq();
+        if(mData instanceof Task){
+            Task task = (Task) mData;
+            replyReq.setKeyId(task.getId());
+            replyReq.setTaskListId(task.getTaskListId());
+        }else if (mData instanceof Consult) {
+            Consult consult = (Consult) mData;
             replyReq.setKeyId(consult.getId());
-            replyReq.setStateCode(dialog.getStateCode());
             replyReq.setTaskListId(consult.getTaskListId());
-            replyReq.setDynamicDatas(new ReportDynamicDatas());
-            String reply = dialog.getReplyText();
-            if (TextUtils.isEmpty(reply)) {
-                Toast.makeText(mContext, "请输入意见", Toast.LENGTH_SHORT).show();
-                return false;
-            }
-            replyReq.setTaskResult(reply);
-
-            RequestManager.getInstance().postHeader(Config.BASE_URL + Config.URL_EXCUTEBIZPROCESS, JSON.toJSONString(replyReq), new RequestManager.RequestListener() {
-                @Override
-                public void onRequest(String url, int actionId) {
-
-                }
-
-                @Override
-                public void onSuccess(String response, String url, int actionId) {
-                    Type type = JSON.parseObject(response, Type.class);
-                    if (null != type && TextUtils.equals("1", type.getCode())) {
-                        Toast.makeText(mContext, "回复成功", Toast.LENGTH_SHORT).show();
-                        finish();
-                    } else {
-                        Toast.makeText(mContext, "回复失败", Toast.LENGTH_SHORT).show();
-                    }
-                }
-
-                @Override
-                public void onError(String errorMsg, String url, int actionId) {
-                    Toast.makeText(mContext, errorMsg, Toast.LENGTH_SHORT).show();
-                }
-            }, 0);
-
+        }else if(mData instanceof Supervise){
+            Supervise supervise = (Supervise) mData;
+            replyReq.setKeyId(supervise.getId());
+            replyReq.setTaskListId(supervise.getSupervisionTaskListId());
         }
+        replyReq.setStateCode(dialog.getStateCode());
+        replyReq.setDynamicDatas(new ReportDynamicDatas());
+        String reply = dialog.getReplyText();
+        if (TextUtils.isEmpty(reply)) {
+            Toast.makeText(mContext, "请输入意见", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        replyReq.setTaskResult(reply);
+
+        RequestManager.getInstance().postHeader(Config.BASE_URL + Config.URL_EXCUTEBIZPROCESS, JSON.toJSONString(replyReq), new RequestManager.RequestListener() {
+            @Override
+            public void onRequest(String url, int actionId) {
+
+            }
+
+            @Override
+            public void onSuccess(String response, String url, int actionId) {
+                Type type = JSON.parseObject(response, Type.class);
+                if (null != type && TextUtils.equals("1", type.getCode())) {
+                    Toast.makeText(mContext, "处理成功", Toast.LENGTH_SHORT).show();
+                    finish();
+                } else {
+                    Toast.makeText(mContext, "处理失败", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onError(String errorMsg, String url, int actionId) {
+                Toast.makeText(mContext, errorMsg, Toast.LENGTH_SHORT).show();
+            }
+        }, 0);
+
+
         return true;
     }
 
     @Override
-    public void onConsultReplyClick(boolean confirm, ConsultReplyDialog dialog) {
+    public void onCustomReplyClick(boolean confirm, CustomReplyDialog dialog) {
         if (confirm) {
-            if (relpy(dialog))
+            if (excuteBizProcess(dialog))
                 dialog.cancel();
         } else {
             dialog.cancel();

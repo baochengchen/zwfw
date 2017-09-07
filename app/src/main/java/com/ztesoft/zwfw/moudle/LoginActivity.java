@@ -66,8 +66,6 @@ public class LoginActivity extends BaseActivity {
 
             @Override
             public void onSuccess(String response, String url, int actionId) {
-                Log.d(TAG, "onSuccess" + response);
-
                 LoginResp loginResp = JSON.parseObject(response, LoginResp.class);
                 if (loginResp.getErrorCode().equals("SUCCESS")) {
                     getUserLevel();
@@ -90,7 +88,6 @@ public class LoginActivity extends BaseActivity {
         RequestManager.getInstance().getHeader(Config.BASE_URL + Config.URL_USER_CURRENT, new RequestManager.RequestListener() {
             @Override
             public void onRequest(String url, int actionId) {
-                Log.d(TAG, "onRequest: " + url);
             }
 
             @Override
@@ -99,6 +96,7 @@ public class LoginActivity extends BaseActivity {
 
                 User user = JSON.parseObject(response, User.class);
                 if(user.getUserRoleType()!=null&&user.getUserRoleType().size()>0){
+                    APPPreferenceManager.getInstance().saveObject(mContext,Config.USERINFO,JSON.toJSONString(user));
                     APPPreferenceManager.getInstance().saveObject(mContext, Config.IS_LOGIN, true);
                     APPPreferenceManager.getInstance().saveObject(mContext,Config.CURRENT_ROLE,user.getUserRoleType().get(0));
                     startActivity(new Intent(LoginActivity.this, MainActivity.class));
@@ -111,7 +109,6 @@ public class LoginActivity extends BaseActivity {
 
             @Override
             public void onError(String errorMsg, String url, int actionId) {
-                Log.d(TAG, "onError: " + errorMsg);
                 hideProgressDialog();
             }
         }, 0, new HashMap<String, String>());

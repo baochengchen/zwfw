@@ -29,9 +29,15 @@ public class Config {
 
     public static final String URL_ATTACHMENT = "portal/rest/attachment";
 
+    public static final String URL_USERS = "portal/users";
+
     public static final String URL_LOGOUT = "portal/logout";
 
+    public static final String URL_SELF = "portal/staffs/self";
+    
+    public static final String URL_SELF_PWD = "portal/users/self/pwd";
 
+    public static final String USERINFO = "userinfo";
     public static final String IS_LOGIN = "islogin";
     public static final String CURRENT_ROLE = "currentRole";
 

@@ -6,6 +6,7 @@
     android:background="@color/white">
 
     <TextView
+        android:id="@+id/title_tv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:textSize="@dimen/large_text_size"

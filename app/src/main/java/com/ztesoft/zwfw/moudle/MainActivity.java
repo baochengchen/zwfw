@@ -11,13 +11,12 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.ztesoft.zwfw.MainFragment;
 import com.ztesoft.zwfw.MyTaskFragment;
 import com.ztesoft.zwfw.R;
 import com.ztesoft.zwfw.base.BaseActivity;
-import com.ztesoft.zwfw.user.PersonalFragment;
+import com.ztesoft.zwfw.moudle.user.PersonalFragment;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener {
 

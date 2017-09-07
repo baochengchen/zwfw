@@ -96,9 +96,15 @@ public class RequestManager {
     public LoadController postHeader(final String url, Object object, final RequestListener requestListener, int actionId) {
         HashMap<String, String> headers = new HashMap<>();
         headers.put("Content-Type", "application/json");
-        Log.d("bcc", APPPreferenceManager.getInstance().getString(context,"session"));
         headers.put("Cookie",APPPreferenceManager.getInstance().getString(context,"session"));
         return this.request(Method.POST, url, object, requestListener, actionId, headers);
+    }
+
+    public LoadController patchHeader(final String url, Object object, final RequestListener requestListener, int actionId) {
+        HashMap<String, String> headers = new HashMap<>();
+        headers.put("Content-Type", "application/json");
+        headers.put("Cookie",APPPreferenceManager.getInstance().getString(context,"session"));
+        return this.request(Method.PATCH, url, object, requestListener, actionId, headers);
     }
 
     public LoadController post(final String url, Object object, final RequestListener requestListener, int actionId, HashMap<String, String> headers) {

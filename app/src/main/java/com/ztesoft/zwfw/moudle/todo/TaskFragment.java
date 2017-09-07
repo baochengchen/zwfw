@@ -94,8 +94,14 @@ public class TaskFragment extends BaseFragment {
             }
         });
 
-        requestData();
 
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        requestData();
     }
 
     private void requestData() {

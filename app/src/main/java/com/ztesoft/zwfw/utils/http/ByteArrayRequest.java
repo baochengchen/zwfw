@@ -9,6 +9,7 @@ import com.android.volley.Response;
 import com.android.volley.Response.ErrorListener;
 import com.android.volley.Response.Listener;
 import com.android.volley.toolbox.HttpHeaderParser;
+import com.ztesoft.zwfw.Config;
 import com.ztesoft.zwfw.ZWFWApp;
 import com.ztesoft.zwfw.utils.APPPreferenceManager;
 
@@ -105,8 +106,11 @@ class ByteArrayRequest extends Request<byte[]> {
         //分隔获取sessionid
         if (null != rawCookies) {
             String[] splitCookie = rawCookies.split(";");
-            APPPreferenceManager.getInstance().saveObject(ZWFWApp.appContext, "session", splitCookie[0]);
+            if (!APPPreferenceManager.getInstance().getBool(ZWFWApp.appContext, Config.IS_LOGIN)){
+                APPPreferenceManager.getInstance().saveObject(ZWFWApp.appContext, "session", splitCookie[0]);
+            }
         }
+
         return Response.success(response.data, HttpHeaderParser.parseCacheHeaders(response));
     }
 

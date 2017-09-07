@@ -1,4 +1,4 @@
-package com.ztesoft.zwfw.user;
+package com.ztesoft.zwfw.moudle.user;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -24,10 +24,12 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.ztesoft.zwfw.Config;
 import com.ztesoft.zwfw.domain.HeaderPic;
+import com.ztesoft.zwfw.domain.User;
 import com.ztesoft.zwfw.moudle.LoginActivity;
 import com.ztesoft.zwfw.R;
 import com.ztesoft.zwfw.base.BaseFragment;
@@ -38,6 +40,7 @@ import com.ztesoft.zwfw.widget.CircleImageView;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -53,6 +56,10 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
     private static final int REQUEST_TAKEPHOTO = 0x00;
     private static final int REQUEST_FROMFILE = 0x01;
 
+    private static final int ACTION_ATTCHMENT = 0;
+    private static final int ACTION_SETHEAD = 1;
+    private static final int ACTION_GETHEAD = 2;
+
     private String SDdir = Environment.getExternalStorageDirectory().toString();
     private String headImgPath =SDdir+"/ztesoft/zwfw/images/head.jpg";
     View mView;
@@ -60,7 +67,9 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
     CircleImageView mHeaderView;
     Button mLogoffBt;
     AlertDialog mHeaderSetDialog;
+    TextView mNameTv, mPhoneTv, mEmailTv, mAddrTv;
 
+    private User mUser;
 
     @Override
     public void onAttach(Context context) {
@@ -76,7 +85,6 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.fragment_layout_personal, container, false);
 
-
         return mView;
     }
 
@@ -90,13 +98,14 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
         csTitile.setTextColor(getResources().getColorStateList(R.color.white));
         mView.findViewById(R.id.cs_back).setVisibility(View.GONE);
 
+
+        mNameTv = (TextView) mView.findViewById(R.id.username_tv);
+        mPhoneTv = (TextView) mView.findViewById(R.id.phone_tv);
+        mEmailTv = (TextView) mView.findViewById(R.id.email_tv);
+        mAddrTv = (TextView) mView.findViewById(R.id.addr_tv);
+
         mHeaderView = (CircleImageView) mView.findViewById(R.id.header_img);
         mHeaderView.setOnClickListener(this);
-        if(TextUtils.isEmpty(APPPreferenceManager.getInstance().getString(getActivity(),"headerURL"))){
-            //调用头像接口
-        }else{
-            ImageLoader.getInstance().displayImage(APPPreferenceManager.getInstance().getString(getActivity(),"headerURL"),mHeaderView);
-        }
 
 
         mLogoffBt = (Button) mView.findViewById(R.id.logoff_btn);
@@ -162,6 +171,29 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
 
     }
 
+    private void requestHead() {
+        RequestManager.getInstance().getHeader(Config.BASE_URL+Config.URL_USERS+"/"+mUser.getUserId()+"/headshot",mListener,ACTION_GETHEAD,new HashMap<String, String>());
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        mUser = JSON.parseObject(APPPreferenceManager.getInstance().getString(getActivity(),Config.USERINFO), User.class);
+        mNameTv.setText(mUser.getUserName());
+        mPhoneTv.setText(mUser.getPhone());
+        mEmailTv.setText(mUser.getEmail());
+        mAddrTv.setText(mUser.getAddress());
+
+        if(TextUtils.isEmpty(APPPreferenceManager.getInstance().getString(getActivity(),"headerURL"))){
+            //调用头像接口
+            requestHead();
+        }else{
+            ImageLoader.getInstance().displayImage(APPPreferenceManager.getInstance().getString(getActivity(),"headerURL"),mHeaderView);
+        }
+
+    }
 
     public static PersonalFragment newInstance() {
 
@@ -287,27 +319,51 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
     private void savePictoServer() {
         RequestMap map = new RequestMap();
         map.put("FILE",new File(headImgPath));
-        RequestManager.getInstance().upload(Config.BASE_URL+Config.URL_ATTACHMENT, map, new RequestManager.RequestListener() {
-            @Override
-            public void onRequest(String url, int actionId) {
-            }
-
-            @Override
-            public void onSuccess(String response, String url, int actionId) {
-                List<HeaderPic> headerPics = JSONArray.parseArray(response,HeaderPic.class);
-                if(headerPics!=null&&headerPics.size()>0){
-                    APPPreferenceManager.getInstance().saveObject(getActivity(),"headerURL",Config.BASE_URL+Config.URL_ATTACHMENT+"/"+headerPics.get(0).getId());
-                }else{
-                    Toast.makeText(getActivity(),"上传头像失败",Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onError(String errorMsg, String url, int actionId) {
-                Toast.makeText(getActivity(),"上传头像失败",Toast.LENGTH_SHORT).show();
-            }
-        },0);
+        RequestManager.getInstance().upload(Config.BASE_URL+Config.URL_ATTACHMENT, map,mListener,ACTION_ATTCHMENT);
     }
+
+
+    RequestManager.RequestListener mListener = new RequestManager.RequestListener() {
+        @Override
+        public void onRequest(String url, int actionId) {
+
+        }
+
+        @Override
+        public void onSuccess(String response, String url, int actionId) {
+            switch (actionId){
+                case ACTION_ATTCHMENT:
+                    List<HeaderPic> headerPics = JSONArray.parseArray(response,HeaderPic.class);
+                    if(headerPics!=null&&headerPics.size()>0){
+                        RequestManager.getInstance().getHeader(Config.BASE_URL+Config.URL_USERS+"/"+mUser.getUserId()+"/headshot/"+headerPics.get(0).getId(),mListener,ACTION_SETHEAD,new HashMap<String, String>());
+                        APPPreferenceManager.getInstance().saveObject(getActivity(),"headerURL",Config.BASE_URL+Config.URL_ATTACHMENT+"/"+headerPics.get(0).getId());
+                    }else{
+                        Toast.makeText(getActivity(),"上传头像失败",Toast.LENGTH_SHORT).show();
+                    }
+                    break;
+
+                case ACTION_SETHEAD:
+                    Toast.makeText(getActivity(),"头像设置成功",Toast.LENGTH_SHORT).show();
+                    break;
+                case ACTION_GETHEAD:
+                    ImageLoader.getInstance().displayImage(Config.BASE_URL+Config.URL_ATTACHMENT+"/"+response.substring(1,response.length()-1),mHeaderView);
+                    break;
+            }
+
+        }
+
+        @Override
+        public void onError(String errorMsg, String url, int actionId) {
+            switch (actionId){
+                case ACTION_ATTCHMENT:
+                    Toast.makeText(getActivity(),"上传头像失败",Toast.LENGTH_SHORT).show();
+                    break;
+                case ACTION_SETHEAD:
+                    Toast.makeText(getActivity(),"设置头像失败",Toast.LENGTH_SHORT).show();
+                    break;
+            }
+        }
+    };
 
     public void startPhotoZoom(Uri uri) {
         Intent intent = new Intent("com.android.camera.action.CROP");

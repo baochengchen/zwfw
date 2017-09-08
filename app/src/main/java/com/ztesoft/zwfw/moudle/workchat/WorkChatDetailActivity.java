@@ -1,4 +1,4 @@
-package com.ztesoft.zwfw;
+package com.ztesoft.zwfw.moudle.workchat;
 
 import android.app.Activity;
 import android.content.Context;
@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import com.lzy.imagepicker.ImagePicker;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.ztesoft.zwfw.R;
 import com.ztesoft.zwfw.base.BaseActivity;
 import com.ztesoft.zwfw.domain.WorkChatBean;
 import com.ztesoft.zwfw.utils.SoftKeyBoardListener;
@@ -35,7 +36,6 @@ public class WorkChatDetailActivity extends BaseActivity {
     EditText mReplyEdt;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,6 +46,16 @@ public class WorkChatDetailActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 onBackPressed();
+            }
+        });
+
+        ImageView rightView = (ImageView) findViewById(R.id.cs_right_view);
+        rightView.setVisibility(View.VISIBLE);
+        rightView.setImageResource(R.mipmap.ic_edit_reply);
+        rightView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                reply();
             }
         });
 
@@ -71,7 +81,7 @@ public class WorkChatDetailActivity extends BaseActivity {
         mReplyEdt.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if(EditorInfo.IME_ACTION_SEND == actionId){
+                if (EditorInfo.IME_ACTION_SEND == actionId) {
                     return true;
                 }
                 return false;
@@ -86,7 +96,7 @@ public class WorkChatDetailActivity extends BaseActivity {
     }
 
 
-       class ImageAdapter extends BaseAdapter {
+    class ImageAdapter extends BaseAdapter {
 
 
         public ImageAdapter() {
@@ -100,7 +110,7 @@ public class WorkChatDetailActivity extends BaseActivity {
 
         @Override
         public Object getItem(int position) {
-            return mChat.imgs == null ? null:mChat.imgs.get(position);
+            return mChat.imgs == null ? null : mChat.imgs.get(position);
         }
 
         @Override
@@ -108,27 +118,27 @@ public class WorkChatDetailActivity extends BaseActivity {
             return position;
         }
 
-           @Override
+        @Override
         public View getView(int position, View view, ViewGroup parent) {
-            if(view == null){
+            if (view == null) {
                 view = LayoutInflater.from(mContext).inflate(R.layout.list_item_image, parent, false);
             }
-               ImageView iv_img = (ImageView) view.findViewById(R.id.iv_img);
-               //ImagePicker.getInstance().getImageLoader().displayImage((Activity) mContext, mChat.imgs.get(position), iv_img, 0, 0);
-               ImageLoader.getInstance().displayImage(mChat.imgs.get(position),iv_img);
+            ImageView iv_img = (ImageView) view.findViewById(R.id.iv_img);
+            //ImagePicker.getInstance().getImageLoader().displayImage((Activity) mContext, mChat.imgs.get(position), iv_img, 0, 0);
+            ImageLoader.getInstance().displayImage(mChat.imgs.get(position), iv_img);
 
             return view;
         }
 
 
-       }
+    }
 
-    public void reply(View view) {
+    private void reply() {
         InputMethodManager imm = (InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
-            mReplyEdt.setFocusable(true);
-            mReplyEdt.setFocusableInTouchMode(true);
-            mReplyEdt.requestFocus();
-            imm.showSoftInput(mReplyEdt,0);
+        mReplyEdt.setFocusable(true);
+        mReplyEdt.setFocusableInTouchMode(true);
+        mReplyEdt.requestFocus();
+        imm.showSoftInput(mReplyEdt, 0);
 
     }
 }

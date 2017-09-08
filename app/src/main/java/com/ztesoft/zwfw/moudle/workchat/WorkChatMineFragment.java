@@ -1,4 +1,4 @@
-package com.ztesoft.zwfw;
+package com.ztesoft.zwfw.moudle.workchat;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -6,13 +6,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.ztesoft.zwfw.R;
 import com.ztesoft.zwfw.base.BaseFragment;
 
 /**
  * Created by BaoChengchen on 2017/8/25.
  */
 
-public class WorkChatPublicFragment extends BaseFragment {
+public class WorkChatMineFragment extends BaseFragment {
 
     View rootView;
 
@@ -29,7 +30,7 @@ public class WorkChatPublicFragment extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_work_chat_public,container,false);
+        rootView = inflater.inflate(R.layout.fragment_work_chat_mine,container,false);
         return rootView;
     }
 
@@ -40,10 +41,10 @@ public class WorkChatPublicFragment extends BaseFragment {
     }
 
 
-    public static WorkChatPublicFragment newInstance() {
+    public static WorkChatMineFragment newInstance() {
 
         Bundle args = new Bundle();
-        WorkChatPublicFragment fragment = new WorkChatPublicFragment();
+        WorkChatMineFragment fragment = new WorkChatMineFragment();
         fragment.setArguments(args);
         return fragment;
     }

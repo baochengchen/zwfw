@@ -10,7 +10,7 @@ import android.widget.ImageView;
 
 import com.lzy.imagepicker.ImagePicker;
 import com.lzy.imagepicker.bean.ImageItem;
-import com.ztesoft.zwfw.PerformChatActivity;
+import com.ztesoft.zwfw.moudle.workchat.PerformChatActivity;
 import com.ztesoft.zwfw.R;
 
 import java.util.ArrayList;

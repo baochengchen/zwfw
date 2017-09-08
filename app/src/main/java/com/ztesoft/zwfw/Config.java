@@ -6,36 +6,45 @@ package com.ztesoft.zwfw;
 
 public class Config {
 
-    public static final String BASE_URL = "http://192.168.50.109:8080/";
-    public static final String URL_LOGIN = "portal/login";
-
-    public static final String URL_USER_CURRENT = "portal/user/current";
-
-    public static final String URL_QRYWORKLIST = "portal/rest/sgsp/mywork/qryMyWorkList";
-
-    public static final String URL_SEARCHFLOWBUTTONDTO = "/portal/rest/commons/searchFlowButtonDto";
-
-    public static final String URL_EXCUTEBIZPROCESS="/portal/rest/commons/excuteBizProcess";
-
-    public static final String URL_QRYINTERACTION = "portal/rest/web/websiteinteraction/queryInterAction";
-
-    public static final String URL_QRYSUPERVISE = "portal/rest/supervision/supervisionwork/queryMySupervisionList";
-
-    public static final String URL_SEARCHFRONTSTARTINFO = "portal/rest/commons/searchFrontStartInfo";
-
-    public static final String URL_SEARCHFRONTEXCUTELIST = "portal/rest/commons/searchFrontExcuteList";
-
-    public static final String URL_QUERYBIZINFOBYID = "portal/rest/supervision/supervisionwork/queryBizInfoById";
-
-    public static final String URL_ATTACHMENT = "portal/rest/attachment";
-
-    public static final String URL_USERS = "portal/users";
-
-    public static final String URL_LOGOUT = "portal/logout";
-
-    public static final String URL_SELF = "portal/staffs/self";
     
-    public static final String URL_SELF_PWD = "portal/users/self/pwd";
+    //http://220.163.118.118
+    //http://192.168.50.109:8080/portal
+    //http://192.168.50.110
+    //http://192.168.0.107:8080/portal
+
+   // public static final String BASE_URL = "http://220.163.118.118";
+
+    public static final String BASE_URL = "http://192.168.50.109:8080/portal";
+
+    public static final String URL_LOGIN = "/rest/login";
+
+    public static final String URL_USER_CURRENT = "/rest/user/current";
+
+    public static final String URL_QRYWORKLIST = "/rest/sgsp/mywork/qryMyWorkList";
+
+    public static final String URL_SEARCHFLOWBUTTONDTO = "/rest/commons/searchFlowButtonDto";
+
+    public static final String URL_EXCUTEBIZPROCESS="/rest/commons/excuteBizProcess";
+
+    public static final String URL_QRYINTERACTION = "/rest/web/websiteinteraction/queryInterAction";
+
+    public static final String URL_QRYSUPERVISE = "/rest/supervision/supervisionwork/queryMySupervisionList";
+
+    public static final String URL_SEARCHFRONTSTARTINFO = "/rest/commons/searchFrontStartInfo";
+
+    public static final String URL_SEARCHFRONTEXCUTELIST = "/rest/commons/searchFrontExcuteList";
+
+    public static final String URL_QUERYBIZINFOBYID = "/rest/supervision/supervisionwork/queryBizInfoById";
+
+    public static final String URL_ATTACHMENT = "/rest/attachment";
+
+    public static final String URL_USERS = "/rest/users";
+
+    public static final String URL_LOGOUT = "/rest/logout";
+
+    public static final String URL_SELF = "/rest/staffs/self";
+    
+    public static final String URL_SELF_PWD = "/rest/users/self/pwd";
 
     public static final String USERINFO = "userinfo";
     public static final String IS_LOGIN = "islogin";

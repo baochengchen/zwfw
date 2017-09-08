@@ -15,6 +15,7 @@ import com.ztesoft.zwfw.base.BaseFragment;
 import com.ztesoft.zwfw.moudle.MainActivity;
 import com.ztesoft.zwfw.moudle.todo.MyTodoActivity;
 import com.ztesoft.zwfw.moudle.warning.EarlyWarningActivity;
+import com.ztesoft.zwfw.moudle.workchat.WorkChatActivity;
 import com.ztesoft.zwfw.widget.NoScrollGridView;
 
 /**

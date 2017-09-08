@@ -71,14 +71,14 @@
         <activity android:name=".moudle.user.ResetPwdActivity" />
         <activity android:name=".moudle.user.AboutActivity" />
         <activity
-            android:name=".WorkChatActivity"
+            android:name=".moudle.workchat.WorkChatActivity"
             android:screenOrientation="portrait"
             android:launchMode="singleTask">
         </activity>
-        <activity android:name=".PerformChatActivity" />
+        <activity android:name=".moudle.workchat.PerformChatActivity" />
         <activity android:name="com.lzy.imagepicker.ui.ImageGridActivity" />
         <activity android:name="com.lzy.imagepicker.ui.ImagePreviewDelActivity" />
-        <activity android:name=".WorkChatDetailActivity" />
+        <activity android:name=".moudle.workchat.WorkChatDetailActivity" />
         <activity android:name=".TaskQueryActivity" />
         <activity android:name=".moudle.warning.EarlyWarningActivity"></activity>
 

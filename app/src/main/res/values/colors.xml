@@ -24,6 +24,8 @@
     <!-- 雪白色 -->
     <color name="floralwhite">#FFFAF0</color>
     <color name="black">#000000</color>
+    <color name="whitesmoke">#F5F5F5</color>
+
     <!-- 灰色 -->
     <color name="grey">#808080</color>
 

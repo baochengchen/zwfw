@@ -130,16 +130,18 @@ public class TaskDetailActivity extends BaseActivity implements SegmentView.OnSe
             public void onSuccess(String response, String url, int actionId) {
                 List<FloatButton> floatButtons = JSON.parseArray(response, FloatButton.class);
                 for (FloatButton bt : floatButtons) {
-                    Button button = new Button(mContext);
-                    button.setTag(bt);
-                    LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, getResources().getDimensionPixelSize(R.dimen.px2dp_76));
-                    lp.setMargins(getResources().getDimensionPixelSize(R.dimen.px2dp_10), 0, 0, 0);
-                    button.setLayoutParams(lp);
-                    button.setTextColor(getResources().getColorStateList(R.color.white));
-                    button.setBackgroundResource(R.drawable.blue_edit_corner_bg);
-                    button.setText(bt.getBtnName());
-                    button.setOnClickListener(TaskDetailActivity.this);
-                    mFloatBtnContainer.addView(button);
+                    if(TextUtils.equals(bt.getBtnName(),"回复")){
+                        Button button = new Button(mContext);
+                        button.setTag(bt);
+                        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, getResources().getDimensionPixelSize(R.dimen.px2dp_76));
+                        lp.setMargins(getResources().getDimensionPixelSize(R.dimen.px2dp_10), 0, 0, 0);
+                        button.setLayoutParams(lp);
+                        button.setTextColor(getResources().getColorStateList(R.color.white));
+                        button.setBackgroundResource(R.drawable.blue_edit_corner_bg);
+                        button.setText(bt.getBtnName());
+                        button.setOnClickListener(TaskDetailActivity.this);
+                        mFloatBtnContainer.addView(button);
+                    }
                 }
 
             }

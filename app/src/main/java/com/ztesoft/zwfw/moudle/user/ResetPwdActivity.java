@@ -17,6 +17,7 @@ import com.ztesoft.zwfw.R;
 import com.ztesoft.zwfw.base.BaseActivity;
 import com.ztesoft.zwfw.domain.User;
 import com.ztesoft.zwfw.utils.APPPreferenceManager;
+import com.ztesoft.zwfw.utils.MD5Utils;
 import com.ztesoft.zwfw.utils.http.RequestManager;
 
 import java.util.HashMap;
@@ -96,7 +97,9 @@ public class ResetPwdActivity extends BaseActivity {
             return;
         }
 
-        if(!TextUtils.equals(mUser.getUserPwd(),new String(Base64.decode(oldPwdStr.getBytes(),Base64.DEFAULT)))){
+
+        String oldPwdBase64Str = Base64.encodeToString(oldPwdStr.getBytes(),Base64.NO_WRAP);
+        if(!TextUtils.equals(mUser.getUserPwd(),MD5Utils.encrypt(oldPwdBase64Str))){
             Toast.makeText(mContext,"旧密码不正确",Toast.LENGTH_SHORT).show();
             return;
         }

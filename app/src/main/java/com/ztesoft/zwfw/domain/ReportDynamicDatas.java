@@ -15,4 +15,14 @@ public class ReportDynamicDatas {
     public void setReportTemplateType(String reportTemplateType) {
         this.reportTemplateType = reportTemplateType;
     }
+
+    Supervise supervise;
+
+    public Supervise getSupervise() {
+        return supervise;
+    }
+
+    public void setSupervise(Supervise supervise) {
+        this.supervise = supervise;
+    }
 }

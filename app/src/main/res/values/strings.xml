@@ -33,6 +33,9 @@
     <!--workchat-->
     <string name="perform_chat">发起提问</string>
 
+    <!--办件查询-->
+    <string name="query_result">查询结果</string>
+
     <!--meInfo-->
     <string name="name">姓名</string>
     <string name="user_code">工号</string>

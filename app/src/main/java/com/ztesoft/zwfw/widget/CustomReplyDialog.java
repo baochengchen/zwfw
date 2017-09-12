@@ -20,6 +20,7 @@ import com.ztesoft.zwfw.R;
 public class CustomReplyDialog extends Dialog implements View.OnClickListener {
 
 
+
     private TextView titleTv;
     private EditText replyEdt;
     private Button positiveBt, negativeBt;

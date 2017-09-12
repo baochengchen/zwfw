@@ -12,8 +12,11 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.ztesoft.zwfw.base.BaseActivity;
 import com.ztesoft.zwfw.domain.Message;
+import com.ztesoft.zwfw.utils.http.RequestManager;
 import com.ztesoft.zwfw.widget.slidedeletelistview.ListViewCompat;
 import com.ztesoft.zwfw.widget.slidedeletelistview.SlideItem;
 import com.ztesoft.zwfw.widget.slidedeletelistview.SlideListView;
@@ -21,13 +24,14 @@ import com.ztesoft.zwfw.widget.slidedeletelistview.SlideView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class MessageCenterActivity extends BaseActivity implements SlideView.OnSlideListener{
 
     SlideListView mMsgListView;
 
     private SlideAdapter mMsgListAdapter;
-    private List<Message> messages = new ArrayList<>();
+    private List<Message> mMessages = new ArrayList<>();
 
     private SlideView mLastSlideViewWithStatusOn;
 
@@ -51,7 +55,7 @@ public class MessageCenterActivity extends BaseActivity implements SlideView.OnS
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(mContext,MessageDetailActivity.class);
-                intent.putExtra(MessageDetailActivity.EXTRA_MSG,messages.get(position));
+                intent.putExtra(MessageDetailActivity.EXTRA_MSG,mMessages.get(position));
                 startActivity(intent);
             }
         });
@@ -60,17 +64,27 @@ public class MessageCenterActivity extends BaseActivity implements SlideView.OnS
     }
 
         private void requestData() {
-        messages.clear();
-        for(int i=0;i<10;i++){
-            Message msg = new Message();
-            msg.setType("系统消息");
-            msg.setTitle("标题---------------"+(i+1));
-            msg.setSendTime("2017/08/14");
-            msg.setSender("发件人:政务中心");
-            msg.setContent("xxxxxxxxxxxxxxxxxxxxxxxxxxxxx\nxxxxxxxxxxx");
-            messages.add(msg);
-        }
+            RequestManager.getInstance().postHeader(Config.BASE_URL + Config.URL_MESSAGE_LIST,"{}",new RequestManager.RequestListener() {
+                @Override
+                public void onRequest(String url, int actionId) {
 
+                }
+
+                @Override
+                public void onSuccess(String response, String url, int actionId) {
+                    List<Message> messages = JSON.parseArray(response,Message.class);
+                    if(messages != null && messages.size() > 0){
+                        mMessages.addAll(messages);
+                        mMsgListAdapter.notifyDataSetChanged();
+                    }
+
+                }
+
+                @Override
+                public void onError(String errorMsg, String url, int actionId) {
+
+                }
+            },0);
         mMsgListAdapter.notifyDataSetChanged();
     }
 
@@ -174,12 +188,12 @@ public class MessageCenterActivity extends BaseActivity implements SlideView.OnS
 
         @Override
         public int getCount() {
-            return messages.size();
+            return mMessages.size();
         }
 
         @Override
         public Object getItem(int position) {
-            return messages.get(position);
+            return mMessages.get(position);
         }
 
         @Override
@@ -202,15 +216,15 @@ public class MessageCenterActivity extends BaseActivity implements SlideView.OnS
                 vHolder= (ViewHolder) convertView.getTag();
             }
 
-            vHolder.tvType.setText(messages.get(position).getType());
-            vHolder.tvTitle.setText(messages.get(position).getTitle());
-            vHolder.tvSendTime.setText(messages.get(position).getSendTime());
-            vHolder.tvSender.setText(messages.get(position).getSender());
+            vHolder.tvType.setText(mMessages.get(position).getRevType().getTitle());
+            vHolder.tvTitle.setText(mMessages.get(position).getTitle());
+            vHolder.tvSendTime.setText(mMessages.get(position).getSendDate());
+            vHolder.tvSender.setText(mMessages.get(position).getSender());
 
             vHolder.itemDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    messages.remove(position);
+                    mMessages.remove(position);
                     notifyDataSetChanged();
                 }
             });

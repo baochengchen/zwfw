@@ -21,6 +21,7 @@ import com.ztesoft.zwfw.R;
 import com.ztesoft.zwfw.base.BaseFragment;
 import com.ztesoft.zwfw.domain.Consult;
 import com.ztesoft.zwfw.domain.resp.QueryConsultListResp;
+import com.ztesoft.zwfw.domain.resp.QueryTaskListResp;
 import com.ztesoft.zwfw.utils.http.RequestManager;
 
 import java.util.ArrayList;
@@ -42,6 +43,10 @@ public class ConsultFragment extends BaseFragment {
     private ConsultAdapter mConsultAdapter;
 
     private int curPage = 0;
+    private int totalSize = 0;
+    private int curClickPositon = 0;
+    private int curClickPage = 0;
+    private int curPageOffset = 0;
 
     @Override
     public void onAttach(Context context) {
@@ -88,17 +93,22 @@ public class ConsultFragment extends BaseFragment {
         mConsultLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                curClickPositon = position - 1;
+                curClickPage = curClickPositon / 20;
+                curPageOffset = curClickPositon % 20;
                 Intent intent = new Intent(getActivity(), TaskDetailActivity.class);
                 intent.putExtra("data",mConsults.get(position-1));
-                startActivity(intent);
+                startActivityForResult(intent,TaskDetailActivity.REQUEST_REFRESH);
             }
         });
+
+
+        requestData();
 
     }
 
     @Override
     public void onResume() {
-        requestData();
         super.onResume();
     }
 
@@ -116,6 +126,7 @@ public class ConsultFragment extends BaseFragment {
                 mConsultLv.onRefreshComplete();
                 QueryConsultListResp resp = JSON.parseObject(response, QueryConsultListResp.class);
                 if (resp.getContent() != null) {
+                    totalSize = Integer.parseInt(resp.getTotalElements());
                     if (resp.isFirst()) {
                         mConsults.clear();
                         mConsults.addAll(resp.getContent());
@@ -194,6 +205,46 @@ public class ConsultFragment extends BaseFragment {
             return convertView;
         }
 
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == TaskDetailActivity.RESULET_CUSTOM_REPLY) {
+            if (TaskDetailActivity.REQUEST_REFRESH == requestCode) {
+                updateItem();
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private void updateItem() {
+        RequestManager.getInstance().postHeader(Config.BASE_URL + Config.URL_QRYINTERACTION + "?page=" + curClickPage + "&size=20", "{}", new RequestManager.RequestListener() {
+            @Override
+            public void onRequest(String url, int actionId) {
+            }
+
+            @Override
+            public void onSuccess(String response, String url, int actionId) {
+                QueryConsultListResp resp = JSON.parseObject(response, QueryConsultListResp.class);
+                if (null != resp) {
+                    if(totalSize == Integer.parseInt(resp.getTotalElements())){
+                        mConsults.remove(curClickPositon);
+                        if (resp.getContent().size() > 0) {
+                            mConsults.add(curClickPositon, resp.getContent().get(curPageOffset));
+                        }
+                    }else{
+                        mConsults.remove(curClickPositon);
+                        totalSize = Integer.parseInt(resp.getTotalElements());
+                    }
+                    mConsultAdapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onError(String errorMsg, String url, int actionId) {
+
+            }
+        }, curClickPage);
 
     }
 }

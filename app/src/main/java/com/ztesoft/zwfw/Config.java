@@ -10,15 +10,17 @@ public class Config {
     //http://220.163.118.118
     //http://192.168.50.109:8080/portal
     //http://192.168.50.110
-    //http://192.168.0.107:8080/portal
+    //http://192.168.0.113:8080/portal
 
-   // public static final String BASE_URL = "http://220.163.118.118";
+   // public static final String BASE_URL = "http://192.168.0.113:8080/portal";
 
     public static final String BASE_URL = "http://192.168.50.109:8080/portal";
 
     public static final String URL_LOGIN = "/rest/login";
 
     public static final String URL_USER_CURRENT = "/rest/user/current";
+
+    public static final String URL_MESSAGE_LIST = "/rest/message/qryList";
 
     public static final String URL_QRYWORKLIST = "/rest/sgsp/mywork/qryMyWorkList";
 
@@ -35,6 +37,8 @@ public class Config {
     public static final String URL_SEARCHFRONTEXCUTELIST = "/rest/commons/searchFrontExcuteList";
 
     public static final String URL_QUERYBIZINFOBYID = "/rest/supervision/supervisionwork/queryBizInfoById";
+
+    public static final String URL_QUERYAPPWORKS ="/rest/app/queryappworks";
 
     public static final String URL_ATTACHMENT = "/rest/attachment";
 

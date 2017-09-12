@@ -45,7 +45,7 @@ public class MessageDetailActivity extends BaseActivity {
 
         tvTitle.setText(mMsg.getTitle());
         tvSender.setText("发送人："+mMsg.getSender());
-        tvSendTime.setText(mMsg.getSendTime());
+        tvSendTime.setText(mMsg.getSendDate());
         tvContent.setText(mMsg.getContent());
     }
 }

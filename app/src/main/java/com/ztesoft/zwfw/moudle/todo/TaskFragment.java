@@ -1,5 +1,6 @@
 package com.ztesoft.zwfw.moudle.todo;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,9 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.BaseAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
@@ -22,6 +21,7 @@ import com.ztesoft.zwfw.base.BaseFragment;
 import com.ztesoft.zwfw.domain.Task;
 import com.ztesoft.zwfw.domain.resp.QueryTaskListResp;
 import com.ztesoft.zwfw.utils.http.RequestManager;
+import com.ztesoft.zwfw.adapter.TaskAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +41,13 @@ public class TaskFragment extends BaseFragment {
     private TaskAdapter mTaskAdapter;
 
     private int curPage = 0;
+
+
+    private int totalSize = 0;
+    private int curClickPositon = 0;
+    private int curClickPage = 0;
+    private int curPageOffset = 0;
+
 
     @Override
     public void onAttach(Context context) {
@@ -67,7 +74,7 @@ public class TaskFragment extends BaseFragment {
         mTaskLv.setMode(PullToRefreshBase.Mode.BOTH);
         mTaskLv.getLoadingLayoutProxy(false, true).setPullLabel("上拉加载更多");
         mTaskLv.getLoadingLayoutProxy(false, true).setReleaseLabel("松开以加载");
-        mTaskAdapter = new TaskAdapter();
+        mTaskAdapter = new TaskAdapter(getActivity(), mTasks);
         mTaskLv.setAdapter(mTaskAdapter);
 
         mTaskLv.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
@@ -88,39 +95,24 @@ public class TaskFragment extends BaseFragment {
         mTaskLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getActivity(), TaskDetailActivity.class);;
-                intent.putExtra("data",mTasks.get(position-1));
-                startActivity(intent);
+                curClickPositon = position - 1;
+                curClickPage = curClickPositon / 20;
+                curPageOffset = curClickPositon % 20;
+                Intent intent = new Intent(getActivity(), TaskDetailActivity.class);
+                intent.putExtra("data", mTasks.get(position - 1));
+                startActivityForResult(intent, TaskDetailActivity.REQUEST_REFRESH);
             }
         });
 
-
-
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
         requestData();
     }
 
+
     private void requestData() {
-        //Map<String, Object> map = new HashMap<String, Object>();
-       /* map.put("itemOrThemeName","");
-        map.put("itemType","");
-        map.put("applySource","");
-        map.put("workType","");
-        map.put("applicantName","");
-        map.put("workNo","");
-        map.put("applyStartTime","");
-        map.put("applyEndTime","");
-        map.put("itemOrgName","");*/
 
         RequestManager.getInstance().postHeader(Config.BASE_URL + Config.URL_QRYWORKLIST + "?page=" + curPage + "&size=20", "{}", new RequestManager.RequestListener() {
             @Override
             public void onRequest(String url, int actionId) {
-
-                Log.d(TAG, "onRequest:" + url);
             }
 
             @Override
@@ -129,6 +121,7 @@ public class TaskFragment extends BaseFragment {
                 mTaskLv.onRefreshComplete();
                 QueryTaskListResp resp = JSON.parseObject(response, QueryTaskListResp.class);
                 if (resp.getContent() != null) {
+                    totalSize = Integer.parseInt(resp.getTotalElements());
                     if (resp.isFirst()) {
                         mTasks.clear();
                         mTasks.addAll(resp.getContent());
@@ -162,54 +155,45 @@ public class TaskFragment extends BaseFragment {
     }
 
 
-    class TaskAdapter extends BaseAdapter {
-
-        @Override
-        public int getCount() {
-            return mTasks.size();
-        }
-
-        @Override
-        public Object getItem(int position) {
-            return mTasks.get(position);
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-
-            if (null == convertView) {
-                convertView = LayoutInflater.from(getActivity()).inflate(R.layout.item_my_todo, null);
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == TaskDetailActivity.RESULET_CUSTOM_REPLY) {
+            if (TaskDetailActivity.REQUEST_REFRESH == requestCode) {
+                updateItem();
             }
-            TextView taskNoTv = (TextView) convertView.findViewById(R.id.task_no_tv);
-            TextView taskTimelineTv = (TextView) convertView.findViewById(R.id.task_time_line_tv);
-            TextView surNameTv = (TextView) convertView.findViewById(R.id.surname_tv);
-            TextView nameTv = (TextView) convertView.findViewById(R.id.name_tv);
-            TextView taskTitleTv = (TextView) convertView.findViewById(R.id.title_tv);
-            TextView taskStatusTv = (TextView) convertView.findViewById(R.id.status_tv);
-
-            Task task = mTasks.get(position);
-            taskNoTv.setText("办件编号：" + task.getWorkNo());
-            taskTimelineTv.setText("办结时限：" + task.getPromiseDate());
-            if (position % 3 == 0) {
-                surNameTv.setBackground(getResources().getDrawable(R.drawable.red_corner_text_bg));
-            } else if (position % 3 == 1) {
-                surNameTv.setBackground(getResources().getDrawable(R.drawable.pink_corner_text_bg));
-            } else {
-                surNameTv.setBackground(getResources().getDrawable(R.drawable.blue_corner_text_bg));
-            }
-            surNameTv.setText(task.getApplicantName().substring(0, 1));
-            nameTv.setText(task.getApplicantName());
-            taskTitleTv.setText(task.getItemOrThemeName());
-            taskStatusTv.setText(task.getTaskname());
-
-            return convertView;
         }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
 
+    private void updateItem() {
+        RequestManager.getInstance().postHeader(Config.BASE_URL + Config.URL_QRYWORKLIST + "?page=" + curClickPage + "&size=20", "{}", new RequestManager.RequestListener() {
+            @Override
+            public void onRequest(String url, int actionId) {
+                Log.d(TAG, "onRequest:" + url);
+            }
+
+            @Override
+            public void onSuccess(String response, String url, int actionId) {
+                QueryTaskListResp resp = JSON.parseObject(response, QueryTaskListResp.class);
+                if (null != resp) {
+                    if(totalSize == Integer.parseInt(resp.getTotalElements())){
+                        mTasks.remove(curClickPositon);
+                        if (resp.getContent().size() > 0) {
+                            mTasks.add(curClickPositon, resp.getContent().get(curPageOffset));
+                        }
+                    }else{
+                        mTasks.remove(curClickPositon);
+                        totalSize = Integer.parseInt(resp.getTotalElements());
+                    }
+                    mTaskAdapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onError(String errorMsg, String url, int actionId) {
+
+            }
+        }, curClickPage);
 
     }
 }

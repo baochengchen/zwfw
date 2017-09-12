@@ -5,116 +5,130 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.ztesoft.zwfw.TaskQueryActivity">
+    tools:context="com.ztesoft.zwfw.moudle.taskquery.TaskQueryActivity">
 
-    <include
-        layout="@layout/custom_title_bar"/>
+    <include layout="@layout/custom_title_bar" />
+
     <LinearLayout
+        android:id="@+id/multiple_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin">
-
-        <Spinner
-            android:id="@+id/spinner"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:spinnerMode="dropdown"
-            android:overlapAnchor="false"></Spinner>
-        <EditText
-            android:id="@+id/code_edit"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:singleLine="true"
-            android:hint="请输入编号"
-            android:textSize="@dimen/normal_text_size"
-            android:inputType="number" />
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
         <LinearLayout
-            android:id="@+id/multiple_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:visibility="gone">
-            <LinearLayout
+            android:layout_marginTop="7dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="查询码："
+                android:textSize="@dimen/normal_text_size" />
+
+            <EditText
+                android:id="@+id/code_edit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="@dimen/normal_text_size"
-                    android:text="事项名称："/>
-
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:singleLine="true"
-                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                    android:background="@null"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="@dimen/normal_text_size"
-                    android:text="申请人："/>
-
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:singleLine="true"
-                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                    android:background="@null"/>
-
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="@dimen/normal_text_size"
-                    android:text="申请时间："/>
-                <Button
-                    android:id="@+id/startTime_bt"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="@dimen/normal_text_size"
-                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                    android:text="开始时间"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="@dimen/normal_text_size"
-                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                    android:text="——"/>
-
-                <Button
-                    android:id="@+id/endTime_bt"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="@dimen/normal_text_size"
-                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                    android:text="结束时间"/>
-
-            </LinearLayout>
+                android:hint="请输入查询码"
+                android:inputType="number"
+                android:singleLine="true"
+                android:textSize="@dimen/normal_text_size" />
 
         </LinearLayout>
-        <Button
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="查询"/>
+            android:layout_marginTop="7dp"
+            android:orientation="horizontal">
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="事项名称："
+                android:textSize="@dimen/normal_text_size" />
+
+            <EditText
+                android:id="@+id/taskname_edt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:textSize="@dimen/normal_text_size"
+                android:background="@null"
+                android:singleLine="true" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="7dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="申请人："
+                android:textSize="@dimen/normal_text_size" />
+
+            <EditText
+                android:id="@+id/apply_user_edt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:textSize="@dimen/normal_text_size"
+                android:background="@null"
+                android:singleLine="true" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="申请时间："
+                android:textSize="@dimen/normal_text_size" />
+
+            <Button
+                android:id="@+id/startTime_bt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:text="开始时间"
+                android:textSize="@dimen/normal_text_size" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="——" />
+
+            <Button
+                android:id="@+id/endTime_bt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="结束时间"
+                android:textSize="@dimen/normal_text_size" />
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/search_bt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:background="@drawable/dimgrey_bg_corner"
+            android:textColor="@color/white"
+            android:text="查询" />
     </LinearLayout>
-    
 
 </LinearLayout>

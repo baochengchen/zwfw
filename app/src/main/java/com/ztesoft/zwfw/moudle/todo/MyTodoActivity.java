@@ -55,15 +55,13 @@ public class MyTodoActivity extends BaseActivity {
             mFragments.add(consultFragment);
             mFragments.add(superviseFragment);
         }else if(role.equals(Config.RoleType.OJD.getName())){
-            mPagerTitles = new String[]{"咨询投诉待回复","催/督办件待处理"};
+            mPagerTitles = new String[]{"咨询投诉待审核","催/督办件待处理"};
             ConsultFragment consultFragment = ConsultFragment.newInstance();
             SuperviseFragment superviseFragment = SuperviseFragment.newInstance();
             mFragments.add(consultFragment);
             mFragments.add(superviseFragment);
 
         }
-
-
 
 
         mPagerStrip = (PagerSlidingTabStrip) findViewById(R.id.pager_strip);

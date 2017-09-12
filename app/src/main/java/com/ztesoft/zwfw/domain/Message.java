@@ -8,18 +8,55 @@ import java.io.Serializable;
  */
 
 public class Message  implements Serializable{
-    public String type;
+
+
+    public String id;
+    public String sender;
+    public String senderName;
+    public Type revType;
+    public String revId;
     public String title;
     public String content;
-    public String sender;
-    public String sendTime;
+    public String sendDate;
 
-    public String getType() {
-        return type;
+    public String getId() {
+        return id;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getSender() {
+        return sender;
+    }
+
+    public void setSender(String sender) {
+        this.sender = sender;
+    }
+
+    public String getSenderName() {
+        return senderName;
+    }
+
+    public void setSenderName(String senderName) {
+        this.senderName = senderName;
+    }
+
+    public Type getRevType() {
+        return revType;
+    }
+
+    public void setRevType(Type revType) {
+        this.revType = revType;
+    }
+
+    public String getRevId() {
+        return revId;
+    }
+
+    public void setRevId(String revId) {
+        this.revId = revId;
     }
 
     public String getTitle() {
@@ -38,20 +75,11 @@ public class Message  implements Serializable{
         this.content = content;
     }
 
-    public String getSender() {
-        return sender;
+    public String getSendDate() {
+        return sendDate;
     }
 
-    public void setSender(String sender) {
-        this.sender = sender;
+    public void setSendDate(String sendDate) {
+        this.sendDate = sendDate;
     }
-
-    public String getSendTime() {
-        return sendTime;
-    }
-
-    public void setSendTime(String sendTime) {
-        this.sendTime = sendTime;
-    }
-
 }

@@ -21,6 +21,7 @@ import com.ztesoft.zwfw.Config;
 import com.ztesoft.zwfw.R;
 import com.ztesoft.zwfw.base.BaseFragment;
 import com.ztesoft.zwfw.domain.Supervise;
+import com.ztesoft.zwfw.domain.resp.QueryConsultListResp;
 import com.ztesoft.zwfw.domain.resp.QuerySuperviseListResp;
 import com.ztesoft.zwfw.utils.http.RequestManager;
 
@@ -32,7 +33,7 @@ import java.util.List;
  */
 
 public class SuperviseFragment extends BaseFragment {
-    private static final String TAG = TaskFragment.class.getSimpleName();
+    private static final String TAG = SuperviseFragment.class.getSimpleName();
 
     View rootView;
 
@@ -42,6 +43,10 @@ public class SuperviseFragment extends BaseFragment {
     private SuperviseAdapter mSuperviseAdapter;
 
     private int curPage = 0;
+    private int totalSize = 0;
+    private int curClickPositon = 0;
+    private int curClickPage = 0;
+    private int curPageOffset = 0;
 
     @Override
     public void onAttach(Context context) {
@@ -89,9 +94,12 @@ public class SuperviseFragment extends BaseFragment {
         mSuperviseLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                curClickPositon = position - 1;
+                curClickPage = curClickPositon / 20;
+                curPageOffset = curClickPositon % 20;
                 Intent intent = new Intent(getActivity(), TaskDetailActivity.class);
                 intent.putExtra("data",mSupervises.get(position-1));
-                startActivity(intent);
+                startActivityForResult(intent,TaskDetailActivity.REQUEST_REFRESH);
             }
         });
 
@@ -114,6 +122,7 @@ public class SuperviseFragment extends BaseFragment {
                 mSuperviseLv.onRefreshComplete();
                 QuerySuperviseListResp resp = JSON.parseObject(response, QuerySuperviseListResp.class);
                 if (resp.getContent() != null) {
+                    totalSize = Integer.parseInt(resp.getTotalElements());
                     if (resp.isFirst()) {
                         mSupervises.clear();
                         mSupervises.addAll(resp.getContent());
@@ -191,6 +200,46 @@ public class SuperviseFragment extends BaseFragment {
             return convertView;
         }
 
+    }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d(TAG,"onActivityResult");
+        if (resultCode == TaskDetailActivity.RESULET_CUSTOM_REPLY) {
+            if (TaskDetailActivity.REQUEST_REFRESH == requestCode) {
+                updateItem();
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private void updateItem() {
+        RequestManager.getInstance().postHeader(Config.BASE_URL + Config.URL_QRYSUPERVISE + "?page=" + curClickPage + "&size=20", "{}", new RequestManager.RequestListener() {
+            @Override
+            public void onRequest(String url, int actionId) {
+            }
+
+            @Override
+            public void onSuccess(String response, String url, int actionId) {
+                QuerySuperviseListResp resp = JSON.parseObject(response, QuerySuperviseListResp.class);
+                if (null != resp) {
+                    if(totalSize == Integer.parseInt(resp.getTotalElements())){
+                        mSupervises.remove(curClickPositon);
+                        if (resp.getContent().size() > 0) {
+                            mSupervises.add(curClickPositon, resp.getContent().get(curPageOffset));
+                        }
+                    }else{
+                        mSupervises.remove(curClickPositon);
+                        totalSize = Integer.parseInt(resp.getTotalElements());
+                    }
+                    mSuperviseAdapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onError(String errorMsg, String url, int actionId) {
+
+            }
+        }, curClickPage);
 
     }
 }

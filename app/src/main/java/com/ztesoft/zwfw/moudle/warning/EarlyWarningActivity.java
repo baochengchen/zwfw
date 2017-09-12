@@ -2,33 +2,53 @@ package com.ztesoft.zwfw.moudle.warning;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.alibaba.fastjson.JSON;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.ztesoft.zwfw.R;
+import com.ztesoft.zwfw.adapter.TaskAdapter;
+import com.ztesoft.zwfw.domain.resp.QueryTaskListResp;
+import com.ztesoft.zwfw.moudle.Config;
 import com.ztesoft.zwfw.moudle.todo.TaskDetailActivity;
 import com.ztesoft.zwfw.base.BaseActivity;
 import com.ztesoft.zwfw.domain.Task;
+import com.ztesoft.zwfw.utils.APPPreferenceManager;
+import com.ztesoft.zwfw.utils.http.RequestManager;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class EarlyWarningActivity extends BaseActivity {
 
     PullToRefreshListView mTaskLv;
     private List<Task> mTasks = new ArrayList<>();
     private TaskAdapter mTaskAdapter;
+
+    private int curPage = 0;
+
+    private int type = 2;
+
+    private String curRole;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_early_warning);
         TextView csTitile = (TextView) findViewById(R.id.cs_title);
-        switch (getIntent().getIntExtra("type",2)){
+
+        type = getIntent().getIntExtra("type",2);
+        switch (type){
 
             case 2:
                 csTitile.setText(getString(R.string.alarm_task));
@@ -44,8 +64,14 @@ public class EarlyWarningActivity extends BaseActivity {
             }
         });
 
+        curRole = APPPreferenceManager.getInstance().getString(mContext,Config.CURRENT_ROLE);
+
         mTaskLv = (PullToRefreshListView) findViewById(R.id.task_lv);
-        mTaskAdapter = new TaskAdapter();
+        mTaskLv.setMode(PullToRefreshBase.Mode.BOTH);
+        mTaskLv.getLoadingLayoutProxy(false, true).setPullLabel("上拉加载更多");
+        mTaskLv.getLoadingLayoutProxy(false, true).setReleaseLabel("松开以加载");
+
+        mTaskAdapter = new TaskAdapter(mContext,mTasks);
         mTaskLv.setAdapter(mTaskAdapter);
 
         mTaskLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -57,78 +83,74 @@ public class EarlyWarningActivity extends BaseActivity {
             }
         });
 
+        mTaskLv.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
+            @Override
+            public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
+                curPage = 0;
+                requestData();
+            }
 
-       // requestData();
+            @Override
+            public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
+                curPage++;
+                requestData();
+            }
+        });
+
+        mTaskLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(mContext,TaskDetailActivity.class);
+                intent.putExtra("data",mTasks.get(position-1));
+                startActivity(intent);
+            }
+        });
+        requestData();
     }
 
- /*   private void requestData() {
+    private void requestData() {
 
-        String[] surNames = new String[]{"孙","猪","沙"};
-        String[] names = new String[]{"孙悟空","猪八戒","沙僧"};
-        for(int i=0 ; i< 10;i++){
-            Task task = new Task();
-            task.taskNumber = "0000"+(i+1);
-            task.timeLine ="2017/9/30";
-            task.surName =surNames[i%surNames.length];
-            task.name =names[i%surNames.length];
-            task.title = "对于销售假冒伪劣产品的处罚";
-            task.content = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
-            task.status = "审批中";
-            mTasks.add(task);
+        Map<String,String> map = new HashMap();
+
+        if(TextUtils.equals(curRole,Config.RoleType.OSP.getName())){
+            map.put("roleType",""+Config.RoleType.OSP.getIndex());
+        }else if (TextUtils.equals(curRole,Config.RoleType.OJD.getName())){
+            map.put("roleType",""+Config.RoleType.OJD.getIndex());
         }
 
-        mTaskAdapter.notifyDataSetChanged();
-    }*/
-
-
-    class TaskAdapter extends BaseAdapter {
-
-        @Override
-        public int getCount() {
-            return mTasks.size();
-        }
-
-        @Override
-        public Object getItem(int position) {
-            return mTasks.get(position);
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-
-            if (null == convertView) {
-                convertView = LayoutInflater.from(mContext).inflate(R.layout.item_my_todo, null);
+        RequestManager.getInstance().postHeader(Config.BASE_URL + (type == 2?"":Config.URL_QUERYTIMEOUT) + "?page=" + curPage + "&size=20", JSON.toJSONString(map), new RequestManager.RequestListener() {
+            @Override
+            public void onRequest(String url, int actionId) {
             }
-            TextView taskNoTv = (TextView) convertView.findViewById(R.id.task_no_tv);
-            TextView taskTimelineTv = (TextView) convertView.findViewById(R.id.task_time_line_tv);
-            TextView surNameTv = (TextView) convertView.findViewById(R.id.surname_tv);
-            TextView nameTv = (TextView) convertView.findViewById(R.id.name_tv);
-            TextView taskTitleTv = (TextView) convertView.findViewById(R.id.title_tv);
-            TextView taskStatusTv = (TextView) convertView.findViewById(R.id.status_tv);
 
-            Task task = mTasks.get(position);
-            taskNoTv.setText("办件编号：" + task.getWorkNo());
-            taskTimelineTv.setText("办结时限：" + task.getPromiseDate());
-            if (position % 3 == 0) {
-                surNameTv.setBackground(getResources().getDrawable(R.drawable.red_corner_text_bg));
-            }else if(position % 3 == 1){
-                surNameTv.setBackground(getResources().getDrawable(R.drawable.pink_corner_text_bg));
-            }else {
-                surNameTv.setBackground(getResources().getDrawable(R.drawable.blue_corner_text_bg));
+            @Override
+            public void onSuccess(String response, String url, int actionId) {
+
+                mTaskLv.onRefreshComplete();
+                QueryTaskListResp resp = JSON.parseObject(response, QueryTaskListResp.class);
+                if (resp.getContent() != null) {
+                    if (resp.isFirst()) {
+                        mTasks.clear();
+                        mTasks.addAll(resp.getContent());
+                        mTaskAdapter.notifyDataSetChanged();
+                    } else {
+                        if (resp.getContent().size() == 0) {
+                            curPage--;
+                            Toast.makeText(mContext, "没有更多数据了", Toast.LENGTH_SHORT).show();
+                        } else {
+                            mTasks.addAll(resp.getContent());
+                            mTaskAdapter.notifyDataSetChanged();
+                        }
+                    }
+                }
             }
-            surNameTv.setText(task.getApplicantName());
-            nameTv.setText(task.getApplicantName().substring(0,1));
-            taskTitleTv.setText(task.getItemOrThemeName());
-            taskStatusTv.setText(task.getTaskname());
 
-            return convertView;
-        }
-
-
+            @Override
+            public void onError(String errorMsg, String url, int actionId) {
+                mTaskLv.onRefreshComplete();
+            }
+        }, curPage);
     }
+
+
 }

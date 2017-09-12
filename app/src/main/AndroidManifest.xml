@@ -70,7 +70,7 @@
         <activity
             android:name=".moudle.workchat.WorkChatActivity"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity android:name=".moudle.workchat.PerformChatActivity" />
         <activity android:name="com.lzy.imagepicker.ui.ImageGridActivity" />
         <activity android:name="com.lzy.imagepicker.ui.ImagePreviewDelActivity" />
@@ -82,7 +82,7 @@
         <activity
             android:name="cn.jpush.android.ui.PopWinActivity"
             android:exported="false"
-            android:theme="@style/JPushDialogStyle"></activity>
+            android:theme="@style/JPushDialogStyle" />
 
         <!-- Required SDK核心功能 -->
         <activity
@@ -162,7 +162,8 @@
             android:name="JPUSH_APPKEY"
             android:value="7dedb2c3b03617b600ddf2cc" />
 
-        <activity android:name=".moudle.taskquery.QueryTaskListActivity"></activity>
+        <activity android:name=".moudle.taskquery.QueryTaskListActivity" />
+        <activity android:name=".moudle.timeout.TimeoutTaskActivity"></activity>
     </application>
 
 </manifest>

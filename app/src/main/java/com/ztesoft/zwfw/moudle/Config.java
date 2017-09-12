@@ -1,4 +1,4 @@
-package com.ztesoft.zwfw;
+package com.ztesoft.zwfw.moudle;
 
 /**
  * Created by BaoChengchen on 2017/8/6.
@@ -12,7 +12,7 @@ public class Config {
     //http://192.168.50.110
     //http://192.168.0.113:8080/portal
 
-   // public static final String BASE_URL = "http://192.168.0.113:8080/portal";
+   // public static final String BASE_URL = "http://192.168.0.111:8080/portal";
 
     public static final String BASE_URL = "http://192.168.50.109:8080/portal";
 
@@ -23,6 +23,8 @@ public class Config {
     public static final String URL_MESSAGE_LIST = "/rest/message/qryList";
 
     public static final String URL_QRYWORKLIST = "/rest/sgsp/mywork/qryMyWorkList";
+
+    public static final String URL_QUERYMYWORKTASKS = "/rest/sgsp/myworktasks/queryMyWorkTasks";
 
     public static final String URL_SEARCHFLOWBUTTONDTO = "/rest/commons/searchFlowButtonDto";
 

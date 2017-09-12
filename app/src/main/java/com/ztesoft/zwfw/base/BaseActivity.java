@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 
 import com.alibaba.fastjson.JSON;
-import com.ztesoft.zwfw.Config;
+import com.ztesoft.zwfw.moudle.Config;
 import com.ztesoft.zwfw.R;
 import com.ztesoft.zwfw.domain.User;
 import com.ztesoft.zwfw.utils.APPPreferenceManager;

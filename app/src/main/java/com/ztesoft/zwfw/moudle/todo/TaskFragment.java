@@ -1,6 +1,5 @@
 package com.ztesoft.zwfw.moudle.todo;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,7 +14,7 @@ import android.widget.Toast;
 import com.alibaba.fastjson.JSON;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
-import com.ztesoft.zwfw.Config;
+import com.ztesoft.zwfw.moudle.Config;
 import com.ztesoft.zwfw.R;
 import com.ztesoft.zwfw.base.BaseFragment;
 import com.ztesoft.zwfw.domain.Task;
@@ -122,6 +121,7 @@ public class TaskFragment extends BaseFragment {
                 QueryTaskListResp resp = JSON.parseObject(response, QueryTaskListResp.class);
                 if (resp.getContent() != null) {
                     totalSize = Integer.parseInt(resp.getTotalElements());
+                    Log.d(TAG,"totalSize:"+totalSize);
                     if (resp.isFirst()) {
                         mTasks.clear();
                         mTasks.addAll(resp.getContent());
@@ -176,8 +176,10 @@ public class TaskFragment extends BaseFragment {
             public void onSuccess(String response, String url, int actionId) {
                 QueryTaskListResp resp = JSON.parseObject(response, QueryTaskListResp.class);
                 if (null != resp) {
+                    Log.d(TAG,"getTotalElements:"+Integer.parseInt(resp.getTotalElements()));
                     if(totalSize == Integer.parseInt(resp.getTotalElements())){
                         mTasks.remove(curClickPositon);
+                        Log.d(TAG,"-------------");
                         if (resp.getContent().size() > 0) {
                             mTasks.add(curClickPositon, resp.getContent().get(curPageOffset));
                         }

@@ -1,7 +1,5 @@
 package com.ztesoft.zwfw.utils.http;
 
-import android.util.Log;
-
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
@@ -9,8 +7,8 @@ import com.android.volley.Response;
 import com.android.volley.Response.ErrorListener;
 import com.android.volley.Response.Listener;
 import com.android.volley.toolbox.HttpHeaderParser;
-import com.ztesoft.zwfw.Config;
-import com.ztesoft.zwfw.ZWFWApp;
+import com.ztesoft.zwfw.moudle.Config;
+import com.ztesoft.zwfw.moudle.ZWFWApp;
 import com.ztesoft.zwfw.utils.APPPreferenceManager;
 
 import org.apache.http.HttpEntity;

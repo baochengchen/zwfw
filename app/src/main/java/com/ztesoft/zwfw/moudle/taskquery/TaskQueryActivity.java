@@ -2,7 +2,6 @@ package com.ztesoft.zwfw.moudle.taskquery;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -12,7 +11,7 @@ import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
 import com.bigkoo.pickerview.TimePickerView;
-import com.ztesoft.zwfw.Config;
+import com.ztesoft.zwfw.moudle.Config;
 import com.ztesoft.zwfw.R;
 import com.ztesoft.zwfw.base.BaseActivity;
 import com.ztesoft.zwfw.domain.req.QueryTaskReq;

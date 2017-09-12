@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 
-import com.ztesoft.zwfw.Config;
 import com.ztesoft.zwfw.R;
 import com.ztesoft.zwfw.base.BaseActivity;
 import com.ztesoft.zwfw.utils.APPPreferenceManager;

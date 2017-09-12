@@ -1,6 +1,5 @@
 package com.ztesoft.zwfw.moudle.todo;
 
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
@@ -9,6 +8,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -18,7 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
-import com.ztesoft.zwfw.Config;
+import com.ztesoft.zwfw.moudle.Config;
 import com.ztesoft.zwfw.R;
 import com.ztesoft.zwfw.base.BaseActivity;
 import com.ztesoft.zwfw.domain.Consult;
@@ -114,14 +114,23 @@ public class TaskDetailActivity extends BaseActivity implements SegmentView.OnSe
     }
 
     private void initFloatBtn() {
-
+        String templateId = null;
         Map<String, String> map = new HashMap<>();
         if (mData instanceof Task) {
-            map.put("templateId", ((Task) mData).getTemplateId());
+            templateId = ((Task) mData).getTemplateId();
+            if(templateId == null)
+                return;
+            map.put("templateId",templateId);
         } else if (mData instanceof Consult) {
-            map.put("templateId", ((Consult) mData).getTemplateId());
+            templateId = ((Consult) mData).getTemplateId();
+            if(templateId == null)
+                return;
+            map.put("templateId", templateId);
         } else if (mData instanceof Supervise) {
-            map.put("templateId", ((Supervise) mData).getSupervisionTemplateId());
+            templateId = ((Supervise) mData).getSupervisionTemplateId();
+            if(templateId == null)
+                return;
+            map.put("templateId",templateId);
         }
 
         RequestManager.getInstance().postHeader(Config.BASE_URL + Config.URL_SEARCHFLOWBUTTONDTO, JSON.toJSONString(map), new RequestManager.RequestListener() {
@@ -202,6 +211,7 @@ public class TaskDetailActivity extends BaseActivity implements SegmentView.OnSe
             replyReq.setTaskListId(supervise.getSupervisionTaskListId());
             reportDynamicDatas.setSupervise(supervise);
         }
+
         replyReq.setStateCode(dialog.getStateCode());
         replyReq.setDynamicDatas(reportDynamicDatas);
         String reply = dialog.getReplyText();

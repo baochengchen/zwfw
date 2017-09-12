@@ -1,8 +1,6 @@
 package com.ztesoft.zwfw.utils.http;
 
 import android.content.Context;
-import android.content.Intent;
-import android.util.Log;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
@@ -16,8 +14,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.ztesoft.zwfw.ZWFWApp;
-import com.ztesoft.zwfw.moudle.LoginActivity;
 import com.ztesoft.zwfw.utils.APPPreferenceManager;
 
 import java.util.Collections;

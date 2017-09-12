@@ -1,10 +1,11 @@
-package com.ztesoft.zwfw;
+package com.ztesoft.zwfw.moudle.message;
 
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.view.View;
 import android.widget.TextView;
 
+import com.ztesoft.zwfw.R;
 import com.ztesoft.zwfw.base.BaseActivity;
 import com.ztesoft.zwfw.domain.Message;
 

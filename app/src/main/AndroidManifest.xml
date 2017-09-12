@@ -30,7 +30,7 @@
     <uses-permission android:name="android.permission.GET_TASKS" />
 
     <application
-        android:name=".ZWFWApp"
+        android:name=".moudle.ZWFWApp"
         android:allowBackup="true"
         android:icon="@mipmap/icon_app_logo"
         android:label="@string/app_name"
@@ -47,9 +47,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".moudle.LoginActivity" />
-        <activity android:name=".MessageCenterActivity" />
+        <activity android:name=".moudle.message.MessageCenterActivity" />
         <activity
-            android:name=".MessageDetailActivity"
+            android:name=".moudle.message.MessageDetailActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".moudle.todo.MyTodoActivity"

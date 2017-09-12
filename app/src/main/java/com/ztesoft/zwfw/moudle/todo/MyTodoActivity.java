@@ -8,7 +8,7 @@ import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.TextView;
 
-import com.ztesoft.zwfw.Config;
+import com.ztesoft.zwfw.moudle.Config;
 import com.ztesoft.zwfw.R;
 import com.ztesoft.zwfw.base.BaseActivity;
 import com.ztesoft.zwfw.utils.APPPreferenceManager;

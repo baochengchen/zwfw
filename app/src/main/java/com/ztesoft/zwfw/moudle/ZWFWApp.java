@@ -1,4 +1,4 @@
-package com.ztesoft.zwfw;
+package com.ztesoft.zwfw.moudle;
 
 import android.app.Activity;
 import android.app.Application;
@@ -16,6 +16,7 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.nostra13.universalimageloader.core.download.BaseImageDownloader;
+import com.ztesoft.zwfw.R;
 import com.ztesoft.zwfw.utils.http.RequestManager;
 
 import java.io.IOException;

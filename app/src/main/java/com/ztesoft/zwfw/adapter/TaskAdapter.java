@@ -1,6 +1,7 @@
 package com.ztesoft.zwfw.adapter;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +22,7 @@ public class TaskAdapter extends BaseAdapter {
     private Context context;
     private List<Task> tasks;
 
-    public TaskAdapter(Context context, List<Task> tasks){
+    public TaskAdapter(Context context, List<Task> tasks) {
         this.context = context;
         this.tasks = tasks;
     }
@@ -56,7 +57,8 @@ public class TaskAdapter extends BaseAdapter {
 
         Task task = tasks.get(position);
         taskNoTv.setText("办件编号：" + task.getWorkNo());
-        taskTimelineTv.setText("办结时限：" + task.getPromiseDate());
+        if (!TextUtils.isEmpty(task.getPromiseDate()))
+            taskTimelineTv.setText("办结时限：" + task.getPromiseDate());
         if (position % 3 == 0) {
             surNameTv.setBackground(context.getResources().getDrawable(R.drawable.red_corner_text_bg));
         } else if (position % 3 == 1) {

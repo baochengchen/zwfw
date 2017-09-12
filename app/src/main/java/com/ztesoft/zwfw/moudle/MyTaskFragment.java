@@ -1,8 +1,12 @@
-package com.ztesoft.zwfw.moudle.taskquery;
+package com.ztesoft.zwfw.moudle;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -11,12 +15,10 @@ import android.widget.Toast;
 import com.alibaba.fastjson.JSON;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
-import com.ztesoft.zwfw.moudle.Config;
 import com.ztesoft.zwfw.R;
 import com.ztesoft.zwfw.adapter.TaskAdapter;
-import com.ztesoft.zwfw.base.BaseActivity;
+import com.ztesoft.zwfw.base.BaseFragment;
 import com.ztesoft.zwfw.domain.Task;
-import com.ztesoft.zwfw.domain.req.QueryTaskReq;
 import com.ztesoft.zwfw.domain.resp.QueryTaskListResp;
 import com.ztesoft.zwfw.moudle.todo.TaskDetailActivity;
 import com.ztesoft.zwfw.utils.http.RequestManager;
@@ -24,39 +26,50 @@ import com.ztesoft.zwfw.utils.http.RequestManager;
 import java.util.ArrayList;
 import java.util.List;
 
-public class QueryTaskListActivity extends BaseActivity {
+/**
+ * Created by BaoChengchen on 2017/8/7.
+ */
 
+public class MyTaskFragment extends BaseFragment{
 
-
+    View mView;
     PullToRefreshListView mTaskLv;
     private List<Task> mTasks = new ArrayList<>();
-    private QueryTaskReq mQueryTaskReq;
     private TaskAdapter mTaskAdapter;
+
     private int curPage = 0;
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate( Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_query_task_list);
+    }
 
-        TextView csTitile = (TextView) findViewById(R.id.cs_title);
-        csTitile.setText(getString(R.string.query_result));
-        findViewById(R.id.cs_back).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
+    @Override
+    public View onCreateView(LayoutInflater inflater,ViewGroup container, Bundle savedInstanceState) {
+        mView = inflater.inflate(R.layout.fragment_layout_my_task,container,false);
+        return mView;
+    }
 
-        mTasks = (List<Task>) getIntent().getSerializableExtra("list");
-        mQueryTaskReq = (QueryTaskReq) getIntent().getSerializableExtra("queryTaskReq");
-
-        mTaskLv = (PullToRefreshListView) findViewById(R.id.task_lv);
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        mView.findViewById(R.id.tt_layout).setBackgroundResource(R.mipmap.sy_top);
+        TextView csTitile = (TextView) mView.findViewById(R.id.cs_title);
+        csTitile.setText(getString(R.string.approve_center));
+        csTitile.setTextColor(getResources().getColorStateList(R.color.white));
+        mView.findViewById(R.id.cs_back).setVisibility(View.GONE);
+        mTaskLv = (PullToRefreshListView) mView.findViewById(R.id.task_lv);
         mTaskLv.setMode(PullToRefreshBase.Mode.BOTH);
+
         mTaskLv.getLoadingLayoutProxy(false, true).setPullLabel("上拉加载更多");
         mTaskLv.getLoadingLayoutProxy(false, true).setReleaseLabel("松开以加载");
-        mTaskAdapter = new TaskAdapter(mContext,mTasks);
+        mTaskAdapter = new TaskAdapter(getActivity(),mTasks);
         mTaskLv.setAdapter(mTaskAdapter);
+
 
         mTaskLv.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
             @Override
@@ -72,24 +85,27 @@ public class QueryTaskListActivity extends BaseActivity {
             }
         });
 
-
         mTaskLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(mContext, TaskDetailActivity.class);;
+                Intent intent = new Intent(getActivity(),TaskDetailActivity.class);
                 intent.putExtra("data",mTasks.get(position-1));
                 startActivity(intent);
             }
         });
+
+
+        requestData();
+
+
     }
 
 
     private void requestData() {
 
-        RequestManager.getInstance().postHeader(Config.BASE_URL + Config.URL_QUERYAPPWORKS + "?page=" + curPage + "&size=20", JSON.toJSONString(mQueryTaskReq), new RequestManager.RequestListener() {
+        RequestManager.getInstance().postHeader(Config.BASE_URL + Config.URL_QUERYMYWORKTASKS + "?page=" + curPage + "&size=20", "{}", new RequestManager.RequestListener() {
             @Override
             public void onRequest(String url, int actionId) {
-
             }
 
             @Override
@@ -105,7 +121,7 @@ public class QueryTaskListActivity extends BaseActivity {
                     } else {
                         if (resp.getContent().size() == 0) {
                             curPage--;
-                            Toast.makeText(mContext, "没有更多数据了", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), "没有更多数据了", Toast.LENGTH_SHORT).show();
                         } else {
                             mTasks.addAll(resp.getContent());
                             mTaskAdapter.notifyDataSetChanged();
@@ -120,4 +136,14 @@ public class QueryTaskListActivity extends BaseActivity {
             }
         }, curPage);
     }
+
+     public static MyTaskFragment newInstance() {
+
+        Bundle args = new Bundle();
+        MyTaskFragment fragment = new MyTaskFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+
 }

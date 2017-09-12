@@ -27,7 +27,7 @@ import android.widget.Toast;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.ztesoft.zwfw.Config;
+import com.ztesoft.zwfw.moudle.Config;
 import com.ztesoft.zwfw.domain.HeaderPic;
 import com.ztesoft.zwfw.domain.User;
 import com.ztesoft.zwfw.moudle.LoginActivity;

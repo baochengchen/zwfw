@@ -12,8 +12,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.ztesoft.zwfw.MainFragment;
-import com.ztesoft.zwfw.MyTaskFragment;
 import com.ztesoft.zwfw.R;
 import com.ztesoft.zwfw.base.BaseActivity;
 import com.ztesoft.zwfw.moudle.user.PersonalFragment;

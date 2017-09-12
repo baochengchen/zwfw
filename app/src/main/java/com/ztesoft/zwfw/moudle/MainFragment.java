@@ -1,4 +1,4 @@
-package com.ztesoft.zwfw;
+package com.ztesoft.zwfw.moudle;
 
 import android.content.Context;
 import android.content.Intent;
@@ -11,8 +11,9 @@ import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.ztesoft.zwfw.moudle.message.MessageCenterActivity;
+import com.ztesoft.zwfw.R;
 import com.ztesoft.zwfw.base.BaseFragment;
-import com.ztesoft.zwfw.moudle.MainActivity;
 import com.ztesoft.zwfw.moudle.taskquery.TaskQueryActivity;
 import com.ztesoft.zwfw.moudle.todo.MyTodoActivity;
 import com.ztesoft.zwfw.moudle.warning.EarlyWarningActivity;

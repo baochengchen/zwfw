@@ -17,11 +17,10 @@ import android.widget.Toast;
 import com.alibaba.fastjson.JSON;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
-import com.ztesoft.zwfw.Config;
+import com.ztesoft.zwfw.moudle.Config;
 import com.ztesoft.zwfw.R;
 import com.ztesoft.zwfw.base.BaseFragment;
 import com.ztesoft.zwfw.domain.Supervise;
-import com.ztesoft.zwfw.domain.resp.QueryConsultListResp;
 import com.ztesoft.zwfw.domain.resp.QuerySuperviseListResp;
 import com.ztesoft.zwfw.utils.http.RequestManager;
 

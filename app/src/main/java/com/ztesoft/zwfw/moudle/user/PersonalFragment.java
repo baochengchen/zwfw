@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,7 +27,9 @@ import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONException;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.ztesoft.zwfw.domain.resp.HttpErrorResp;
 import com.ztesoft.zwfw.moudle.Config;
 import com.ztesoft.zwfw.domain.HeaderPic;
 import com.ztesoft.zwfw.domain.User;
@@ -34,6 +37,7 @@ import com.ztesoft.zwfw.moudle.LoginActivity;
 import com.ztesoft.zwfw.R;
 import com.ztesoft.zwfw.base.BaseFragment;
 import com.ztesoft.zwfw.utils.APPPreferenceManager;
+import com.ztesoft.zwfw.utils.SessionUtils;
 import com.ztesoft.zwfw.utils.http.RequestManager;
 import com.ztesoft.zwfw.utils.http.RequestMap;
 import com.ztesoft.zwfw.widget.CircleImageView;
@@ -121,6 +125,7 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
 
                     @Override
                     public void onSuccess(String response, String url, int actionId) {
+
                         APPPreferenceManager.getInstance().saveObject(getActivity(), Config.IS_LOGIN, false);
                         startActivity(new Intent(getActivity(), LoginActivity.class));
                         getActivity().finish();
@@ -128,12 +133,15 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
 
                     @Override
                     public void onError(String errorMsg, String url, int actionId) {
-                        if(TextUtils.equals("Server Response Error (400)",errorMsg)){
+                        if(SessionUtils.invalid(errorMsg)){
                             Toast.makeText(getActivity(),"会话超时",Toast.LENGTH_SHORT).show();
                             APPPreferenceManager.getInstance().saveObject(getActivity(), Config.IS_LOGIN, false);
                             startActivity(new Intent(getActivity(),LoginActivity.class));
                             getActivity().finish();
+                        }else{
+                            Toast.makeText(getActivity(),errorMsg,Toast.LENGTH_SHORT).show();
                         }
+
                     }
                 },0);
             }

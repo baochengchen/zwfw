@@ -9,12 +9,16 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
 import com.ztesoft.zwfw.moudle.Config;
 import com.ztesoft.zwfw.R;
 import com.ztesoft.zwfw.base.BaseActivity;
 import com.ztesoft.zwfw.domain.Message;
+import com.ztesoft.zwfw.moudle.LoginActivity;
+import com.ztesoft.zwfw.utils.APPPreferenceManager;
+import com.ztesoft.zwfw.utils.SessionUtils;
 import com.ztesoft.zwfw.utils.http.RequestManager;
 import com.ztesoft.zwfw.widget.slidedeletelistview.SlideItem;
 import com.ztesoft.zwfw.widget.slidedeletelistview.SlideListView;
@@ -60,6 +64,7 @@ public class MessageCenterActivity extends BaseActivity implements SlideView.OnS
         requestData();
     }
 
+
         private void requestData() {
             RequestManager.getInstance().postHeader(Config.BASE_URL + Config.URL_MESSAGE_LIST,"{}",new RequestManager.RequestListener() {
                 @Override
@@ -79,7 +84,14 @@ public class MessageCenterActivity extends BaseActivity implements SlideView.OnS
 
                 @Override
                 public void onError(String errorMsg, String url, int actionId) {
-
+                    if(SessionUtils.invalid(errorMsg)){
+                        Toast.makeText(mContext,"会话超时",Toast.LENGTH_SHORT).show();
+                        APPPreferenceManager.getInstance().saveObject(mContext, Config.IS_LOGIN, false);
+                        startActivity(new Intent(mContext,LoginActivity.class));
+                        finish();
+                    }else{
+                        Toast.makeText(mContext, "查询失败", Toast.LENGTH_SHORT).show();
+                    }
                 }
             },0);
         mMsgListAdapter.notifyDataSetChanged();

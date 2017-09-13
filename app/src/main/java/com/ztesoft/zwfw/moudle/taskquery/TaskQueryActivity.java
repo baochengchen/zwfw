@@ -16,7 +16,10 @@ import com.ztesoft.zwfw.R;
 import com.ztesoft.zwfw.base.BaseActivity;
 import com.ztesoft.zwfw.domain.req.QueryTaskReq;
 import com.ztesoft.zwfw.domain.resp.QueryTaskListResp;
+import com.ztesoft.zwfw.moudle.LoginActivity;
+import com.ztesoft.zwfw.utils.APPPreferenceManager;
 import com.ztesoft.zwfw.utils.DateUtils;
+import com.ztesoft.zwfw.utils.SessionUtils;
 import com.ztesoft.zwfw.utils.http.RequestManager;
 
 import java.io.Serializable;
@@ -135,7 +138,15 @@ public class TaskQueryActivity extends BaseActivity implements View.OnClickListe
             @Override
             public void onError(String errorMsg, String url, int actionId) {
                 hideProgressDialog();
-                Toast.makeText(mContext, "查询失败", Toast.LENGTH_SHORT).show();
+                if(SessionUtils.invalid(errorMsg)){
+                    Toast.makeText(mContext,"会话超时",Toast.LENGTH_SHORT).show();
+                    APPPreferenceManager.getInstance().saveObject(mContext, Config.IS_LOGIN, false);
+                    startActivity(new Intent(mContext,LoginActivity.class));
+                    finish();
+                }else{
+                    Toast.makeText(mContext, "查询失败", Toast.LENGTH_SHORT).show();
+                }
+
             }
         }, 0);
 

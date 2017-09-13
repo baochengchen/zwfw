@@ -72,6 +72,7 @@ public class MainFragment extends BaseFragment implements MainActivity.UpdateMsg
                         startActivity(new Intent(getActivity(),MyTodoActivity.class));
                         break;
                     case 2:
+                        break;
                     case 3:
                         Intent intent = new Intent(getActivity(),EarlyWarningActivity.class);
                         intent.putExtra("type",position);

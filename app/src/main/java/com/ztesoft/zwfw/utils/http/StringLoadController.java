@@ -25,7 +25,8 @@ public class StringLoadController extends AbsLoadControler implements Listener<S
             errorMsg = error.getMessage();
         } else {
             try {
-                errorMsg = "Server Response Error (" + error.networkResponse.statusCode + ")";
+                //errorMsg = "Server Response Error (" + error.networkResponse.statusCode + ")";
+                errorMsg = new String(error.networkResponse.data);
             } catch (Exception e) {
                 errorMsg = "Server Response Error";
             }

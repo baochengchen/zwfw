@@ -19,6 +19,9 @@ import com.ztesoft.zwfw.R;
 import com.ztesoft.zwfw.base.BaseFragment;
 import com.ztesoft.zwfw.domain.Task;
 import com.ztesoft.zwfw.domain.resp.QueryTaskListResp;
+import com.ztesoft.zwfw.moudle.LoginActivity;
+import com.ztesoft.zwfw.utils.APPPreferenceManager;
+import com.ztesoft.zwfw.utils.SessionUtils;
 import com.ztesoft.zwfw.utils.http.RequestManager;
 import com.ztesoft.zwfw.adapter.TaskAdapter;
 
@@ -179,7 +182,6 @@ public class TaskFragment extends BaseFragment {
                     Log.d(TAG,"getTotalElements:"+Integer.parseInt(resp.getTotalElements()));
                     if(totalSize == Integer.parseInt(resp.getTotalElements())){
                         mTasks.remove(curClickPositon);
-                        Log.d(TAG,"-------------");
                         if (resp.getContent().size() > 0) {
                             mTasks.add(curClickPositon, resp.getContent().get(curPageOffset));
                         }
@@ -193,7 +195,14 @@ public class TaskFragment extends BaseFragment {
 
             @Override
             public void onError(String errorMsg, String url, int actionId) {
-
+                if(SessionUtils.invalid(errorMsg)){
+                    Toast.makeText(getActivity(),"会话超时",Toast.LENGTH_SHORT).show();
+                    APPPreferenceManager.getInstance().saveObject(getActivity(), Config.IS_LOGIN, false);
+                    startActivity(new Intent(getActivity(),LoginActivity.class));
+                    getActivity().finish();
+                }else{
+                    Toast.makeText(getActivity(),errorMsg,Toast.LENGTH_SHORT).show();
+                }
             }
         }, curClickPage);
 

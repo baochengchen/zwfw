@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 
 import com.ztesoft.zwfw.R;
 import com.ztesoft.zwfw.base.BaseActivity;
+import com.ztesoft.zwfw.moudle.todo.TaskFragment;
 import com.ztesoft.zwfw.moudle.user.PersonalFragment;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener {
@@ -25,6 +27,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     public MainFragment mainFragment;
     private MyTaskFragment myTaskFragment;
     private PersonalFragment personalFragment;
+    private FragmentManager mFragmentManager;
     private static final int TAG_FRAG_MYTASK= 0;
     private static final int TAG_FRAG_MAIN = 1;
     private static final int TAG_FRAG_PERSONAL = 2;
@@ -48,8 +51,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         tabImgWdbj = (ImageView) findViewById(R.id.img_wdbj);
         tabImgGrzx = (ImageView) findViewById(R.id.img_grzx);
 
+        mFragmentManager = getSupportFragmentManager();
         if(savedInstanceState == null){
             curTag = TAG_FRAG_MAIN;
+            mainFragment = (MainFragment) mFragmentManager.findFragmentByTag(""+TAG_FRAG_MAIN);
+            myTaskFragment = (MyTaskFragment) mFragmentManager.findFragmentByTag(""+TAG_FRAG_MYTASK);
+            personalFragment = (PersonalFragment) mFragmentManager.findFragmentByTag(""+TAG_FRAG_PERSONAL);
         }else{
             curTag = savedInstanceState.getInt("curTag",TAG_FRAG_MAIN);
         }
@@ -61,27 +68,27 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
 
     private void setTab(int tag) {
-        FragmentTransaction fm = getSupportFragmentManager().beginTransaction();
+        FragmentTransaction fm = mFragmentManager.beginTransaction();
         hideAllFragMent(fm);
         switch (tag){
             case TAG_FRAG_MYTASK:
                 if(myTaskFragment == null){
                     myTaskFragment = MyTaskFragment.newInstance();
-                    fm.add(R.id.fragContainer, myTaskFragment);
+                    fm.add(R.id.fragContainer, myTaskFragment,""+TAG_FRAG_MYTASK);
                 }
                 fm.show(myTaskFragment);
                 break;
             case TAG_FRAG_MAIN:
                 if(mainFragment== null){
                     mainFragment = MainFragment.newInstance();
-                    fm.add(R.id.fragContainer,mainFragment);
+                    fm.add(R.id.fragContainer,mainFragment,""+TAG_FRAG_MAIN);
                 }
                 fm.show(mainFragment);
                 break;
             case TAG_FRAG_PERSONAL:
                 if(personalFragment== null){
                     personalFragment = PersonalFragment.newInstance();
-                    fm.add(R.id.fragContainer,personalFragment);
+                    fm.add(R.id.fragContainer,personalFragment,""+TAG_FRAG_PERSONAL);
                 }
                 fm.show(personalFragment);
                 break;

@@ -18,7 +18,8 @@
             android:id="@+id/pager_strip"
             android:layout_width="match_parent"
             android:layout_height="@dimen/title_bar_height"
-            app:pstsIndicatorHeight="1dp"
+            app:pstsIndicatorHeight="2dp"
+            app:pstsIndicatorColor="@color/colorPrimary"
             android:background="@color/white"/>
         <android.support.v4.view.ViewPager
             android:id="@+id/view_pager"

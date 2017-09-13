@@ -9,12 +9,12 @@ public class Config {
     
     //http://220.163.118.118
     //http://192.168.50.109:8080/portal
-    //http://192.168.50.110
+    //http://192.168.50.110/portal
     //http://192.168.0.113:8080/portal
 
-    //public static final String BASE_URL = "http://192.168.0.111:8080/portal";
+    public static final String BASE_URL = "http://192.168.50.110/portal";
 
-    public static final String BASE_URL = "http://192.168.50.109:8080/portal";
+//    public static final String BASE_URL = "http://192.168.50.109:8080/portal";
 
     public static final String URL_LOGIN = "/rest/login";
 

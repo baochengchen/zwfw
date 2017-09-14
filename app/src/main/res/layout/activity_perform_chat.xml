@@ -20,14 +20,15 @@
         android:layout_marginLeft="@dimen/activity_horizontal_margin"
         android:layout_marginRight="@dimen/activity_horizontal_margin">
         <TextView
-            android:id="@+id/select_chat_tv"
+            android:id="@+id/search_users_tv"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="50dp"
             android:gravity="center_vertical"
             android:textSize="@dimen/normal_text_size"
             android:paddingLeft="7dp"
-            android:hint="请选择想要提问的人"/>
+            android:onClick="searchUsers"
+            android:hint="搜索想要提问的人"/>
 
         <ImageView
             android:layout_width="30dp"

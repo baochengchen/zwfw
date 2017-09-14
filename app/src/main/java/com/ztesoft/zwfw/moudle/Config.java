@@ -12,9 +12,11 @@ public class Config {
     //http://192.168.50.110/portal
     //http://192.168.0.113:8080/portal
 
-    public static final String BASE_URL = "http://192.168.50.110/portal";
+  //  public static final String BASE_URL = "http://192.168.50.110/portal";
 
 //    public static final String BASE_URL = "http://192.168.50.109:8080/portal";
+
+    public static final String BASE_URL = "http://192.168.0.107:8080/portal";
 
     public static final String URL_LOGIN = "/rest/login";
 
@@ -45,6 +47,8 @@ public class Config {
     public static final String URL_QUERYAPPWORKS ="/rest/app/queryappworks";
 
     public static final String URL_ATTACHMENT = "/rest/attachment";
+
+    public static final String URL_USERS_QUERY="/rest/users/query";
 
     public static final String URL_USERS = "/rest/users";
 

@@ -163,7 +163,8 @@
             android:value="7dedb2c3b03617b600ddf2cc" />
 
         <activity android:name=".moudle.taskquery.QueryTaskListActivity" />
-        <activity android:name=".moudle.timeout.TimeoutTaskActivity"></activity>
+        <activity android:name=".moudle.timeout.TimeoutTaskActivity" />
+        <activity android:name=".moudle.workchat.SearchUsersActivity"></activity>
     </application>
 
 </manifest>

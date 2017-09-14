@@ -14,6 +14,8 @@ import com.lzy.imagepicker.ui.ImagePreviewDelActivity;
 import com.ztesoft.zwfw.R;
 import com.ztesoft.zwfw.adapter.ImagePickerAdapter;
 import com.ztesoft.zwfw.base.BaseActivity;
+import com.ztesoft.zwfw.moudle.Config;
+import com.ztesoft.zwfw.utils.http.RequestManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,11 +25,14 @@ public class PerformChatActivity extends BaseActivity implements ImagePickerAdap
     public static final int IMAGE_ITEM_ADD = -1;
     public static final int REQUEST_CODE_SELECT = 100;
     public static final int REQUEST_CODE_PREVIEW = 101;
+    public static final int REQUEST_CODE_USER = 102;
 
     private ImagePickerAdapter mImgadapter;
     private ArrayList<ImageItem> mSelImageList; //当前选择的所有图片
     private int maxImgCount = 8;               //允许选择图片最大数
 
+
+    TextView mSearchUsersTv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +47,9 @@ public class PerformChatActivity extends BaseActivity implements ImagePickerAdap
             }
         });
 
+
+        mSearchUsersTv = (TextView) findViewById(R.id.search_users_tv);
+
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         mSelImageList = new ArrayList<>();
         mImgadapter = new ImagePickerAdapter(this, mSelImageList, maxImgCount);
@@ -50,6 +58,13 @@ public class PerformChatActivity extends BaseActivity implements ImagePickerAdap
         recyclerView.setLayoutManager(new GridLayoutManager(this, 4));
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(mImgadapter);
+
+    }
+
+
+
+    public void searchUsers(View view){
+        startActivityForResult(new Intent(mContext,SearchUsersActivity.class),REQUEST_CODE_USER);
     }
 
 
@@ -74,6 +89,11 @@ public class PerformChatActivity extends BaseActivity implements ImagePickerAdap
                     mSelImageList.addAll(items);
                     mImgadapter.setImages(mSelImageList);
                 }
+            }
+        }else if (resultCode == SearchUsersActivity.RESULT_CODE_SELECT) {
+            //选择提问人返回
+            if (data != null && requestCode == REQUEST_CODE_USER) {
+                mSearchUsersTv.setText(data.getStringExtra("userCode"));
             }
         }
 

@@ -2,6 +2,7 @@ package com.ztesoft.zwfw.moudle.taskquery;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -18,7 +19,10 @@ import com.ztesoft.zwfw.base.BaseActivity;
 import com.ztesoft.zwfw.domain.Task;
 import com.ztesoft.zwfw.domain.req.QueryTaskReq;
 import com.ztesoft.zwfw.domain.resp.QueryTaskListResp;
+import com.ztesoft.zwfw.moudle.LoginActivity;
 import com.ztesoft.zwfw.moudle.todo.TaskDetailActivity;
+import com.ztesoft.zwfw.utils.APPPreferenceManager;
+import com.ztesoft.zwfw.utils.SessionUtils;
 import com.ztesoft.zwfw.utils.http.RequestManager;
 
 import java.util.ArrayList;
@@ -33,7 +37,10 @@ public class QueryTaskListActivity extends BaseActivity {
     private QueryTaskReq mQueryTaskReq;
     private TaskAdapter mTaskAdapter;
     private int curPage = 0;
-
+    private int totalSize = 0;
+    private int curClickPositon = 0;
+    private int curClickPage = 0;
+    private int curPageOffset = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,9 +83,13 @@ public class QueryTaskListActivity extends BaseActivity {
         mTaskLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(mContext, TaskDetailActivity.class);;
-                intent.putExtra("data",mTasks.get(position-1));
-                startActivity(intent);
+
+                curClickPositon = position - 1;
+                curClickPage = curClickPositon / 20;
+                curPageOffset = curClickPositon % 20;
+                Intent intent = new Intent(mContext, TaskDetailActivity.class);
+                intent.putExtra("data", mTasks.get(position - 1));
+                startActivityForResult(intent, TaskDetailActivity.REQUEST_REFRESH);
             }
         });
     }
@@ -98,6 +109,7 @@ public class QueryTaskListActivity extends BaseActivity {
                 mTaskLv.onRefreshComplete();
                 QueryTaskListResp resp = JSON.parseObject(response, QueryTaskListResp.class);
                 if (resp.getContent() != null) {
+                    totalSize = Integer.parseInt(resp.getTotalElements());
                     if (resp.isFirst()) {
                         mTasks.clear();
                         mTasks.addAll(resp.getContent());
@@ -119,5 +131,55 @@ public class QueryTaskListActivity extends BaseActivity {
                 mTaskLv.onRefreshComplete();
             }
         }, curPage);
+    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == TaskDetailActivity.RESULET_CUSTOM_REPLY) {
+            if (TaskDetailActivity.REQUEST_REFRESH == requestCode) {
+                updateItem();
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private void updateItem() {
+        RequestManager.getInstance().postHeader(Config.BASE_URL + Config.URL_QRYWORKLIST + "?page=" + curClickPage + "&size=20", "{}", new RequestManager.RequestListener() {
+            @Override
+            public void onRequest(String url, int actionId) {
+
+            }
+
+            @Override
+            public void onSuccess(String response, String url, int actionId) {
+                QueryTaskListResp resp = JSON.parseObject(response, QueryTaskListResp.class);
+                if (null != resp) {
+                    if(totalSize == Integer.parseInt(resp.getTotalElements())){
+                        mTasks.remove(curClickPositon);
+                        if (resp.getContent().size() > 0) {
+                            mTasks.add(curClickPositon, resp.getContent().get(curPageOffset));
+                        }
+                    }else{
+                        mTasks.remove(curClickPositon);
+                        totalSize = Integer.parseInt(resp.getTotalElements());
+                    }
+                    mTaskAdapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onError(String errorMsg, String url, int actionId) {
+                if(SessionUtils.invalid(errorMsg)){
+                    Toast.makeText(mContext,"会话超时",Toast.LENGTH_SHORT).show();
+                    APPPreferenceManager.getInstance().saveObject(mContext, Config.IS_LOGIN, false);
+                    startActivity(new Intent(mContext,LoginActivity.class));
+                    finish();
+                }else{
+                    Toast.makeText(mContext,errorMsg,Toast.LENGTH_SHORT).show();
+                }
+            }
+        }, curClickPage);
+
     }
 }

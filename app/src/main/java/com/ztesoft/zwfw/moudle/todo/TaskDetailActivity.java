@@ -118,17 +118,17 @@ public class TaskDetailActivity extends BaseActivity implements SegmentView.OnSe
         Map<String, String> map = new HashMap<>();
         if (mData instanceof Task) {
             templateId = ((Task) mData).getTemplateId();
-            if(templateId == null)
+            if(TextUtils.isEmpty(templateId))
                 return;
             map.put("templateId",templateId);
         } else if (mData instanceof Consult) {
             templateId = ((Consult) mData).getTemplateId();
-            if(templateId == null)
+            if(TextUtils.isEmpty(templateId))
                 return;
             map.put("templateId", templateId);
         } else if (mData instanceof Supervise) {
             templateId = ((Supervise) mData).getSupervisionTemplateId();
-            if(templateId == null)
+            if(TextUtils.isEmpty(templateId))
                 return;
             map.put("templateId",templateId);
         }
@@ -221,6 +221,7 @@ public class TaskDetailActivity extends BaseActivity implements SegmentView.OnSe
         }
         replyReq.setTaskResult(reply);
 
+        Log.d("kkk", "excuteBizProcess: "+JSON.toJSONString(replyReq));
         RequestManager.getInstance().postHeader(Config.BASE_URL + Config.URL_EXCUTEBIZPROCESS, JSON.toJSONString(replyReq), new RequestManager.RequestListener() {
             @Override
             public void onRequest(String url, int actionId) {

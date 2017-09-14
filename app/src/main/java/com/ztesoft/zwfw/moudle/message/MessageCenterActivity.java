@@ -225,7 +225,7 @@ public class MessageCenterActivity extends BaseActivity implements SlideView.OnS
                 vHolder= (ViewHolder) convertView.getTag();
             }
 
-            vHolder.tvType.setText(mMessages.get(position).getRevType().getTitle());
+            vHolder.tvType.setText("消息类型："+mMessages.get(position).getRevType().getTitle());
             vHolder.tvTitle.setText(mMessages.get(position).getTitle());
             vHolder.tvSendTime.setText(mMessages.get(position).getSendDate());
             vHolder.tvSender.setText(mMessages.get(position).getSender());

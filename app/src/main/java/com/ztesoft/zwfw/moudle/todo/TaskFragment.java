@@ -124,7 +124,6 @@ public class TaskFragment extends BaseFragment {
                 QueryTaskListResp resp = JSON.parseObject(response, QueryTaskListResp.class);
                 if (resp.getContent() != null) {
                     totalSize = Integer.parseInt(resp.getTotalElements());
-                    Log.d(TAG,"totalSize:"+totalSize);
                     if (resp.isFirst()) {
                         mTasks.clear();
                         mTasks.addAll(resp.getContent());
@@ -179,7 +178,6 @@ public class TaskFragment extends BaseFragment {
             public void onSuccess(String response, String url, int actionId) {
                 QueryTaskListResp resp = JSON.parseObject(response, QueryTaskListResp.class);
                 if (null != resp) {
-                    Log.d(TAG,"getTotalElements:"+Integer.parseInt(resp.getTotalElements()));
                     if(totalSize == Integer.parseInt(resp.getTotalElements())){
                         mTasks.remove(curClickPositon);
                         if (resp.getContent().size() > 0) {

@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ztesoft.zwfw.moudle.message.MessageCenterActivity;
 import com.ztesoft.zwfw.R;
@@ -72,6 +73,7 @@ public class MainFragment extends BaseFragment implements MainActivity.UpdateMsg
                         startActivity(new Intent(getActivity(),MyTodoActivity.class));
                         break;
                     case 2:
+                        Toast.makeText(getActivity(),"正在努力开发中",Toast.LENGTH_SHORT).show();
                         break;
                     case 3:
                         Intent intent = new Intent(getActivity(),EarlyWarningActivity.class);

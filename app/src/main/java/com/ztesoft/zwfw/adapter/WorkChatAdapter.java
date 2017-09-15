@@ -11,6 +11,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.ztesoft.zwfw.R;
+import com.ztesoft.zwfw.domain.Chat;
 import com.ztesoft.zwfw.domain.WorkChatBean;
 
 import java.util.List;
@@ -21,9 +22,9 @@ import java.util.List;
 
 public class WorkChatAdapter extends BaseAdapter {
     private Context context;
-    private List<WorkChatBean> datas;
+    private List<Chat> datas;
 
-    public WorkChatAdapter(Context context, List<WorkChatBean> datas) {
+    public WorkChatAdapter(Context context, List<Chat> datas) {
         this.context = context;
         this.datas = datas;
     }
@@ -51,11 +52,12 @@ public class WorkChatAdapter extends BaseAdapter {
         TextView titleTv = (TextView) convertView.findViewById(R.id.title_tv);
         TextView contentTv = (TextView) convertView.findViewById(R.id.content_tv);
         TextView creatorTv = (TextView) convertView.findViewById(R.id.creator_tv);
+        TextView readStateTv = (TextView) convertView.findViewById(R.id.read_state_tv);
 
-        WorkChatBean workChatBean = datas.get(position);
-        titleTv.setText(workChatBean.title);
-        contentTv.setText(workChatBean.content);
-        creatorTv.setText(workChatBean.creator);
+        Chat chat = datas.get(position);
+        titleTv.setText(chat.getTitle());
+        contentTv.setText(chat.getContent());
+        creatorTv.setText(chat.getByUserName());
         return convertView;
     }
 

@@ -13,6 +13,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.ztesoft.zwfw.R;
 import com.ztesoft.zwfw.adapter.WorkChatAdapter;
 import com.ztesoft.zwfw.base.BaseFragment;
+import com.ztesoft.zwfw.domain.Chat;
 import com.ztesoft.zwfw.domain.WorkChatBean;
 
 import java.util.ArrayList;
@@ -28,7 +29,7 @@ public class WorkChatToMeFragment extends BaseFragment {
     View rootView;
     PullToRefreshListView mLv;
     private WorkChatAdapter mWorkChatAdapter;
-    private List<WorkChatBean> mChats = new ArrayList<>();
+    private List<Chat> mChats = new ArrayList<>();
 
     @Override
     public void onAttach(Context context) {
@@ -66,7 +67,7 @@ public class WorkChatToMeFragment extends BaseFragment {
             }
         });
 
-        requestData();
+      //  requestData();
 
     }
 
@@ -80,18 +81,5 @@ public class WorkChatToMeFragment extends BaseFragment {
     }
 
 
-    private void requestData(){
-        mChats.clear();
-        for(int i = 0 ;i<10;i++){
-            WorkChatBean chatBean = new WorkChatBean();
-            chatBean.title = "问题"+i;
-            chatBean.content = "问题"+i+"的内容";
-            chatBean.creator = "来自工号：11122"+i;
-            chatBean.imgs = Arrays.asList(new String[]{"https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=2422054375,4012256293&fm=117&gp=0.jpg",
-                    "https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=4143674929,412981208&fm=117&gp=0.jpg", "https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=754377390,559214204&fm=117&gp=0.jpg"});
 
-            mChats.add(chatBean);
-        }
-        mWorkChatAdapter.notifyDataSetChanged();
-    }
 }

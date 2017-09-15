@@ -18,6 +18,7 @@ import java.util.List;
 
 public class WorkChatActivity extends BaseActivity {
 
+    public static final int REQUEST_MINE = 100;
     private PagerSlidingTabStrip mPagerStrip;
     private ViewPager mViewPager;
     private List<Fragment> mFragments;
@@ -78,6 +79,6 @@ public class WorkChatActivity extends BaseActivity {
     }
 
     public void onChat(View v){
-        startActivity(new Intent(mContext,PerformChatActivity.class));
+        startActivityForResult(new Intent(mContext,PerformChatActivity.class),REQUEST_MINE);
     }
 }

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.hardware.input.InputManager;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -22,7 +23,9 @@ import com.lzy.imagepicker.ImagePicker;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.ztesoft.zwfw.R;
 import com.ztesoft.zwfw.base.BaseActivity;
+import com.ztesoft.zwfw.domain.Chat;
 import com.ztesoft.zwfw.domain.WorkChatBean;
+import com.ztesoft.zwfw.moudle.Config;
 import com.ztesoft.zwfw.utils.SoftKeyBoardListener;
 
 import java.util.List;
@@ -30,7 +33,7 @@ import java.util.List;
 public class WorkChatDetailActivity extends BaseActivity {
 
 
-    private WorkChatBean mChat;
+    private Chat mChat;
 
     LinearLayout mReplyLayout;
     EditText mReplyEdt;
@@ -88,29 +91,33 @@ public class WorkChatDetailActivity extends BaseActivity {
             }
         });
 
-        mChat = (WorkChatBean) getIntent().getSerializableExtra("chat");
-        titleTv.setText(mChat.title);
-        contentTv.setText(mChat.content);
-        creatorTv.setText(mChat.creator);
-        imgGv.setAdapter(new ImageAdapter());
+        mChat = (Chat) getIntent().getSerializableExtra("chat");
+        titleTv.setText(mChat.getTitle());
+        contentTv.setText(mChat.getContent());
+        creatorTv.setText(mChat.getByUserName());
+        String attachments = mChat.getAttachments();
+        if(!TextUtils.isEmpty(attachments)){
+            imgGv.setAdapter(new ImageAdapter(attachments.split(",")));
+        }
+
     }
 
 
     class ImageAdapter extends BaseAdapter {
 
-
-        public ImageAdapter() {
-
+        private String[] imgIds;
+        public ImageAdapter(String[] imgIds) {
+            this.imgIds = imgIds;
         }
 
         @Override
         public int getCount() {
-            return mChat.imgs == null ? 0 : mChat.imgs.size();
+            return imgIds == null ? 0 : imgIds.length;
         }
 
         @Override
         public Object getItem(int position) {
-            return mChat.imgs == null ? null : mChat.imgs.get(position);
+            return imgIds == null ? null : imgIds[position];
         }
 
         @Override
@@ -125,7 +132,7 @@ public class WorkChatDetailActivity extends BaseActivity {
             }
             ImageView iv_img = (ImageView) view.findViewById(R.id.iv_img);
             //ImagePicker.getInstance().getImageLoader().displayImage((Activity) mContext, mChat.imgs.get(position), iv_img, 0, 0);
-            ImageLoader.getInstance().displayImage(mChat.imgs.get(position), iv_img);
+            ImageLoader.getInstance().displayImage(Config.BASE_URL+Config.URL_ATTACHMENT+"/"+imgIds[position], iv_img);
 
             return view;
         }

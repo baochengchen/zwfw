@@ -105,7 +105,7 @@ public class SearchUsersActivity extends BaseActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent();
-                intent.putExtra("userCode",queryUsers.get(position).getUserCode());
+                intent.putExtra("queryUser",queryUsers.get(position-1));
                 setResult(RESULT_CODE_SELECT,intent);
                 finish();
             }
@@ -210,5 +210,10 @@ public class SearchUsersActivity extends BaseActivity {
             userNameTv.setText(queryUser.getUserName());
             return convertView;
         }
+    }
+
+
+    public void onCancel(View view){
+        onBackPressed();
     }
 }

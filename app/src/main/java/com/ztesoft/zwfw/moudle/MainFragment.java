@@ -3,6 +3,9 @@ package com.ztesoft.zwfw.moudle;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +23,8 @@ import com.ztesoft.zwfw.moudle.todo.MyTodoActivity;
 import com.ztesoft.zwfw.moudle.warning.EarlyWarningActivity;
 import com.ztesoft.zwfw.moudle.workchat.WorkChatActivity;
 import com.ztesoft.zwfw.widget.NoScrollGridView;
+
+import java.lang.ref.WeakReference;
 
 /**
  * Created by BaoChengchen on 2017/8/7.
@@ -91,8 +96,37 @@ public class MainFragment extends BaseFragment implements MainActivity.UpdateMsg
                 }
             }
         });
+
+
     }
 
+
+    GetCountHandler mHandler = new GetCountHandler(this);
+
+    private static class GetCountHandler extends Handler {
+        private final WeakReference<MainFragment> mFragment;
+
+        public GetCountHandler(MainFragment fragment) {
+            mFragment = new WeakReference<MainFragment>(fragment);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+
+            if (mFragment.get() == null) {
+                return;
+            }
+            Log.d("hand","------------");
+        }
+    }
+
+    Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            mHandler.sendEmptyMessage(0);
+            mHandler.postDelayed(this,1000);
+        }
+    };
 
     public static MainFragment newInstance() {
 
@@ -106,6 +140,7 @@ public class MainFragment extends BaseFragment implements MainActivity.UpdateMsg
     @Override
     public void onResume() {
         mHomeSquareAdapter.notifyDataSetChanged();
+        mHandler.post(runnable);
         super.onResume();
     }
 
@@ -166,4 +201,9 @@ public class MainFragment extends BaseFragment implements MainActivity.UpdateMsg
     }
 
 
+    @Override
+    public void onStop() {
+        mHandler.removeCallbacksAndMessages(null);
+        super.onStop();
+    }
 }

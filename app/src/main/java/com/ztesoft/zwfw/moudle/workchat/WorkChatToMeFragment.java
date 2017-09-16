@@ -7,7 +7,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ListView;
+import android.widget.Toast;
 
+import com.alibaba.fastjson.JSON;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.ztesoft.zwfw.R;
@@ -15,10 +18,15 @@ import com.ztesoft.zwfw.adapter.WorkChatAdapter;
 import com.ztesoft.zwfw.base.BaseFragment;
 import com.ztesoft.zwfw.domain.Chat;
 import com.ztesoft.zwfw.domain.WorkChatBean;
+import com.ztesoft.zwfw.domain.resp.ChatListResp;
+import com.ztesoft.zwfw.moudle.Config;
+import com.ztesoft.zwfw.utils.http.RequestManager;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by BaoChengchen on 2017/8/25.
@@ -30,6 +38,8 @@ public class WorkChatToMeFragment extends BaseFragment {
     PullToRefreshListView mLv;
     private WorkChatAdapter mWorkChatAdapter;
     private List<Chat> mChats = new ArrayList<>();
+
+    private int curPage = 0;
 
     @Override
     public void onAttach(Context context) {
@@ -55,7 +65,7 @@ public class WorkChatToMeFragment extends BaseFragment {
         mLv.setMode(PullToRefreshBase.Mode.BOTH);
         mLv.getLoadingLayoutProxy(false, true).setPullLabel("上拉加载更多");
         mLv.getLoadingLayoutProxy(false, true).setReleaseLabel("松开以加载");
-        mWorkChatAdapter = new WorkChatAdapter(getActivity(),mChats);
+        mWorkChatAdapter = new WorkChatAdapter(getActivity(),mChats,WorkChatAdapter.TYPE_TOME);
         mLv.setAdapter(mWorkChatAdapter);
 
         mLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -67,8 +77,65 @@ public class WorkChatToMeFragment extends BaseFragment {
             }
         });
 
-      //  requestData();
 
+        mLv.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
+            @Override
+            public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
+                curPage = 0;
+                requestData();
+            }
+
+            @Override
+            public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
+                curPage++;
+                requestData();
+            }
+        });
+
+        requestData();
+
+    }
+
+
+    private void requestData() {
+        Map<String,Long> map = new HashMap<>();
+        map.put("toUserId",Long.parseLong(((WorkChatActivity)(getActivity())).getmUser().getUserId()));
+        RequestManager.getInstance().postHeader(Config.BASE_URL + Config.URL_TALK_CHATLIST, JSON.toJSONString(map), new RequestManager.RequestListener() {
+            @Override
+            public void onRequest(String url, int actionId) {
+
+            }
+
+            @Override
+            public void onSuccess(String response, String url, int actionId) {
+                mLv.onRefreshComplete();
+                ChatListResp chatListResp = JSON.parseObject(response,ChatListResp.class);
+                if (chatListResp.getContent() != null) {
+                    if (chatListResp.isFirst()) {
+                        mChats.clear();
+                        mChats.addAll(chatListResp.getContent());
+                        mWorkChatAdapter.notifyDataSetChanged();
+                    } else {
+                        if (chatListResp.getContent().size() == 0) {
+                            curPage--;
+                            Toast.makeText(getActivity(), "没有更多数据了", Toast.LENGTH_SHORT).show();
+                        } else {
+                            mChats.addAll(chatListResp.getContent());
+                            mWorkChatAdapter.notifyDataSetChanged();
+                        }
+                    }
+                }
+
+            }
+
+
+            @Override
+            public void onError(String errorMsg, String url, int actionId) {
+                mLv.onRefreshComplete();
+                Toast.makeText(getActivity(),errorMsg,Toast.LENGTH_SHORT).show();
+
+            }
+        },0);
     }
 
 

@@ -9,6 +9,7 @@ import java.util.List;
 
 public class Chat implements Serializable{
 
+    private String id;
     private String title;
     private String content;
     private String  attachments;
@@ -16,13 +17,26 @@ public class Chat implements Serializable{
     private Long  toUserId;
     private Long byUserId;
     private String state ;
-    private Long readState;
     private String chatType;
     private List<Comment> commentDtoList;
+    private String byReadState;
+    private String toReadState;
+    private String createDate;
+    private String createUser;
+    private String orgId;
+    private String areaId;
     private String toUserName;
     private String byUserName;
     private String toUserCode;
     private String byUserCode;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getTitle() {
         return title;
@@ -79,14 +93,7 @@ public class Chat implements Serializable{
     public void setState(String state) {
         this.state = state;
     }
-
-    public Long getReadState() {
-        return readState;
-    }
-
-    public void setReadState(Long readState) {
-        this.readState = readState;
-    }
+    
 
     public String getChatType() {
         return chatType;
@@ -102,6 +109,54 @@ public class Chat implements Serializable{
 
     public void setCommentDtoList(List<Comment> commentDtoList) {
         this.commentDtoList = commentDtoList;
+    }
+
+    public String getByReadState() {
+        return byReadState;
+    }
+
+    public void setByReadState(String byReadState) {
+        this.byReadState = byReadState;
+    }
+
+    public String getToReadState() {
+        return toReadState;
+    }
+
+    public void setToReadState(String toReadState) {
+        this.toReadState = toReadState;
+    }
+
+    public String getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(String createDate) {
+        this.createDate = createDate;
+    }
+
+    public String getCreateUser() {
+        return createUser;
+    }
+
+    public void setCreateUser(String createUser) {
+        this.createUser = createUser;
+    }
+
+    public String getOrgId() {
+        return orgId;
+    }
+
+    public void setOrgId(String orgId) {
+        this.orgId = orgId;
+    }
+
+    public String getAreaId() {
+        return areaId;
+    }
+
+    public void setAreaId(String areaId) {
+        this.areaId = areaId;
     }
 
     public String getToUserName() {

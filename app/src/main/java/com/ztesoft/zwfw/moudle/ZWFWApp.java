@@ -40,8 +40,8 @@ public class ZWFWApp extends Application{
         RequestManager.getInstance().init(this);
         initImageLoader();
         initImagePicker();
-        JPushInterface.setDebugMode(true);
-        JPushInterface.init(this);
+        //JPushInterface.setDebugMode(true);
+        //JPushInterface.init(this);
     }
 
 

@@ -200,7 +200,7 @@ public class PerformChatActivity extends BaseActivity implements ImagePickerAdap
         @Override
         public void onError(String errorMsg, String url, int actionId) {
             hideProgressDialog();
-            Log.d("kkk", "onError: "+errorMsg);
+            Toast.makeText(mContext,errorMsg,Toast.LENGTH_SHORT).show();
         }
     };
 

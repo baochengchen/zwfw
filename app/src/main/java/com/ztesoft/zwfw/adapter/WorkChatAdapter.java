@@ -1,6 +1,7 @@
 package com.ztesoft.zwfw.adapter;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,12 +22,18 @@ import java.util.List;
  */
 
 public class WorkChatAdapter extends BaseAdapter {
+
+    public static final int TYPE_MINE = 0;
+    public static final int TYPE_TOME = 1;
+
     private Context context;
     private List<Chat> datas;
+    private int type;
 
-    public WorkChatAdapter(Context context, List<Chat> datas) {
+    public WorkChatAdapter(Context context, List<Chat> datas,int type) {
         this.context = context;
         this.datas = datas;
+        this.type = type;
     }
 
     @Override
@@ -55,6 +62,19 @@ public class WorkChatAdapter extends BaseAdapter {
         TextView readStateTv = (TextView) convertView.findViewById(R.id.read_state_tv);
 
         Chat chat = datas.get(position);
+        if(type == TYPE_MINE){
+            if(TextUtils.equals("0",chat.getByReadState())){
+                readStateTv.setVisibility(View.VISIBLE);
+            }else{
+                readStateTv.setVisibility(View.GONE);
+            }
+        }else if(type == TYPE_TOME){
+            if(TextUtils.equals("0",chat.getToReadState())){
+                readStateTv.setVisibility(View.VISIBLE);
+            }else{
+                readStateTv.setVisibility(View.GONE);
+            }
+        }
         titleTv.setText(chat.getTitle());
         contentTv.setText(chat.getContent());
         creatorTv.setText(chat.getByUserName());

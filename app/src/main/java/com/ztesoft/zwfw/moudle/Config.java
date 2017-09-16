@@ -12,11 +12,11 @@ public class Config {
     //http://192.168.50.110/portal
     //http://192.168.0.113:8080/portal
 
-    //public static final String BASE_URL = "http://192.168.50.110/portal";
+    public static final String BASE_URL = "http://192.168.50.110/portal";
 
-   // public static final String BASE_URL = "http://192.168.50.109:8080/portal";
+   //public static final String BASE_URL = "http://192.168.50.109:8080/portal";
 
-    public static final String BASE_URL = "http://192.168.0.111:8080/portal";
+    //public static final String BASE_URL = "http://192.168.0.115:8080/portal";
 
     public static final String URL_LOGIN = "/rest/login";
 
@@ -54,6 +54,12 @@ public class Config {
 
     public static final String URL_TALK_CHATLIST="/rest/app/talk/chatlist";
 
+    public static final String URL_TALK_ADDCOMMENT="/rest/app/talk/addcomment";
+
+    public static final String URL_TALK_GETCOMMENTS = "/rest/app/talk/getcomments";
+
+    public static final String URL_TALK_UPDATECHAT = "/rest/app/talk/updatechat";
+
     public static final String URL_USERS = "/rest/users";
 
     public static final String URL_LOGOUT = "/rest/logout";
@@ -65,7 +71,6 @@ public class Config {
     public static final String USERINFO = "userinfo";
     public static final String IS_LOGIN = "islogin";
     public static final String CURRENT_ROLE = "currentRole";
-
 
     public static enum RoleType {
         OSP("OSP", 1), OJD("OJD", 2);

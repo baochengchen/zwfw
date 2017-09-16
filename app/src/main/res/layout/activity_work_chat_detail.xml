@@ -6,8 +6,6 @@
     android:layout_height="match_parent"
     tools:context="com.ztesoft.zwfw.moudle.workchat.WorkChatDetailActivity">
 
-    <include layout="@layout/custom_title_bar" />
-
     <com.ztesoft.zwfw.widget.ElasticScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -27,6 +25,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/large_text_size"
+                android:textStyle="bold"
                 android:layout_marginTop="7dp"/>
 
             <LinearLayout
@@ -38,12 +37,14 @@
                     android:id="@+id/creator_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/dimgrey"
                     android:textSize="@dimen/normal_text_size"/>
                 <TextView
                     android:id="@+id/time_tv"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/normal_text_size"
+                    android:textColor="@color/dimgrey"
                     android:gravity="right"/>
 
             </LinearLayout>
@@ -69,17 +70,38 @@
                 android:numColumns="4"
                 android:verticalSpacing="3dp" />
 
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="xxx：很好nice"
-                android:textSize="@dimen/normal_text_size" />
+                android:orientation="horizontal"
+                android:layout_marginTop="7dp"
+                android:gravity="center_vertical">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="1px"
+                    android:background="@color/weakdimgrey"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/normal_text_size"
+                    android:text="回复"
+                    android:textColor="@color/weakdimgrey"/>
 
-            <TextView
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="1px"
+                    android:background="@color/weakdimgrey"/>
+
+            </LinearLayout>
+
+            <com.ztesoft.zwfw.widget.NoScrollListView
+                android:id="@+id/commentLv"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="我：一般一般宇宙第三"
-                android:textSize="@dimen/normal_text_size" />
+                android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:divider="@null"/>
 
         </LinearLayout>
     </com.ztesoft.zwfw.widget.ElasticScrollView>
@@ -104,6 +126,7 @@
             android:background="@drawable/custom_send_edit_stroke_bg"
             android:textSize="@dimen/normal_text_size"/>
         <Button
+            android:id="@+id/send_bt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="@dimen/normal_text_size"
@@ -113,5 +136,7 @@
             android:background="@drawable/dimgrey_bg_corner"/>
 
     </LinearLayout>
+
+    <include layout="@layout/custom_title_bar" />
 
 </RelativeLayout>

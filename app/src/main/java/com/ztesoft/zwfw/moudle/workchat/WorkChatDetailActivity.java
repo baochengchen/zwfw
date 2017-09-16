@@ -1,10 +1,13 @@
 package com.ztesoft.zwfw.moudle.workchat;
 
-import android.app.Activity;
 import android.content.Context;
-import android.hardware.input.InputManager;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
 import android.text.TextUtils;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -13,30 +16,45 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.lzy.imagepicker.ImagePicker;
+import com.alibaba.fastjson.JSON;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.ztesoft.zwfw.R;
 import com.ztesoft.zwfw.base.BaseActivity;
 import com.ztesoft.zwfw.domain.Chat;
-import com.ztesoft.zwfw.domain.WorkChatBean;
+import com.ztesoft.zwfw.domain.Comment;
 import com.ztesoft.zwfw.moudle.Config;
 import com.ztesoft.zwfw.utils.SoftKeyBoardListener;
+import com.ztesoft.zwfw.utils.http.RequestManager;
+import com.ztesoft.zwfw.widget.NoScrollListView;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-public class WorkChatDetailActivity extends BaseActivity {
+public class WorkChatDetailActivity extends BaseActivity implements View.OnClickListener{
 
+
+    public static final int ACTION_ADD_COMMENT = 0;
+    public static final int ACTION_GET_COMMENT = 1;
+    public static final int ACTION_UPDATECHAT = 2;
 
     private Chat mChat;
-
     LinearLayout mReplyLayout;
     EditText mReplyEdt;
+    Button mSendBt;
+    CommentAdapter mCommentAdapter;
+    List<Comment> mComments = new ArrayList<>();
+    private Comment mComment;
 
 
     @Override
@@ -65,7 +83,12 @@ public class WorkChatDetailActivity extends BaseActivity {
         TextView titleTv = (TextView) findViewById(R.id.title_tv);
         TextView contentTv = (TextView) findViewById(R.id.content_tv);
         TextView creatorTv = (TextView) findViewById(R.id.creator_tv);
+        TextView creatTimeTv = (TextView) findViewById(R.id.time_tv);
         GridView imgGv = (GridView) findViewById(R.id.img_gv);
+        NoScrollListView commentLv = (NoScrollListView) findViewById(R.id.commentLv);
+        mSendBt = (Button) findViewById(R.id.send_bt);
+        mSendBt.setOnClickListener(this);
+
 
         mReplyLayout = (LinearLayout) findViewById(R.id.reply_layout);
         mReplyEdt = (EditText) findViewById(R.id.reply_edt);
@@ -94,18 +117,102 @@ public class WorkChatDetailActivity extends BaseActivity {
         mChat = (Chat) getIntent().getSerializableExtra("chat");
         titleTv.setText(mChat.getTitle());
         contentTv.setText(mChat.getContent());
-        creatorTv.setText(mChat.getByUserName());
+        creatorTv.setText("来自 " + mChat.getByUserName());
+        creatTimeTv.setText(mChat.getCreateDate());
         String attachments = mChat.getAttachments();
-        if(!TextUtils.isEmpty(attachments)){
+        if (!TextUtils.isEmpty(attachments)) {
             imgGv.setAdapter(new ImageAdapter(attachments.split(",")));
         }
 
+        mCommentAdapter = new CommentAdapter();
+        commentLv.setAdapter(mCommentAdapter);
+
+        updateChat();
+        requestComment();
+        
+        
+    }
+
+    private void updateChat() {
+        Map<String,String> map = new HashMap<>();
+        map.put("id",mChat.getId());
+        RequestManager.getInstance().postHeader(Config.BASE_URL+Config.URL_TALK_UPDATECHAT,JSON.toJSONString(map),mListener,ACTION_UPDATECHAT);
+    }
+
+
+    private void requestComment() {
+        Map<String,String> map = new HashMap<>();
+        map.put("chatId",mChat.getId());
+        RequestManager.getInstance().postHeader(Config.BASE_URL + Config.URL_TALK_GETCOMMENTS, JSON.toJSONString(map), mListener,ACTION_GET_COMMENT);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.send_bt:
+                addComment();
+                break;
+        }
+    }
+
+    RequestManager.RequestListener mListener = new RequestManager.RequestListener() {
+        @Override
+        public void onRequest(String url, int actionId) {
+
+        }
+
+        @Override
+        public void onSuccess(String response, String url, int actionId) {
+
+            switch (actionId){
+                case ACTION_ADD_COMMENT:
+                    mComments.add(mComment);
+                    mCommentAdapter.notifyDataSetChanged();
+                    break;
+                case ACTION_GET_COMMENT:
+                    mComments = JSON.parseArray(response,Comment.class);
+                    mCommentAdapter.notifyDataSetChanged();
+                    break;
+            }
+        }
+
+        @Override
+        public void onError(String errorMsg, String url, int actionId) {
+
+            switch (actionId){
+                case ACTION_ADD_COMMENT:
+                    Toast.makeText(mContext,"回复失败",Toast.LENGTH_SHORT).show();
+                    break;
+
+                case ACTION_GET_COMMENT:
+                    break;
+
+                case ACTION_UPDATECHAT:
+                    
+                    break;
+            }
+
+        }
+    };
+
+    private void addComment() {
+        mComment = new Comment();
+        mComment.setChatId(Long.parseLong(mChat.getId()));
+        mComment.setByUserId(mChat.getByUserId());
+        mComment.setToUserId(mChat.getToUserId());
+        mComment.setByUserName(mChat.getByUserName());
+        mComment.setToUserName(mChat.getToUserName());
+        mComment.setContent(mReplyEdt.getText().toString().trim());
+        RequestManager.getInstance().postHeader(Config.BASE_URL + Config.URL_TALK_ADDCOMMENT, JSON.toJSONString(mComment),mListener,ACTION_ADD_COMMENT);
+
+        hideRelyEdt();
     }
 
 
     class ImageAdapter extends BaseAdapter {
 
         private String[] imgIds;
+
         public ImageAdapter(String[] imgIds) {
             this.imgIds = imgIds;
         }
@@ -132,7 +239,7 @@ public class WorkChatDetailActivity extends BaseActivity {
             }
             ImageView iv_img = (ImageView) view.findViewById(R.id.iv_img);
             //ImagePicker.getInstance().getImageLoader().displayImage((Activity) mContext, mChat.imgs.get(position), iv_img, 0, 0);
-            ImageLoader.getInstance().displayImage(Config.BASE_URL+Config.URL_ATTACHMENT+"/"+imgIds[position], iv_img);
+            ImageLoader.getInstance().displayImage(Config.BASE_URL + Config.URL_ATTACHMENT + "/" + imgIds[position], iv_img);
 
             return view;
         }
@@ -140,12 +247,55 @@ public class WorkChatDetailActivity extends BaseActivity {
 
     }
 
+
+    class CommentAdapter extends BaseAdapter {
+
+        @Override
+        public int getCount() {
+            return mComments.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return mComments.size() == 0 ? null : mComments.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            Comment comment = mComments.get(position);
+            if(null == convertView){
+              convertView = LayoutInflater.from(mContext).inflate(R.layout.comment_item,parent,false);
+            }
+            TextView commentTv = (TextView) convertView.findViewById(R.id.comment_tv);
+            String byUserName = comment.getByUserName();
+
+            SpannableStringBuilder ssb = new SpannableStringBuilder(byUserName+"："+comment.getContent());
+            ssb.setSpan(new ForegroundColorSpan(Color.BLUE),0,byUserName.length()+1,Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            commentTv.setText(ssb);
+            return convertView;
+        }
+    }
+
+
     private void reply() {
         InputMethodManager imm = (InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
         mReplyEdt.setFocusable(true);
         mReplyEdt.setFocusableInTouchMode(true);
         mReplyEdt.requestFocus();
         imm.showSoftInput(mReplyEdt, 0);
+
+    }
+
+
+    private void hideRelyEdt(){
+        mReplyEdt.setText("");
+        InputMethodManager imm = (InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(mReplyEdt.getWindowToken(),0);
 
     }
 }

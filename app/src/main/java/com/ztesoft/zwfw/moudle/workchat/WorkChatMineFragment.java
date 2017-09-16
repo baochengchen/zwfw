@@ -65,7 +65,7 @@ public class WorkChatMineFragment extends BaseFragment {
         mLv.setMode(PullToRefreshBase.Mode.BOTH);
         mLv.getLoadingLayoutProxy(false, true).setPullLabel("上拉加载更多");
         mLv.getLoadingLayoutProxy(false, true).setReleaseLabel("松开以加载");
-        mWorkChatAdapter = new WorkChatAdapter(getActivity(),mChats);
+        mWorkChatAdapter = new WorkChatAdapter(getActivity(),mChats,WorkChatAdapter.TYPE_MINE);
         mLv.setAdapter(mWorkChatAdapter);
 
         mLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -145,4 +145,14 @@ public class WorkChatMineFragment extends BaseFragment {
     }
 
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(resultCode == PerformChatActivity.RESULT_SEND){
+            if(requestCode == WorkChatActivity.REQUEST_CHAT){
+                curPage = 0;
+                requestData();
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
 }

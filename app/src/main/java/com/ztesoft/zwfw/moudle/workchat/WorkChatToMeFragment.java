@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
@@ -65,14 +66,18 @@ public class WorkChatToMeFragment extends BaseFragment {
         mLv.setMode(PullToRefreshBase.Mode.BOTH);
         mLv.getLoadingLayoutProxy(false, true).setPullLabel("上拉加载更多");
         mLv.getLoadingLayoutProxy(false, true).setReleaseLabel("松开以加载");
-        mWorkChatAdapter = new WorkChatAdapter(getActivity(),mChats,WorkChatAdapter.TYPE_TOME);
+        mWorkChatAdapter = new WorkChatAdapter(getActivity(),mChats,Config.TYPE_TOME);
         mLv.setAdapter(mWorkChatAdapter);
 
         mLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getActivity(),WorkChatDetailActivity.class);
-                intent.putExtra("chat",mChats.get(position-1));
+                Chat chat = mChats.get(position-1);
+                intent.putExtra("chat",chat);
+                intent.putExtra("type",Config.TYPE_TOME);
+                TextView stateView = (TextView) view.findViewById(R.id.read_state_tv);
+                stateView.setVisibility(View.GONE);
                 startActivity(intent);
             }
         });

@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -48,6 +49,7 @@ public class WorkChatActivity extends BaseActivity {
 
         mPagerStrip = (PagerSlidingTabStrip) findViewById(R.id.pager_strip);
         mViewPager = (ViewPager) findViewById(R.id.view_pager);
+        mViewPager.setOffscreenPageLimit(2);
         mViewPager.setAdapter(new WorkChatFragmentPagerAdapter(getSupportFragmentManager()));
 
         mPagerStrip.setViewPager(mViewPager);
@@ -80,5 +82,16 @@ public class WorkChatActivity extends BaseActivity {
 
     public void onChat(View v){
         startActivityForResult(new Intent(mContext,PerformChatActivity.class),REQUEST_CHAT);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == PerformChatActivity.RESULT_SEND){
+            if(requestCode == REQUEST_CHAT){
+                ((WorkChatMineFragment)mFragments.get(0)).refreshData();
+                ((WorkChatPublicFragment)mFragments.get(2)).refreshData();
+            }
+        }
     }
 }

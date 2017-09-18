@@ -43,5 +43,6 @@ dependencies {
     compile 'com.contrarywind:Android-PickerView:3.2.6'
     compile files('libs/jcore-android-1.1.6.jar')
     compile files('libs/jpush-android-3.0.8.jar')
+    compile 'com.bm.photoview:library:1.4.1'
 
 }

@@ -9,16 +9,16 @@ import java.io.Serializable;
 public class Comment implements Serializable{
 
     private Long id;
-    private Long     chatId;
+    private Long chatId;
     private String content;
-    private String    attahcments;
-    private Long  toUserId;
+    private String attahcments;
+    private Long toUserId;
     private Long byUserId;
     private String state ;
     private Long readState;//0未读 1 已读
-    private String createDate;;
+    private String createDate;
     private String updateDate;
-    private Long   createUser;
+    private Long createUser;
     private Long updateUser;
     private Long orgId;
     private Long areaId;

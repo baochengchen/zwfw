@@ -65,6 +65,9 @@ public class SearchUsersActivity extends BaseActivity {
                 code = s.toString();
                 if (TextUtils.isEmpty(code)) {
                     // clear list
+                    queryUsers.clear();
+                    mUserListAdapter.notifyDataSetChanged();
+
                 } else {
                     curPage = 0;
                     mSearchRunnable.startSearch();

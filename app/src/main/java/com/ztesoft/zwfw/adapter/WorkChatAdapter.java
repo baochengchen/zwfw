@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.ztesoft.zwfw.R;
 import com.ztesoft.zwfw.domain.Chat;
 import com.ztesoft.zwfw.domain.WorkChatBean;
+import com.ztesoft.zwfw.moudle.Config;
 
 import java.util.List;
 
@@ -23,8 +24,7 @@ import java.util.List;
 
 public class WorkChatAdapter extends BaseAdapter {
 
-    public static final int TYPE_MINE = 0;
-    public static final int TYPE_TOME = 1;
+
 
     private Context context;
     private List<Chat> datas;
@@ -62,22 +62,26 @@ public class WorkChatAdapter extends BaseAdapter {
         TextView readStateTv = (TextView) convertView.findViewById(R.id.read_state_tv);
 
         Chat chat = datas.get(position);
-        if(type == TYPE_MINE){
+        if(type == Config.TYPE_MINE){
             if(TextUtils.equals("0",chat.getByReadState())){
                 readStateTv.setVisibility(View.VISIBLE);
             }else{
                 readStateTv.setVisibility(View.GONE);
             }
-        }else if(type == TYPE_TOME){
+            creatorTv.setText("发给："+chat.getToUserName());
+        }else if(type == Config.TYPE_TOME){
             if(TextUtils.equals("0",chat.getToReadState())){
                 readStateTv.setVisibility(View.VISIBLE);
             }else{
                 readStateTv.setVisibility(View.GONE);
             }
+            creatorTv.setText("来自："+chat.getByUserName());
+        }else {
+            creatorTv.setText("来自："+chat.getByUserName());
         }
         titleTv.setText(chat.getTitle());
         contentTv.setText(chat.getContent());
-        creatorTv.setText(chat.getByUserName());
+
         return convertView;
     }
 

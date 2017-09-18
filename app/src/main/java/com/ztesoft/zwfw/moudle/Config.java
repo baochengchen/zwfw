@@ -12,11 +12,11 @@ public class Config {
     //http://192.168.50.110/portal
     //http://192.168.0.113:8080/portal
 
-    public static final String BASE_URL = "http://192.168.50.110/portal";
+    //public static final String BASE_URL = "http://192.168.50.110/portal";
 
    //public static final String BASE_URL = "http://192.168.50.109:8080/portal";
 
-    //public static final String BASE_URL = "http://192.168.0.115:8080/portal";
+    public static final String BASE_URL = "http://192.168.0.110:8080/portal";
 
     public static final String URL_LOGIN = "/rest/login";
 
@@ -60,6 +60,8 @@ public class Config {
 
     public static final String URL_TALK_UPDATECHAT = "/rest/app/talk/updatechat";
 
+    public static final String URL_TALK_GETNEWCOUNT = "/rest/app/talk/getnewcount";
+
     public static final String URL_USERS = "/rest/users";
 
     public static final String URL_LOGOUT = "/rest/logout";
@@ -91,4 +93,8 @@ public class Config {
             return index;
         }
     }
+
+    public static final int TYPE_MINE = 0;
+    public static final int TYPE_TOME = 1;
+    public static final int TYPE_PUBLIC = 2;
 }

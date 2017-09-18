@@ -3,11 +3,14 @@ package com.ztesoft.zwfw.moudle.workchat;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
@@ -17,6 +20,7 @@ import com.ztesoft.zwfw.R;
 import com.ztesoft.zwfw.adapter.WorkChatAdapter;
 import com.ztesoft.zwfw.base.BaseFragment;
 import com.ztesoft.zwfw.domain.Chat;
+import com.ztesoft.zwfw.domain.Consult;
 import com.ztesoft.zwfw.domain.WorkChatBean;
 import com.ztesoft.zwfw.domain.resp.ChatListResp;
 import com.ztesoft.zwfw.moudle.Config;
@@ -65,14 +69,18 @@ public class WorkChatMineFragment extends BaseFragment {
         mLv.setMode(PullToRefreshBase.Mode.BOTH);
         mLv.getLoadingLayoutProxy(false, true).setPullLabel("上拉加载更多");
         mLv.getLoadingLayoutProxy(false, true).setReleaseLabel("松开以加载");
-        mWorkChatAdapter = new WorkChatAdapter(getActivity(),mChats,WorkChatAdapter.TYPE_MINE);
+        mWorkChatAdapter = new WorkChatAdapter(getActivity(),mChats,Config.TYPE_MINE);
         mLv.setAdapter(mWorkChatAdapter);
 
         mLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getActivity(),WorkChatDetailActivity.class);
-                intent.putExtra("chat",mChats.get(position-1));
+                Chat chat = mChats.get(position-1);
+                intent.putExtra("chat",chat);
+                intent.putExtra("type",Config.TYPE_MINE);
+                TextView stateView = (TextView) view.findViewById(R.id.read_state_tv);
+                stateView.setVisibility(View.GONE);
                 startActivity(intent);
             }
         });
@@ -145,14 +153,10 @@ public class WorkChatMineFragment extends BaseFragment {
     }
 
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(resultCode == PerformChatActivity.RESULT_SEND){
-            if(requestCode == WorkChatActivity.REQUEST_CHAT){
-                curPage = 0;
-                requestData();
-            }
-        }
-        super.onActivityResult(requestCode, resultCode, data);
+
+    public void refreshData(){
+        curPage = 0;
+        requestData();
     }
+
 }

@@ -1,27 +1,26 @@
 package com.ztesoft.zwfw.moudle.workchat;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -49,11 +48,12 @@ public class WorkChatDetailActivity extends BaseActivity implements View.OnClick
     public static final int ACTION_UPDATECHAT = 2;
 
     private Chat mChat;
+    private int mType;
     LinearLayout mReplyLayout;
     EditText mReplyEdt;
     Button mSendBt;
-    CommentAdapter mCommentAdapter;
-    List<Comment> mComments = new ArrayList<>();
+    private CommentAdapter mCommentAdapter;
+    private List<Comment> mComments = new ArrayList<>();
     private Comment mComment;
 
 
@@ -115,13 +115,27 @@ public class WorkChatDetailActivity extends BaseActivity implements View.OnClick
         });
 
         mChat = (Chat) getIntent().getSerializableExtra("chat");
+        mType = getIntent().getIntExtra("type",0);
+
+        if(mType == Config.TYPE_PUBLIC)
+            rightView.setVisibility(View.GONE);
+
         titleTv.setText(mChat.getTitle());
         contentTv.setText(mChat.getContent());
         creatorTv.setText("来自 " + mChat.getByUserName());
         creatTimeTv.setText(mChat.getCreateDate());
         String attachments = mChat.getAttachments();
         if (!TextUtils.isEmpty(attachments)) {
-            imgGv.setAdapter(new ImageAdapter(attachments.split(",")));
+            final String[] imgIds = attachments.split(",");
+            imgGv.setAdapter(new ImageAdapter(imgIds));
+            imgGv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Intent intent = new Intent(WorkChatDetailActivity.this,PhotoViewActivity.class);
+                    intent.putExtra("imgs",imgIds);
+                    startActivity(intent);
+                }
+            });
         }
 
         mCommentAdapter = new CommentAdapter();
@@ -198,10 +212,10 @@ public class WorkChatDetailActivity extends BaseActivity implements View.OnClick
     private void addComment() {
         mComment = new Comment();
         mComment.setChatId(Long.parseLong(mChat.getId()));
-        mComment.setByUserId(mChat.getByUserId());
-        mComment.setToUserId(mChat.getToUserId());
-        mComment.setByUserName(mChat.getByUserName());
-        mComment.setToUserName(mChat.getToUserName());
+        mComment.setByUserId(Long.parseLong(getmUser().getUserId()));
+        mComment.setToUserId(mType==Config.TYPE_MINE?mChat.getToUserId():mChat.getByUserId());
+        mComment.setByUserName(getmUser().getUserName());
+        mComment.setToUserName(mType==Config.TYPE_MINE?mChat.getToUserName():mChat.getByUserName());
         mComment.setContent(mReplyEdt.getText().toString().trim());
         RequestManager.getInstance().postHeader(Config.BASE_URL + Config.URL_TALK_ADDCOMMENT, JSON.toJSONString(mComment),mListener,ACTION_ADD_COMMENT);
 
@@ -275,7 +289,7 @@ public class WorkChatDetailActivity extends BaseActivity implements View.OnClick
             String byUserName = comment.getByUserName();
 
             SpannableStringBuilder ssb = new SpannableStringBuilder(byUserName+"："+comment.getContent());
-            ssb.setSpan(new ForegroundColorSpan(Color.BLUE),0,byUserName.length()+1,Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            ssb.setSpan(new ForegroundColorSpan(Color.parseColor("#708090")),0,byUserName.length()+1,Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             commentTv.setText(ssb);
             return convertView;
         }

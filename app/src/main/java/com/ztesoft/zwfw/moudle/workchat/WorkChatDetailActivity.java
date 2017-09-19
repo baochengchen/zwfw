@@ -133,6 +133,7 @@ public class WorkChatDetailActivity extends BaseActivity implements View.OnClick
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     Intent intent = new Intent(WorkChatDetailActivity.this,PhotoViewActivity.class);
                     intent.putExtra("imgs",imgIds);
+                    intent.putExtra("position",position);
                     startActivity(intent);
                 }
             });
@@ -216,7 +217,12 @@ public class WorkChatDetailActivity extends BaseActivity implements View.OnClick
         mComment.setToUserId(mType==Config.TYPE_MINE?mChat.getToUserId():mChat.getByUserId());
         mComment.setByUserName(getmUser().getUserName());
         mComment.setToUserName(mType==Config.TYPE_MINE?mChat.getToUserName():mChat.getByUserName());
-        mComment.setContent(mReplyEdt.getText().toString().trim());
+        String replyStr = mReplyEdt.getText().toString().trim();
+        if(TextUtils.isEmpty(replyStr)){
+            Toast.makeText(mContext,"请输入回复内容",Toast.LENGTH_SHORT).show();
+            return;
+        }
+        mComment.setContent(replyStr);
         RequestManager.getInstance().postHeader(Config.BASE_URL + Config.URL_TALK_ADDCOMMENT, JSON.toJSONString(mComment),mListener,ACTION_ADD_COMMENT);
 
         hideRelyEdt();

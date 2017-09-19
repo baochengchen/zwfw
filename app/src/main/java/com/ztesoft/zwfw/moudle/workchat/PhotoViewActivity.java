@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.bm.library.PhotoView;
 import com.bumptech.glide.Glide;
@@ -28,19 +29,41 @@ import java.util.List;
 public class PhotoViewActivity extends BaseActivity {
 
     ViewPager mViewPager;
+    TextView imgPositionTv;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo_view);
 
-        String[] imgIds = getIntent().getStringArrayExtra("imgs");
+        final String[] imgIds = getIntent().getStringArrayExtra("imgs");
+        int positon = getIntent().getIntExtra("position",0);
         List<String> imageUrls = new ArrayList<>();
         for(String imgId : imgIds){
             imageUrls.add(Config.BASE_URL + Config.URL_ATTACHMENT + "/"+imgId);
         }
 
+
+        imgPositionTv = (TextView) findViewById(R.id.img_position_tv);
+        imgPositionTv.setText(positon+1+"/"+imgIds.length);
         mViewPager = (ViewPager) findViewById(R.id.viewPager);
         mViewPager.setAdapter(new ImageAdapter(imageUrls,this));
+        mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                imgPositionTv.setText(position+1+"/"+imgIds.length);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+        mViewPager.setCurrentItem(positon);
     }
 
 

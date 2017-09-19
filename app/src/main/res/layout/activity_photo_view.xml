@@ -15,4 +15,14 @@
 
     </android.support.v4.view.ViewPager>
 
+    <TextView
+        android:id="@+id/img_position_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:gravity="center"
+        android:padding="7dp"
+        android:textSize="@dimen/normal_text_size"
+        android:textColor="@color/white"/>
+
 </RelativeLayout>

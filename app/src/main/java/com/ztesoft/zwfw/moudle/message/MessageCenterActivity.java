@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,7 +30,7 @@ import java.util.List;
 
 public class MessageCenterActivity extends BaseActivity implements SlideView.OnSlideListener{
 
-    SlideListView mMsgListView;
+    ListView mMsgListView;
 
     private SlideAdapter mMsgListAdapter;
     private List<Message> mMessages = new ArrayList<>();
@@ -48,7 +49,7 @@ public class MessageCenterActivity extends BaseActivity implements SlideView.OnS
                 onBackPressed();
             }
         });
-        mMsgListView = (SlideListView) findViewById(R.id.msg_lv);
+        mMsgListView = (ListView) findViewById(R.id.msg_lv);
         mMsgListAdapter = new SlideAdapter();
         mMsgListView.setAdapter(mMsgListAdapter);
 

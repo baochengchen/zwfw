@@ -12,11 +12,11 @@ public class Config {
     //http://192.168.50.110/portal
     //http://192.168.0.113:8080/portal
 
-    //public static final String BASE_URL = "http://192.168.50.110/portal";
+    public static final String BASE_URL = "http://192.168.50.110/portal";
 
    //public static final String BASE_URL = "http://192.168.50.109:8080/portal";
 
-    public static final String BASE_URL = "http://192.168.0.110:8080/portal";
+    //public static final String BASE_URL = "http://192.168.0.111:8080/portal";
 
     public static final String URL_LOGIN = "/rest/login";
 
@@ -27,6 +27,8 @@ public class Config {
     public static final String URL_QRYWORKLIST = "/rest/sgsp/mywork/qryMyWorkList";
 
     public static final String URL_QUERYMYWORKTASKS = "/rest/sgsp/myworktasks/queryMyWorkTasks";
+
+    public static final String URL_QUERYWARN = "/rest/app/querywarn";
 
     public static final String URL_QUERYTIMEOUT = "/rest/app/querytimeout";
 
@@ -61,6 +63,10 @@ public class Config {
     public static final String URL_TALK_UPDATECHAT = "/rest/app/talk/updatechat";
 
     public static final String URL_TALK_GETNEWCOUNT = "/rest/app/talk/getnewcount";
+
+    public static final String URL_CHECKVERSION ="/rest/app/version";
+
+    public static final String URL_DOWNLOADFILE ="/rest/download";
 
     public static final String URL_USERS = "/rest/users";
 

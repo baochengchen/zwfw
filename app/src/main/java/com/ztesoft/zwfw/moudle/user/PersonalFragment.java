@@ -3,7 +3,9 @@ package com.ztesoft.zwfw.moudle.user;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -28,7 +30,10 @@ import android.widget.Toast;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONException;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.ztesoft.zwfw.domain.Version;
 import com.ztesoft.zwfw.domain.resp.HttpErrorResp;
 import com.ztesoft.zwfw.moudle.Config;
 import com.ztesoft.zwfw.domain.HeaderPic;
@@ -36,6 +41,7 @@ import com.ztesoft.zwfw.domain.User;
 import com.ztesoft.zwfw.moudle.LoginActivity;
 import com.ztesoft.zwfw.R;
 import com.ztesoft.zwfw.base.BaseFragment;
+import com.ztesoft.zwfw.moudle.service.UpdateService;
 import com.ztesoft.zwfw.utils.APPPreferenceManager;
 import com.ztesoft.zwfw.utils.SessionUtils;
 import com.ztesoft.zwfw.utils.http.RequestManager;
@@ -63,6 +69,7 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
     private static final int ACTION_ATTCHMENT = 0;
     private static final int ACTION_SETHEAD = 1;
     private static final int ACTION_GETHEAD = 2;
+    private static final int ACTION_CHECKVERSION = 3;
 
     private String SDdir = Environment.getExternalStorageDirectory().toString();
     private String headImgPath =SDdir+"/ztesoft/zwfw/images/head.jpg";
@@ -164,7 +171,7 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
                         startActivity(intentResetPwd);
                         break;
                     case 2:
-
+                        checkVersion();
                         break;
                     case 3:
                         Intent intentAbout = new Intent(getActivity(),AboutActivity.class);
@@ -180,10 +187,12 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
             //调用头像接口
             requestHead();
         }else{
-            ImageLoader.getInstance().displayImage(APPPreferenceManager.getInstance().getString(getActivity(),"headerURL"),mHeaderView);
+            Glide.with(getActivity()).load(APPPreferenceManager.getInstance().getString(getActivity(),"headerURL")).error(R.mipmap.icon_default_header_img).diskCacheStrategy(DiskCacheStrategy.ALL).into(mHeaderView);
+           // ImageLoader.getInstance().displayImage(APPPreferenceManager.getInstance().getString(getActivity(),"headerURL"),mHeaderView);
         }
 
     }
+
 
     private void requestHead() {
         RequestManager.getInstance().getHeader(Config.BASE_URL+Config.URL_USERS+"/"+mUser.getUserId()+"/headshot",mListener,ACTION_GETHEAD,new HashMap<String, String>());
@@ -350,7 +359,29 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
                     Toast.makeText(getActivity(),"头像设置成功",Toast.LENGTH_SHORT).show();
                     break;
                 case ACTION_GETHEAD:
-                    ImageLoader.getInstance().displayImage(Config.BASE_URL+Config.URL_ATTACHMENT+"/"+response.substring(1,response.length()-1),mHeaderView);
+                    Glide.with(getActivity()).load(Config.BASE_URL+Config.URL_ATTACHMENT+"/"+response.substring(1,response.length()-1)).error(R.mipmap.icon_default_header_img).diskCacheStrategy(DiskCacheStrategy.ALL).into(mHeaderView);
+                    break;
+                case ACTION_CHECKVERSION:
+                    try {
+                        String localVersionName = getActivity().getPackageManager().getPackageInfo(getActivity().getPackageName(),0).versionName;
+                        Version version = JSON.parseObject(response,Version.class);
+                        if(TextUtils.equals(localVersionName,version.getValue())){
+                            new AlertDialog.Builder(getActivity()).setTitle("提示").setMessage("当前已是最新版本").setPositiveButton("确定",null).show();
+                        }else{
+                            new AlertDialog.Builder(getActivity()).setTitle("提示").setMessage("检测到新版本\n"+version.getValue()).setPositiveButton("立即更新", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    //download
+                                    Intent intent = new Intent(getActivity(), UpdateService.class);
+                                    intent.putExtra("downloadUrl",Config.BASE_URL+Config.URL_DOWNLOADFILE+"?fileName=zwfw.apk&path=/");
+                                    getActivity().startService(intent);
+                                }
+                            }).setNegativeButton("以后更新",null).show();
+                        }
+                    } catch (PackageManager.NameNotFoundException e) {
+                        e.printStackTrace();
+                    }
+
                     break;
             }
 
@@ -426,5 +457,9 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
         ViewGroup.LayoutParams params = listView.getLayoutParams();
         params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
         listView.setLayoutParams(params);
+    }
+
+    private void checkVersion() {
+        RequestManager.getInstance().getHeader(Config.BASE_URL+Config.URL_CHECKVERSION,mListener,ACTION_CHECKVERSION,new HashMap<String, String>());
     }
 }

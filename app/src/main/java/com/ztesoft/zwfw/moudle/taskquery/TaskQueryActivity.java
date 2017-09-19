@@ -127,6 +127,7 @@ public class TaskQueryActivity extends BaseActivity implements View.OnClickListe
                 QueryTaskListResp resp = JSON.parseObject(response, QueryTaskListResp.class);
                 if (resp.getContent() != null) {
                     Intent intent = new Intent(mContext, QueryTaskListActivity.class);
+                    intent.putExtra("totalSize",resp.getTotalElements());
                     intent.putExtra("list", (Serializable) resp.getContent());
                     intent.putExtra("queryTaskReq", (Serializable) queryTaskReq);
                     startActivity(intent);

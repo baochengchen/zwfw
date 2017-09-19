@@ -63,20 +63,42 @@
                </intent-filter>
             -->
         </activity>
-        <activity android:name=".moudle.todo.TaskDetailActivity" />
-        <activity android:name=".moudle.user.MeInfoActivity" />
-        <activity android:name=".moudle.user.ResetPwdActivity" />
-        <activity android:name=".moudle.user.AboutActivity" />
+        <activity
+            android:name=".moudle.todo.TaskDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".moudle.user.MeInfoActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".moudle.user.ResetPwdActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".moudle.user.AboutActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".moudle.workchat.WorkChatActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
-        <activity android:name=".moudle.workchat.PerformChatActivity" />
-        <activity android:name="com.lzy.imagepicker.ui.ImageGridActivity" />
-        <activity android:name="com.lzy.imagepicker.ui.ImagePreviewDelActivity" />
-        <activity android:name=".moudle.workchat.WorkChatDetailActivity" />
-        <activity android:name=".moudle.taskquery.TaskQueryActivity" />
-        <activity android:name=".moudle.warning.EarlyWarningActivity" />
+        <activity
+            android:name=".moudle.workchat.PerformChatActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.lzy.imagepicker.ui.ImageGridActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.lzy.imagepicker.ui.ImagePreviewDelActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".moudle.workchat.WorkChatDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".moudle.taskquery.TaskQueryActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".moudle.warning.EarlyWarningActivity"
+            android:screenOrientation="portrait" />
+
+        <service android:name=".moudle.service.UpdateService" />
 
         <!-- Rich push 核心功能 since 2.0.6 -->
         <activity

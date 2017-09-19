@@ -118,7 +118,7 @@ public class EarlyWarningActivity extends BaseActivity {
             map.put("roleType",""+Config.RoleType.OJD.getIndex());
         }
 
-        RequestManager.getInstance().postHeader(Config.BASE_URL + (type == 2?"":Config.URL_QUERYTIMEOUT) + "?page=" + curPage + "&size=20", JSON.toJSONString(map), new RequestManager.RequestListener() {
+        RequestManager.getInstance().postHeader(Config.BASE_URL + (type == 2?Config.URL_QUERYWARN:Config.URL_QUERYTIMEOUT) + "?page=" + curPage + "&size=20", JSON.toJSONString(map), new RequestManager.RequestListener() {
             @Override
             public void onRequest(String url, int actionId) {
             }

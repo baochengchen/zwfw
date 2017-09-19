@@ -10,6 +10,7 @@
 
     <include layout="@layout/custom_title_bar" />
 
+<!--
     <com.ztesoft.zwfw.widget.slidedeletelistview.SlideListView
         android:id="@+id/msg_lv"
         android:scrollbars="none"
@@ -17,5 +18,14 @@
         android:layout_height="match_parent">
 
     </com.ztesoft.zwfw.widget.slidedeletelistview.SlideListView>
+-->
+
+    <ListView
+        android:id="@+id/msg_lv"
+        android:scrollbars="none"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </ListView>
 
 </LinearLayout>

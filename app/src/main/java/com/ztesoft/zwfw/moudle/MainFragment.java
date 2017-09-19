@@ -81,8 +81,6 @@ public class MainFragment extends BaseFragment implements MainActivity.UpdateMsg
                         startActivity(new Intent(getActivity(), MyTodoActivity.class));
                         break;
                     case 2:
-                        Toast.makeText(getActivity(), "正在努力开发中", Toast.LENGTH_SHORT).show();
-                        break;
                     case 3:
                         Intent intent = new Intent(getActivity(), EarlyWarningActivity.class);
                         intent.putExtra("type", position);
@@ -115,7 +113,6 @@ public class MainFragment extends BaseFragment implements MainActivity.UpdateMsg
 
                 @Override
                 public void onSuccess(String response, String url, int actionId) {
-                    Log.d("kkk", "onSuccess: "+response);
                     Message msg = mHandler.obtainMessage();
                     Bundle bundle = new Bundle();
                     bundle.putInt("count", Integer.parseInt(response.substring(1,response.length()-1)));

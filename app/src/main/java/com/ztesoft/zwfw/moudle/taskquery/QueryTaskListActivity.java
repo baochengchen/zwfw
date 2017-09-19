@@ -1,5 +1,6 @@
 package com.ztesoft.zwfw.moudle.taskquery;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -56,7 +57,13 @@ public class QueryTaskListActivity extends BaseActivity {
         });
 
         mTasks = (List<Task>) getIntent().getSerializableExtra("list");
+        totalSize = Integer.parseInt(getIntent().getStringExtra("totalSize"));
         mQueryTaskReq = (QueryTaskReq) getIntent().getSerializableExtra("queryTaskReq");
+
+        if(totalSize==0){
+            new AlertDialog.Builder(mContext).setTitle("提示").setMessage("没有符合的办件")
+                    .setPositiveButton("确定",null).show();
+        }
 
         mTaskLv = (PullToRefreshListView) findViewById(R.id.task_lv);
         mTaskLv.setMode(PullToRefreshBase.Mode.BOTH);
@@ -100,7 +107,6 @@ public class QueryTaskListActivity extends BaseActivity {
         RequestManager.getInstance().postHeader(Config.BASE_URL + Config.URL_QUERYAPPWORKS + "?page=" + curPage + "&size=20", JSON.toJSONString(mQueryTaskReq), new RequestManager.RequestListener() {
             @Override
             public void onRequest(String url, int actionId) {
-
             }
 
             @Override
@@ -145,7 +151,8 @@ public class QueryTaskListActivity extends BaseActivity {
     }
 
     private void updateItem() {
-        RequestManager.getInstance().postHeader(Config.BASE_URL + Config.URL_QRYWORKLIST + "?page=" + curClickPage + "&size=20", "{}", new RequestManager.RequestListener() {
+
+        RequestManager.getInstance().postHeader(Config.BASE_URL + Config.URL_QUERYAPPWORKS + "?page=" + curClickPage + "&size=20", JSON.toJSONString(mQueryTaskReq), new RequestManager.RequestListener() {
             @Override
             public void onRequest(String url, int actionId) {
 
@@ -182,4 +189,5 @@ public class QueryTaskListActivity extends BaseActivity {
         }, curClickPage);
 
     }
+
 }

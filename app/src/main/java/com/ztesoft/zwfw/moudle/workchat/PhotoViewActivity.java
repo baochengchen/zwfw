@@ -2,16 +2,22 @@ package com.ztesoft.zwfw.moudle.workchat;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import com.bm.library.PhotoView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 import com.ztesoft.zwfw.R;
 import com.ztesoft.zwfw.base.BaseActivity;
 import com.ztesoft.zwfw.moudle.Config;
@@ -51,16 +57,38 @@ public class PhotoViewActivity extends BaseActivity {
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
             String url = imageUrls.get(position);
-            PhotoView photoView = new PhotoView(context);
-            Glide.with(context).load(url).diskCacheStrategy(DiskCacheStrategy.ALL).into(photoView);
-            container.addView(photoView);
-            photoView.setOnClickListener(new View.OnClickListener() {
+            View view = LayoutInflater.from(mContext).inflate(R.layout.item_photo_view,null);
+
+            final PhotoView photoView = (PhotoView) view.findViewById(R.id.photo_view);
+            final ProgressBar progressBar = (ProgressBar) view.findViewById(R.id.loading_progress_bar);
+            Glide.with(context).load(url).placeholder(R.mipmap.pic_loading).diskCacheStrategy(DiskCacheStrategy.ALL).into(new GlideDrawableImageViewTarget(photoView){
+                @Override
+                public void onLoadStarted(Drawable placeholder) {
+                    super.onLoadStarted(placeholder);
+                    progressBar.setVisibility(View.VISIBLE);
+                }
+
+                @Override
+                public void onLoadFailed(Exception e, Drawable errorDrawable) {
+                    super.onLoadFailed(e, errorDrawable);
+                    progressBar.setVisibility(View.GONE);
+                    photoView.setImageResource(R.mipmap.pic_fail);
+                }
+
+                @Override
+                public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> animation) {
+                    super.onResourceReady(resource, animation);
+                    progressBar.setVisibility(View.GONE);
+                }
+            });
+            container.addView(view);
+            view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     finish();
                 }
             });
-            return photoView;
+            return view;
         }
 
         @Override

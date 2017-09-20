@@ -14,9 +14,9 @@ public class Config {
 
     public static final String BASE_URL = "http://192.168.50.110/portal";
 
-   //public static final String BASE_URL = "http://192.168.50.109:8080/portal";
+   // public static final String BASE_URL = "http://192.168.50.109:8080/portal";
 
-    //public static final String BASE_URL = "http://192.168.0.111:8080/portal";
+   // public static final String BASE_URL = "http://192.168.0.107:8080/portal";
 
     public static final String URL_LOGIN = "/rest/login";
 
@@ -81,7 +81,7 @@ public class Config {
     public static final String CURRENT_ROLE = "currentRole";
 
     public static enum RoleType {
-        OSP("OSP", 1), OJD("OJD", 2);
+        OSP("OSP", 1), OJD("OJD", 2), AJD("AJD", 3);
 
         private String name;
         private int index;

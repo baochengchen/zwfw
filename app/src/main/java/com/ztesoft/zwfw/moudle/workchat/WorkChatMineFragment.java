@@ -24,6 +24,9 @@ import com.ztesoft.zwfw.domain.Consult;
 import com.ztesoft.zwfw.domain.WorkChatBean;
 import com.ztesoft.zwfw.domain.resp.ChatListResp;
 import com.ztesoft.zwfw.moudle.Config;
+import com.ztesoft.zwfw.moudle.LoginActivity;
+import com.ztesoft.zwfw.utils.APPPreferenceManager;
+import com.ztesoft.zwfw.utils.SessionUtils;
 import com.ztesoft.zwfw.utils.http.RequestManager;
 
 import java.util.ArrayList;
@@ -137,8 +140,14 @@ public class WorkChatMineFragment extends BaseFragment {
             @Override
             public void onError(String errorMsg, String url, int actionId) {
                 mLv.onRefreshComplete();
-                Toast.makeText(getActivity(),errorMsg,Toast.LENGTH_SHORT).show();
-
+                if(SessionUtils.invalid(errorMsg)){
+                    Toast.makeText(getActivity(),"会话超时",Toast.LENGTH_SHORT).show();
+                    APPPreferenceManager.getInstance().saveObject(getActivity(), Config.IS_LOGIN, false);
+                    startActivity(new Intent(getActivity(),LoginActivity.class));
+                    getActivity().finish();
+                }else{
+                    Toast.makeText(getActivity(),errorMsg,Toast.LENGTH_SHORT).show();
+                }
             }
         },0);
     }

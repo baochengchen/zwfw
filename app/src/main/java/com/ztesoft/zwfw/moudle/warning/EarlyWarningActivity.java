@@ -116,6 +116,8 @@ public class EarlyWarningActivity extends BaseActivity {
             map.put("roleType",""+Config.RoleType.OSP.getIndex());
         }else if (TextUtils.equals(curRole,Config.RoleType.OJD.getName())){
             map.put("roleType",""+Config.RoleType.OJD.getIndex());
+        }else{
+            map.put("roleType",""+Config.RoleType.AJD.getIndex());
         }
 
         RequestManager.getInstance().postHeader(Config.BASE_URL + (type == 2?Config.URL_QUERYWARN:Config.URL_QUERYTIMEOUT) + "?page=" + curPage + "&size=20", JSON.toJSONString(map), new RequestManager.RequestListener() {

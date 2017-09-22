@@ -6,17 +6,19 @@ package com.ztesoft.zwfw.moudle;
 
 public class Config {
 
-    
+
     //http://220.163.118.118
     //http://192.168.50.109:8080/portal
     //http://192.168.50.110/portal
     //http://192.168.0.113:8080/portal
+    //http://10.45.10.134
 
-    public static final String BASE_URL = "http://192.168.50.110/portal";
+    public static final String BASE_URL = "http://220.163.118.118";
+    // public static final String BASE_URL = "http://192.168.50.110/portal";
 
-   // public static final String BASE_URL = "http://192.168.50.109:8080/portal";
+    // public static final String BASE_URL = "http://192.168.50.109:8080/portal";
 
-   // public static final String BASE_URL = "http://192.168.0.107:8080/portal";
+    // public static final String BASE_URL = "http://192.168.0.107:8080/portal";
 
     public static final String URL_LOGIN = "/rest/login";
 
@@ -34,7 +36,7 @@ public class Config {
 
     public static final String URL_SEARCHFLOWBUTTONDTO = "/rest/commons/searchFlowButtonDto";
 
-    public static final String URL_EXCUTEBIZPROCESS="/rest/commons/excuteBizProcess";
+    public static final String URL_EXCUTEBIZPROCESS = "/rest/commons/excuteBizProcess";
 
     public static final String URL_QRYINTERACTION = "/rest/web/websiteinteraction/queryInterAction";
 
@@ -46,17 +48,17 @@ public class Config {
 
     public static final String URL_QUERYBIZINFOBYID = "/rest/supervision/supervisionwork/queryBizInfoById";
 
-    public static final String URL_QUERYAPPWORKS ="/rest/app/queryappworks";
+    public static final String URL_QUERYAPPWORKS = "/rest/app/queryappworks";
 
     public static final String URL_ATTACHMENT = "/rest/attachment";
 
-    public static final String URL_USERS_QUERY="/rest/users/query";
+    public static final String URL_USERS_QUERY = "/rest/users/query";
 
-    public static final String URL_TALK_ADDCHAT="/rest/app/talk/addchat";
+    public static final String URL_TALK_ADDCHAT = "/rest/app/talk/addchat";
 
-    public static final String URL_TALK_CHATLIST="/rest/app/talk/chatlist";
+    public static final String URL_TALK_CHATLIST = "/rest/app/talk/chatlist";
 
-    public static final String URL_TALK_ADDCOMMENT="/rest/app/talk/addcomment";
+    public static final String URL_TALK_ADDCOMMENT = "/rest/app/talk/addcomment";
 
     public static final String URL_TALK_GETCOMMENTS = "/rest/app/talk/getcomments";
 
@@ -64,16 +66,16 @@ public class Config {
 
     public static final String URL_TALK_GETNEWCOUNT = "/rest/app/talk/getnewcount";
 
-    public static final String URL_CHECKVERSION ="/rest/app/version";
+    public static final String URL_CHECKVERSION = "/rest/app/version";
 
-    public static final String URL_DOWNLOADFILE ="/rest/download";
+    public static final String URL_DOWNLOADFILE = "/rest/download";
 
     public static final String URL_USERS = "/rest/users";
 
     public static final String URL_LOGOUT = "/rest/logout";
 
     public static final String URL_SELF = "/rest/staffs/self";
-    
+
     public static final String URL_SELF_PWD = "/rest/users/self/pwd";
 
     public static final String USERINFO = "userinfo";

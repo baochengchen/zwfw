@@ -143,7 +143,7 @@ public class TaskDetailActivity extends BaseActivity implements SegmentView.OnSe
             public void onSuccess(String response, String url, int actionId) {
                 List<FloatButton> floatButtons = JSON.parseArray(response, FloatButton.class);
                 for (FloatButton bt : floatButtons) {
-                    if(TextUtils.equals(bt.getBtnName(),"回复")||TextUtils.equals(bt.getBtnName(),"预审通过")||TextUtils.equals(bt.getBtnName(),"预审不通过")){
+                    if(TextUtils.isEmpty(bt.getPageUrl())){
                         Button button = new Button(mContext);
                         button.setTag(bt);
                         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, getResources().getDimensionPixelSize(R.dimen.px2dp_76));
@@ -176,22 +176,9 @@ public class TaskDetailActivity extends BaseActivity implements SegmentView.OnSe
     @Override
     public void onClick(View v) {
         FloatButton floatButton = (FloatButton) v.getTag();
-        if (TextUtils.equals("回复", floatButton.getBtnName())) {
-            mCustomReplyDialog.setStateCode(floatButton.getStateCode());
-            mCustomReplyDialog.show();
-            mCustomReplyDialog.setTiTleText(floatButton.getBtnName());
-        } else if (TextUtils.equals("预审通过", floatButton.getBtnName())||TextUtils.equals("预审不通过", floatButton.getBtnName())) {
-            mCustomReplyDialog.setStateCode(floatButton.getStateCode());
-            mCustomReplyDialog.show();
-            mCustomReplyDialog.setTiTleText(floatButton.getBtnName());
-        }else if (TextUtils.equals("转发", floatButton.getBtnName())) {
-
-        } else if (TextUtils.equals("提交", floatButton.getBtnName())) {
-            mCustomReplyDialog.setStateCode(floatButton.getStateCode());
-            mCustomReplyDialog.show();
-            mCustomReplyDialog.setTiTleText(floatButton.getBtnName());
-        }
-
+        mCustomReplyDialog.setStateCode(floatButton.getStateCode());
+        mCustomReplyDialog.show();
+        mCustomReplyDialog.setTiTleText(floatButton.getBtnName());
     }
 
     private boolean excuteBizProcess(CustomReplyDialog dialog) {

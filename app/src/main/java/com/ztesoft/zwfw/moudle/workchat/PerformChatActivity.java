@@ -208,7 +208,7 @@ public class PerformChatActivity extends BaseActivity implements ImagePickerAdap
     private void uploadContent(String attchemnts){
 
         Chat chat = new Chat();
-        chat.setTitle(mTitle);
+        //chat.setTitle(mTitle);
         chat.setContent(mContent);
         chat.setAttachments(attchemnts);
         chat.setToUserId(Long.parseLong(mQueryUser.getUserId()));
@@ -220,16 +220,16 @@ public class PerformChatActivity extends BaseActivity implements ImagePickerAdap
 
     public void send(View view) {
 
-        if (null == mQueryUser){
+        if (null == mQueryUser && !isPulic){
             Toast.makeText(mContext, "请选择想要提问的人", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        mTitle = mChatTitleEdt.getText().toString().trim();
+     /*   mTitle = mChatTitleEdt.getText().toString().trim();
         if (TextUtils.isEmpty(mTitle)){
             Toast.makeText(mContext, "请输入标题", Toast.LENGTH_SHORT).show();
             return;
-        }
+        }*/
 
         mContent = mChatContentEdt.getText().toString().trim();
         if (TextUtils.isEmpty(mContent)){

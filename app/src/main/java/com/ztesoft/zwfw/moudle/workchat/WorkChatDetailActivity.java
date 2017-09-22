@@ -32,6 +32,7 @@ import com.ztesoft.zwfw.domain.Chat;
 import com.ztesoft.zwfw.domain.Comment;
 import com.ztesoft.zwfw.moudle.Config;
 import com.ztesoft.zwfw.utils.SoftKeyBoardListener;
+import com.ztesoft.zwfw.utils.UnicodeUtils;
 import com.ztesoft.zwfw.utils.http.RequestManager;
 import com.ztesoft.zwfw.widget.NoScrollListView;
 
@@ -121,7 +122,7 @@ public class WorkChatDetailActivity extends BaseActivity implements View.OnClick
             rightView.setVisibility(View.GONE);
 
         titleTv.setText(mChat.getTitle());
-        contentTv.setText(mChat.getContent());
+        contentTv.setText(UnicodeUtils.unicode2String(mChat.getContent()));
         creatorTv.setText("来自 " + mChat.getByUserName());
         creatTimeTv.setText(mChat.getCreateDate());
         String attachments = mChat.getAttachments();
@@ -222,7 +223,7 @@ public class WorkChatDetailActivity extends BaseActivity implements View.OnClick
             Toast.makeText(mContext,"请输入回复内容",Toast.LENGTH_SHORT).show();
             return;
         }
-        mComment.setContent(replyStr);
+        mComment.setContent(UnicodeUtils.string2Unicode(replyStr));
         RequestManager.getInstance().postHeader(Config.BASE_URL + Config.URL_TALK_ADDCOMMENT, JSON.toJSONString(mComment),mListener,ACTION_ADD_COMMENT);
 
         hideRelyEdt();
@@ -294,7 +295,7 @@ public class WorkChatDetailActivity extends BaseActivity implements View.OnClick
             TextView commentTv = (TextView) convertView.findViewById(R.id.comment_tv);
             String byUserName = comment.getByUserName();
 
-            SpannableStringBuilder ssb = new SpannableStringBuilder(byUserName+"："+comment.getContent());
+            SpannableStringBuilder ssb = new SpannableStringBuilder(byUserName+"："+UnicodeUtils.unicode2String(comment.getContent()));
             ssb.setSpan(new ForegroundColorSpan(Color.parseColor("#708090")),0,byUserName.length()+1,Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             commentTv.setText(ssb);
             return convertView;

@@ -15,6 +15,7 @@ import com.ztesoft.zwfw.R;
 import com.ztesoft.zwfw.domain.Chat;
 import com.ztesoft.zwfw.domain.WorkChatBean;
 import com.ztesoft.zwfw.moudle.Config;
+import com.ztesoft.zwfw.utils.UnicodeUtils;
 
 import java.util.List;
 
@@ -77,10 +78,10 @@ public class WorkChatAdapter extends BaseAdapter {
             }
             creatorTv.setText("来自："+chat.getByUserName());
         }else {
-            creatorTv.setText("来自："+chat.getByUserName());
+            creatorTv.setText("发给："+chat.getByUserName());
         }
         titleTv.setText(chat.getTitle());
-        contentTv.setText(chat.getContent());
+        contentTv.setText(UnicodeUtils.unicode2String(chat.getContent()));
 
         return convertView;
     }

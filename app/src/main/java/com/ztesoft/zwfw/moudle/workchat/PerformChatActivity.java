@@ -27,6 +27,7 @@ import com.ztesoft.zwfw.domain.HeaderPic;
 import com.ztesoft.zwfw.domain.QueryUser;
 import com.ztesoft.zwfw.moudle.Config;
 import com.ztesoft.zwfw.utils.APPPreferenceManager;
+import com.ztesoft.zwfw.utils.UnicodeUtils;
 import com.ztesoft.zwfw.utils.http.RequestManager;
 import com.ztesoft.zwfw.utils.http.RequestMap;
 
@@ -209,7 +210,7 @@ public class PerformChatActivity extends BaseActivity implements ImagePickerAdap
 
         Chat chat = new Chat();
         //chat.setTitle(mTitle);
-        chat.setContent(mContent);
+        chat.setContent(UnicodeUtils.string2Unicode(mContent));
         chat.setAttachments(attchemnts);
         chat.setToUserId(Long.parseLong(mQueryUser.getUserId()));
         chat.setByUserId(Long.parseLong(getmUser().getUserId()));
@@ -225,7 +226,7 @@ public class PerformChatActivity extends BaseActivity implements ImagePickerAdap
             return;
         }
 
-     /*   mTitle = mChatTitleEdt.getText().toString().trim();
+    /*    mTitle = mChatTitleEdt.getText().toString().trim();
         if (TextUtils.isEmpty(mTitle)){
             Toast.makeText(mContext, "请输入标题", Toast.LENGTH_SHORT).show();
             return;

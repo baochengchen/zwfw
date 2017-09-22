@@ -3,6 +3,7 @@ package com.ztesoft.zwfw.moudle.taskquery;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,6 +21,7 @@ import com.ztesoft.zwfw.moudle.LoginActivity;
 import com.ztesoft.zwfw.utils.APPPreferenceManager;
 import com.ztesoft.zwfw.utils.DateUtils;
 import com.ztesoft.zwfw.utils.SessionUtils;
+import com.ztesoft.zwfw.utils.UnicodeUtils;
 import com.ztesoft.zwfw.utils.http.RequestManager;
 
 import java.io.Serializable;
@@ -145,7 +147,7 @@ public class TaskQueryActivity extends BaseActivity implements View.OnClickListe
                     intent.putExtra("queryTaskReq", (Serializable) queryTaskReq);
                     startActivity(intent);
                 }else{
-                    Toast.makeText(mContext, "content = null", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, "content == null", Toast.LENGTH_SHORT).show();
                 }
             }
 

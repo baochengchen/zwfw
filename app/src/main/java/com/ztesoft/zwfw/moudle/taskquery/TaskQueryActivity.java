@@ -34,6 +34,8 @@ public class TaskQueryActivity extends BaseActivity implements View.OnClickListe
     TimePickerView mTimePickerView;
 
     private int curTimeViewId;
+    private long mStartTimeLong = Long.MIN_VALUE;
+    private long mEndTimeLong = Long.MAX_VALUE;
     private String mStartTime = "";
     private String mEndTime = "";
 
@@ -74,10 +76,21 @@ public class TaskQueryActivity extends BaseActivity implements View.OnClickListe
                 @Override
                 public void onTimeSelect(Date date, View v) {
                     if (curTimeViewId == R.id.startTime_bt) {
+                        if(date.getTime()>mEndTimeLong){
+                            Toast.makeText(mContext,"起始时间不能大于截止时间",Toast.LENGTH_SHORT).show();
+                            return;
+                        }
                         mStartTimeBt.setText(DateUtils.Date2String(date));
+                        mStartTimeLong = date.getTime();
                         mStartTime = DateUtils.Date2String(date);
                     } else {
+
+                        if(date.getTime()<mStartTimeLong){
+                            Toast.makeText(mContext,"截止时间不能小于开始时间",Toast.LENGTH_SHORT).show();
+                            return;
+                        }
                         mEndTimeBt.setText(DateUtils.Date2String(date));
+                        mEndTimeLong = date.getTime();
                         mEndTime = DateUtils.Date2String(date);
                     }
 

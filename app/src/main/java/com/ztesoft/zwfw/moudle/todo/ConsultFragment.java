@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,7 +36,7 @@ public class ConsultFragment extends BaseFragment {
     private static final String TAG = ConsultFragment.class.getSimpleName();
 
     View rootView;
-
+    LinearLayout mNoDataLayout;
     PullToRefreshListView mConsultLv;
 
     private List<Consult> mConsults = new ArrayList<>();
@@ -68,6 +69,7 @@ public class ConsultFragment extends BaseFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        mNoDataLayout = (LinearLayout) rootView.findViewById(R.id.no_data_layout);
         mConsultLv = (PullToRefreshListView) rootView.findViewById(R.id.consult_lv);
         mConsultLv.setMode(PullToRefreshBase.Mode.BOTH);
         mConsultLv.getLoadingLayoutProxy(false, true).setPullLabel("上拉加载更多");
@@ -130,6 +132,11 @@ public class ConsultFragment extends BaseFragment {
                         mConsults.clear();
                         mConsults.addAll(resp.getContent());
                         mConsultAdapter.notifyDataSetChanged();
+                        if(resp.getContent().size()==0){
+                            mNoDataLayout.setVisibility(View.VISIBLE);
+                        }else{
+                            mNoDataLayout.setVisibility(View.GONE);
+                        }
                     } else {
                         if (resp.getContent().size() == 0) {
                             curPage--;
@@ -139,6 +146,7 @@ public class ConsultFragment extends BaseFragment {
                             mConsultAdapter.notifyDataSetChanged();
                         }
                     }
+
                 }
             }
 

@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,6 +36,7 @@ import java.util.List;
 public class MyTaskFragment extends BaseFragment{
 
     View mView;
+    LinearLayout mNoDataLayout;
     PullToRefreshListView mTaskLv;
     private List<Task> mTasks = new ArrayList<>();
     private TaskAdapter mTaskAdapter;
@@ -64,6 +66,8 @@ public class MyTaskFragment extends BaseFragment{
         csTitile.setText(getString(R.string.approve_center));
         csTitile.setTextColor(getResources().getColorStateList(R.color.white));
         mView.findViewById(R.id.cs_back).setVisibility(View.GONE);
+
+        mNoDataLayout = (LinearLayout) mView.findViewById(R.id.no_data_layout);
         mTaskLv = (PullToRefreshListView) mView.findViewById(R.id.task_lv);
         mTaskLv.setMode(PullToRefreshBase.Mode.BOTH);
 
@@ -120,6 +124,11 @@ public class MyTaskFragment extends BaseFragment{
                         mTasks.clear();
                         mTasks.addAll(resp.getContent());
                         mTaskAdapter.notifyDataSetChanged();
+                        if(resp.getContent().size()==0){
+                            mNoDataLayout.setVisibility(View.VISIBLE);
+                        }else{
+                            mNoDataLayout.setVisibility(View.GONE);
+                        }
                     } else {
                         if (resp.getContent().size() == 0) {
                             curPage--;

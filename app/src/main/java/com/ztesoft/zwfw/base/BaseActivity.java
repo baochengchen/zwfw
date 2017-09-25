@@ -20,6 +20,7 @@ public class BaseActivity extends FragmentActivity {
     private CustomDialog mCustomDialog;
     public Context mContext;
     private User mUser;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,20 +28,21 @@ public class BaseActivity extends FragmentActivity {
     }
 
 
-    public void showProgressDialog(String text){
-        if(mCustomDialog == null){
+    public void showProgressDialog(String text) {
+        if (mCustomDialog == null) {
             mCustomDialog = new CustomDialog(this, R.style.customDialog);
         }
         mCustomDialog.show();
         mCustomDialog.setContent(text);
     }
 
-    public void hideProgressDialog(){
-        mCustomDialog.cancel();
+    public void hideProgressDialog() {
+        if (mCustomDialog != null)
+            mCustomDialog.cancel();
     }
 
     public User getmUser() {
-        mUser =JSON.parseObject(APPPreferenceManager.getInstance().getString(mContext, Config.USERINFO),User.class);
+        mUser = JSON.parseObject(APPPreferenceManager.getInstance().getString(mContext, Config.USERINFO), User.class);
         return mUser;
     }
 }

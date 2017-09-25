@@ -7,14 +7,25 @@
     android:orientation="vertical"
     tools:context="com.ztesoft.zwfw.moudle.warning.EarlyWarningActivity">
 
-    <include
-        layout="@layout/custom_title_bar"/>
+    <include layout="@layout/custom_title_bar" />
 
-    <com.handmark.pulltorefresh.library.PullToRefreshListView
-        android:id="@+id/task_lv"
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:overScrollMode="never"
-        android:dividerHeight="10dp"/>
+        android:layout_height="match_parent">
+
+        <include
+            android:id="@+id/no_data_layout"
+            layout="@layout/no_data_view"
+            android:visibility="gone" />
+
+        <com.handmark.pulltorefresh.library.PullToRefreshListView
+            android:id="@+id/task_lv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:dividerHeight="10dp"
+            android:overScrollMode="never" />
+    </RelativeLayout>
+
 
 </LinearLayout>

@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,6 +37,7 @@ import java.util.Map;
 public class WorkChatToMeFragment extends BaseFragment {
 
     View rootView;
+    LinearLayout mNoDataLayout;
     PullToRefreshListView mLv;
     private WorkChatAdapter mWorkChatAdapter;
     private List<Chat> mChats = new ArrayList<>();
@@ -62,6 +64,7 @@ public class WorkChatToMeFragment extends BaseFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        mNoDataLayout = (LinearLayout) rootView.findViewById(R.id.no_data_layout);
         mLv = (PullToRefreshListView) rootView.findViewById(R.id.work_chat_lv);
         mLv.setMode(PullToRefreshBase.Mode.BOTH);
         mLv.getLoadingLayoutProxy(false, true).setPullLabel("上拉加载更多");
@@ -120,6 +123,11 @@ public class WorkChatToMeFragment extends BaseFragment {
                         mChats.clear();
                         mChats.addAll(chatListResp.getContent());
                         mWorkChatAdapter.notifyDataSetChanged();
+                        if(chatListResp.getContent().size()==0){
+                            mNoDataLayout.setVisibility(View.VISIBLE);
+                        }else{
+                            mNoDataLayout.setVisibility(View.GONE);
+                        }
                     } else {
                         if (chatListResp.getContent().size() == 0) {
                             curPage--;

@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,7 +36,7 @@ public class SuperviseFragment extends BaseFragment {
     private static final String TAG = SuperviseFragment.class.getSimpleName();
 
     View rootView;
-
+    LinearLayout mNoDataLayout;
     PullToRefreshListView mSuperviseLv;
 
     private List<Supervise> mSupervises = new ArrayList<>();
@@ -68,6 +69,7 @@ public class SuperviseFragment extends BaseFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        mNoDataLayout = (LinearLayout) rootView.findViewById(R.id.no_data_layout);
         mSuperviseLv = (PullToRefreshListView) rootView.findViewById(R.id.supervise_lv);
         mSuperviseLv.setMode(PullToRefreshBase.Mode.BOTH);
         mSuperviseLv.getLoadingLayoutProxy(false, true).setPullLabel("上拉加载更多");
@@ -112,7 +114,6 @@ public class SuperviseFragment extends BaseFragment {
             @Override
             public void onRequest(String url, int actionId) {
 
-                Log.d(TAG, "onRequest:" + url);
             }
 
             @Override
@@ -126,6 +127,12 @@ public class SuperviseFragment extends BaseFragment {
                         mSupervises.clear();
                         mSupervises.addAll(resp.getContent());
                         mSuperviseAdapter.notifyDataSetChanged();
+                        if(resp.getContent().size()==0){
+                            mNoDataLayout.setVisibility(View.VISIBLE);
+                        }else{
+                            mNoDataLayout.setVisibility(View.GONE);
+                        }
+
                     } else {
                         if (resp.getContent().size() == 0) {
                             curPage--;

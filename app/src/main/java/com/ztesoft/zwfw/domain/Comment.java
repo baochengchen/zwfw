@@ -11,7 +11,7 @@ public class Comment implements Serializable{
     private Long id;
     private Long chatId;
     private String content;
-    private String attahcments;
+    private String attachments;
     private Long toUserId;
     private Long byUserId;
     private String state ;
@@ -52,12 +52,12 @@ public class Comment implements Serializable{
         this.content = content;
     }
 
-    public String getAttahcments() {
-        return attahcments;
+    public String getAttachments() {
+        return attachments;
     }
 
-    public void setAttahcments(String attahcments) {
-        this.attahcments = attahcments;
+    public void setAttachments(String attachments) {
+        this.attachments = attachments;
     }
 
     public Long getToUserId() {

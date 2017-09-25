@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,7 +32,7 @@ import java.util.List;
 public class MessageCenterActivity extends BaseActivity implements SlideView.OnSlideListener{
 
     ListView mMsgListView;
-
+    LinearLayout mNoDataLayout;
     private SlideAdapter mMsgListAdapter;
     private List<Message> mMessages = new ArrayList<>();
 
@@ -49,6 +50,10 @@ public class MessageCenterActivity extends BaseActivity implements SlideView.OnS
                 onBackPressed();
             }
         });
+
+
+        mNoDataLayout = (LinearLayout) findViewById(R.id.no_data_layout);
+
         mMsgListView = (ListView) findViewById(R.id.msg_lv);
         mMsgListAdapter = new SlideAdapter();
         mMsgListView.setAdapter(mMsgListAdapter);
@@ -77,8 +82,13 @@ public class MessageCenterActivity extends BaseActivity implements SlideView.OnS
                 public void onSuccess(String response, String url, int actionId) {
                     List<Message> messages = JSON.parseArray(response,Message.class);
                     if(messages != null && messages.size() > 0){
+                        mNoDataLayout.setVisibility(View.GONE);
+                        mMsgListView.setVisibility(View.VISIBLE);
                         mMessages.addAll(messages);
                         mMsgListAdapter.notifyDataSetChanged();
+                    }else{
+                        mNoDataLayout.setVisibility(View.VISIBLE);
+                        mMsgListView.setVisibility(View.GONE);
                     }
 
                 }
@@ -91,7 +101,7 @@ public class MessageCenterActivity extends BaseActivity implements SlideView.OnS
                         startActivity(new Intent(mContext,LoginActivity.class));
                         finish();
                     }else{
-                        Toast.makeText(mContext, "查询失败", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(mContext, "请求数据失败", Toast.LENGTH_SHORT).show();
                     }
                 }
             },0);
@@ -109,76 +119,6 @@ public class MessageCenterActivity extends BaseActivity implements SlideView.OnS
         }
     }
 
-
-   /* class MessageAdapter extends BaseAdapter{
-
-        @Override
-        public int getCount() {
-            return messages.size();
-        }
-
-        @Override
-        public Object getItem(int position) {
-            return messages.get(position);
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
-
-        @Override
-        public View getView(final int position, View convertView, final ViewGroup parent) {
-            ViewHolder vHolder = null;
-            SlideView slideView = (SlideView) convertView;
-            if(null == slideView){
-                Log.d("kkk","null:"+position);
-                View itemView = LayoutInflater.from(mContext).inflate(R.layout.slip_msg_list_item,null);
-                slideView = new SlideView(mContext);
-                slideView.setContentView(itemView);
-                vHolder = new ViewHolder(slideView);
-                slideView.setTag(vHolder);
-                slideView.setOnSlideListener(MessageCenterActivity.this);
-            }else{
-                vHolder = (ViewHolder) slideView.getTag();
-            }
-            Message message = messages.get(position);
-            message.slideView = slideView;
-            message.slideView.shrink();
-
-            vHolder.deleteHolder.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    messages.remove(position);
-                    notifyDataSetChanged();
-                }
-            });
-
-            vHolder.tvType.setText(messages.get(position).getType());
-            vHolder.tvTitle.setText(messages.get(position).getTitle());
-            vHolder.tvSendTime.setText(messages.get(position).getSendTime());
-            vHolder.tvSender.setText(messages.get(position).getSender());
-
-            return slideView;
-        }
-
-
-        class ViewHolder {
-            TextView  tvType;
-            TextView  tvTitle;
-            TextView  tvSendTime;
-            TextView  tvSender;
-            ViewGroup deleteHolder;
-
-            ViewHolder(View view) {
-                tvType = (TextView) view.findViewById(R.id.tv_type);
-                tvTitle = (TextView) view.findViewById(R.id.tv_title);
-                tvSendTime = (TextView) view.findViewById(R.id.tv_sendTime);
-                tvSender = (TextView) view.findViewById(R.id.tv_sender);
-                deleteHolder = (ViewGroup)view.findViewById(R.id.holder);
-            }
-        }
-    }*/
 
 
     public class SlideAdapter extends BaseAdapter{

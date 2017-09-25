@@ -28,4 +28,10 @@
 
     </ListView>
 
+
+    <include
+        android:id="@+id/no_data_layout"
+        layout="@layout/no_data_view"
+        android:visibility="gone"/>
+
 </LinearLayout>

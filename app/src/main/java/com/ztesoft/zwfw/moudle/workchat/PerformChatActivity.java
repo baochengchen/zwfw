@@ -242,7 +242,7 @@ public class PerformChatActivity extends BaseActivity implements ImagePickerAdap
         if (0 < mSelImageList.size()) {
             RequestMap map = new RequestMap();
             for (int i = 0; i < mSelImageList.size(); i++) {
-                map.put("chatAttch_Img_" + i, new File(mSelImageList.get(i).path));
+                map.put("chatAttach_Img_" + i, new File(mSelImageList.get(i).path));
             }
             RequestManager.getInstance().upload(Config.BASE_URL + Config.URL_ATTACHMENT, map, mListener, ACTION_ATTCHMENT);
         }else{

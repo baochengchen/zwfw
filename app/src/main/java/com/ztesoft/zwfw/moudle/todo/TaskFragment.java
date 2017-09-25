@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -38,6 +39,7 @@ public class TaskFragment extends BaseFragment {
 
     View rootView;
     PullToRefreshListView mTaskLv;
+    LinearLayout mNoDataLayout;
 
     private List<Task> mTasks = new ArrayList<>();
     private TaskAdapter mTaskAdapter;
@@ -71,6 +73,8 @@ public class TaskFragment extends BaseFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        mNoDataLayout = (LinearLayout) rootView.findViewById(R.id.no_data_layout);
 
         mTaskLv = (PullToRefreshListView) rootView.findViewById(R.id.task_lv);
         mTaskLv.setMode(PullToRefreshBase.Mode.BOTH);
@@ -128,6 +132,11 @@ public class TaskFragment extends BaseFragment {
                         mTasks.clear();
                         mTasks.addAll(resp.getContent());
                         mTaskAdapter.notifyDataSetChanged();
+                        if(resp.getContent().size()==0){
+                            mNoDataLayout.setVisibility(View.VISIBLE);
+                        }else{
+                            mNoDataLayout.setVisibility(View.GONE);
+                        }
                     } else {
                         if (resp.getContent().size() == 0) {
                             curPage--;

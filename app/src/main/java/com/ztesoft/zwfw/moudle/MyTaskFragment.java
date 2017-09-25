@@ -96,6 +96,7 @@ public class MyTaskFragment extends BaseFragment{
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getActivity(),TaskDetailActivity.class);
                 intent.putExtra("data",mTasks.get(position-1));
+                intent.putExtra(TaskDetailActivity.FLAG_BUTTON,false);
                 startActivity(intent);
             }
         });

@@ -1,7 +1,10 @@
 package com.ztesoft.zwfw.moudle.workchat;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -31,7 +34,13 @@ import com.ztesoft.zwfw.utils.UnicodeUtils;
 import com.ztesoft.zwfw.utils.http.RequestManager;
 import com.ztesoft.zwfw.utils.http.RequestMap;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -242,7 +251,7 @@ public class PerformChatActivity extends BaseActivity implements ImagePickerAdap
         if (0 < mSelImageList.size()) {
             RequestMap map = new RequestMap();
             for (int i = 0; i < mSelImageList.size(); i++) {
-                map.put("chatAttach_Img_" + i, new File(mSelImageList.get(i).path));
+                map.put("chatAttach_Img_" + i,new File(mSelImageList.get(i).path));
             }
             RequestManager.getInstance().upload(Config.BASE_URL + Config.URL_ATTACHMENT, map, mListener, ACTION_ATTCHMENT);
         }else{
@@ -250,4 +259,5 @@ public class PerformChatActivity extends BaseActivity implements ImagePickerAdap
         }
 
     }
+
 }

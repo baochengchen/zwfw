@@ -180,7 +180,7 @@ public class TaskFragment extends BaseFragment {
         RequestManager.getInstance().postHeader(Config.BASE_URL + Config.URL_QRYWORKLIST + "?page=" + curClickPage + "&size=20", "{}", new RequestManager.RequestListener() {
             @Override
             public void onRequest(String url, int actionId) {
-                Log.d(TAG, "onRequest:" + url);
+
             }
 
             @Override

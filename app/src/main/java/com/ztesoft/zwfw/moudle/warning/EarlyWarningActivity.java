@@ -20,10 +20,12 @@ import com.ztesoft.zwfw.R;
 import com.ztesoft.zwfw.adapter.TaskAdapter;
 import com.ztesoft.zwfw.domain.resp.QueryTaskListResp;
 import com.ztesoft.zwfw.moudle.Config;
+import com.ztesoft.zwfw.moudle.LoginActivity;
 import com.ztesoft.zwfw.moudle.todo.TaskDetailActivity;
 import com.ztesoft.zwfw.base.BaseActivity;
 import com.ztesoft.zwfw.domain.Task;
 import com.ztesoft.zwfw.utils.APPPreferenceManager;
+import com.ztesoft.zwfw.utils.SessionUtils;
 import com.ztesoft.zwfw.utils.http.RequestManager;
 
 import java.util.ArrayList;
@@ -107,11 +109,13 @@ public class EarlyWarningActivity extends BaseActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(mContext, TaskDetailActivity.class);
                 intent.putExtra("data", mTasks.get(position - 1));
+                intent.putExtra(TaskDetailActivity.FLAG_BUTTON,false);
                 startActivity(intent);
             }
         });
         requestData();
     }
+
 
     private void requestData() {
 
@@ -164,6 +168,5 @@ public class EarlyWarningActivity extends BaseActivity {
             }
         }, curPage);
     }
-
 
 }

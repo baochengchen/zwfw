@@ -46,6 +46,8 @@ public class TaskDetailActivity extends BaseActivity implements SegmentView.OnSe
     public static final int REQUEST_REFRESH = 0;
     public static final int RESULET_CUSTOM_REPLY = 1;
 
+    public static final String FLAG_BUTTON = "flag_button";
+
     SegmentView mSegView;
     ViewPager mViewPager;
     LinearLayout mFloatBtnContainer;
@@ -78,7 +80,8 @@ public class TaskDetailActivity extends BaseActivity implements SegmentView.OnSe
 
         mReplyEdt = (EditText) findViewById(R.id.reply_edt);
 
-        initFloatBtn();
+        if (getIntent().getBooleanExtra(FLAG_BUTTON, true))
+            initFloatBtn();
 
         mSegView = (SegmentView) findViewById(R.id.seg_task_detail);
         mSegView.setSegmentText("申请信息", "流转痕迹");
@@ -95,7 +98,7 @@ public class TaskDetailActivity extends BaseActivity implements SegmentView.OnSe
         mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                
+
             }
 
             @Override
@@ -118,19 +121,19 @@ public class TaskDetailActivity extends BaseActivity implements SegmentView.OnSe
         Map<String, String> map = new HashMap<>();
         if (mData instanceof Task) {
             templateId = ((Task) mData).getTemplateId();
-            if(TextUtils.isEmpty(templateId))
+            if (TextUtils.isEmpty(templateId))
                 return;
-            map.put("templateId",templateId);
+            map.put("templateId", templateId);
         } else if (mData instanceof Consult) {
             templateId = ((Consult) mData).getTemplateId();
-            if(TextUtils.isEmpty(templateId))
+            if (TextUtils.isEmpty(templateId))
                 return;
             map.put("templateId", templateId);
         } else if (mData instanceof Supervise) {
             templateId = ((Supervise) mData).getSupervisionTemplateId();
-            if(TextUtils.isEmpty(templateId))
+            if (TextUtils.isEmpty(templateId))
                 return;
-            map.put("templateId",templateId);
+            map.put("templateId", templateId);
         }
 
         RequestManager.getInstance().postHeader(Config.BASE_URL + Config.URL_SEARCHFLOWBUTTONDTO, JSON.toJSONString(map), new RequestManager.RequestListener() {
@@ -143,7 +146,7 @@ public class TaskDetailActivity extends BaseActivity implements SegmentView.OnSe
             public void onSuccess(String response, String url, int actionId) {
                 List<FloatButton> floatButtons = JSON.parseArray(response, FloatButton.class);
                 for (FloatButton bt : floatButtons) {
-                    if(TextUtils.isEmpty(bt.getPageUrl())){
+                    if (TextUtils.isEmpty(bt.getPageUrl())) {
                         Button button = new Button(mContext);
                         button.setTag(bt);
                         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, getResources().getDimensionPixelSize(R.dimen.px2dp_76));
@@ -184,15 +187,15 @@ public class TaskDetailActivity extends BaseActivity implements SegmentView.OnSe
     private boolean excuteBizProcess(CustomReplyDialog dialog) {
         ReplyReq replyReq = new ReplyReq();
         ReportDynamicDatas reportDynamicDatas = new ReportDynamicDatas();
-        if(mData instanceof Task){
+        if (mData instanceof Task) {
             Task task = (Task) mData;
             replyReq.setKeyId(task.getId());
             replyReq.setTaskListId(task.getTaskListId());
-        }else if (mData instanceof Consult) {
+        } else if (mData instanceof Consult) {
             Consult consult = (Consult) mData;
             replyReq.setKeyId(consult.getId());
             replyReq.setTaskListId(consult.getTaskListId());
-        }else if(mData instanceof Supervise){
+        } else if (mData instanceof Supervise) {
             Supervise supervise = (Supervise) mData;
             replyReq.setKeyId(supervise.getId());
             replyReq.setTaskListId(supervise.getSupervisionTaskListId());
@@ -220,7 +223,7 @@ public class TaskDetailActivity extends BaseActivity implements SegmentView.OnSe
                 Type type = JSON.parseObject(response, Type.class);
                 if (null != type && TextUtils.equals("1", type.getCode())) {
                     Toast.makeText(mContext, "处理成功", Toast.LENGTH_SHORT).show();
-                    setResult(RESULET_CUSTOM_REPLY,null);
+                    setResult(RESULET_CUSTOM_REPLY, null);
                     finish();
 
                 } else {
@@ -233,7 +236,7 @@ public class TaskDetailActivity extends BaseActivity implements SegmentView.OnSe
                 hideProgressDialog();
                 Toast.makeText(mContext, errorMsg, Toast.LENGTH_SHORT).show();
             }
-        },0);
+        }, 0);
 
 
         return true;

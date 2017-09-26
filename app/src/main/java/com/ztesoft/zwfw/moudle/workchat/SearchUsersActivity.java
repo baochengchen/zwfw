@@ -31,6 +31,8 @@ import com.ztesoft.zwfw.utils.http.RequestManager;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 public class SearchUsersActivity extends BaseActivity {
@@ -41,7 +43,7 @@ public class SearchUsersActivity extends BaseActivity {
     PullToRefreshListView mUserLv;
     private int curPage = 0;
     private int pageSize = 40;
-    private String code;
+    private String queryStr;
     private List<QueryUser> queryUsers = new ArrayList<>();
     private UserListAdapter mUserListAdapter;
 
@@ -62,8 +64,8 @@ public class SearchUsersActivity extends BaseActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                code = s.toString();
-                if (TextUtils.isEmpty(code)) {
+                queryStr = s.toString();
+                if (TextUtils.isEmpty(queryStr)) {
                     // clear list
                     queryUsers.clear();
                     mUserListAdapter.notifyDataSetChanged();
@@ -136,9 +138,14 @@ public class SearchUsersActivity extends BaseActivity {
     }
 
     private void requestUsers() {
-
         SearchUserReq searchUserReq = new SearchUserReq();
-        searchUserReq.setUserCode(code);
+        Pattern pattern = Pattern.compile("[0-9]+");
+        Matcher matcher = pattern.matcher(queryStr);
+        if(matcher.matches()){
+            searchUserReq.setUserCode(queryStr);
+        }else{
+            searchUserReq.setUserName(queryStr);
+        }
         searchUserReq.setPageIndex(curPage);
         searchUserReq.setPageLen(pageSize);
 

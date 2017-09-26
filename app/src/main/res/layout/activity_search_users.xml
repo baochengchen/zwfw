@@ -24,8 +24,7 @@
             android:padding="7dp"
             android:background="@drawable/custom_search_edit_bg"
             android:drawablePadding="7dp"
-            android:inputType="number"
-            android:hint="输入工号"/>
+            android:hint="输入工号或姓名"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

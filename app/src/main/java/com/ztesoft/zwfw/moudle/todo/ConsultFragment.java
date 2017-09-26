@@ -22,6 +22,9 @@ import com.ztesoft.zwfw.R;
 import com.ztesoft.zwfw.base.BaseFragment;
 import com.ztesoft.zwfw.domain.Consult;
 import com.ztesoft.zwfw.domain.resp.QueryConsultListResp;
+import com.ztesoft.zwfw.moudle.LoginActivity;
+import com.ztesoft.zwfw.utils.APPPreferenceManager;
+import com.ztesoft.zwfw.utils.SessionUtils;
 import com.ztesoft.zwfw.utils.http.RequestManager;
 
 import java.util.ArrayList;
@@ -118,7 +121,6 @@ public class ConsultFragment extends BaseFragment {
             @Override
             public void onRequest(String url, int actionId) {
 
-                Log.d(TAG, "onRequest:" + url);
             }
 
             @Override
@@ -152,8 +154,15 @@ public class ConsultFragment extends BaseFragment {
 
             @Override
             public void onError(String errorMsg, String url, int actionId) {
-                Log.d(TAG, errorMsg);
                 mConsultLv.onRefreshComplete();
+                if(SessionUtils.invalid(errorMsg)){
+                    Toast.makeText(getActivity(),"会话超时",Toast.LENGTH_SHORT).show();
+                    APPPreferenceManager.getInstance().saveObject(getActivity(), Config.IS_LOGIN, false);
+                    startActivity(new Intent(getActivity(),LoginActivity.class));
+                    getActivity().finish();
+                }else{
+                    Toast.makeText(getActivity(), "请求数据失败", Toast.LENGTH_SHORT).show();
+                }
             }
         }, curPage);
     }

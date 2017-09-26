@@ -151,8 +151,15 @@ public class TaskFragment extends BaseFragment {
 
             @Override
             public void onError(String errorMsg, String url, int actionId) {
-                Log.d(TAG, errorMsg);
                 mTaskLv.onRefreshComplete();
+                if(SessionUtils.invalid(errorMsg)){
+                    Toast.makeText(getActivity(),"会话超时",Toast.LENGTH_SHORT).show();
+                    APPPreferenceManager.getInstance().saveObject(getActivity(), Config.IS_LOGIN, false);
+                    startActivity(new Intent(getActivity(),LoginActivity.class));
+                    getActivity().finish();
+                }else{
+                    Toast.makeText(getActivity(), "请求数据失败", Toast.LENGTH_SHORT).show();
+                }
             }
         }, curPage);
     }

@@ -23,7 +23,7 @@ public class WorkChatActivity extends BaseActivity {
     private PagerSlidingTabStrip mPagerStrip;
     private ViewPager mViewPager;
     private List<Fragment> mFragments;
-    private String[] mPagerTitles = {"我问的","问我的","公开的"};
+    private String[] mPagerTitles = {"我问的","问我的","政务圈"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

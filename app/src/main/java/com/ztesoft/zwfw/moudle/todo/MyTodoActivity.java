@@ -1,5 +1,6 @@
 package com.ztesoft.zwfw.moudle.todo;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -61,6 +62,9 @@ public class MyTodoActivity extends BaseActivity {
             mFragments.add(consultFragment);
             mFragments.add(superviseFragment);
 
+        }else {
+            new AlertDialog.Builder(mContext).setTitle("提示").setMessage("该用户没有待办功能")
+                    .setPositiveButton("确定",null).show();
         }
 
 

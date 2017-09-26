@@ -182,26 +182,26 @@ public class PerformChatActivity extends BaseActivity implements ImagePickerAdap
         @Override
         public void onSuccess(String response, String url, int actionId) {
             hideProgressDialog();
-            switch (actionId){
+            switch (actionId) {
                 case ACTION_ATTCHMENT:
-                    List<HeaderPic> headerPics = JSONArray.parseArray(response,HeaderPic.class);
+                    List<HeaderPic> headerPics = JSONArray.parseArray(response, HeaderPic.class);
                     StringBuffer sb = new StringBuffer();
-                    for(HeaderPic headerPic : headerPics){
+                    for (HeaderPic headerPic : headerPics) {
                         sb.append(headerPic.getId()).append(",");
                     }
-                    if(!TextUtils.isEmpty(sb)){
-                        String attchemnts = sb.substring(0,sb.length()-1);
+                    if (!TextUtils.isEmpty(sb)) {
+                        String attchemnts = sb.substring(0, sb.length() - 1);
                         uploadContent(attchemnts);
                     }
 
                     break;
                 case ACTION_CONTENT:
-                    if(TextUtils.equals(response,"true")){
-                        Toast.makeText(mContext,"发送成功",Toast.LENGTH_SHORT).show();
+                    if (TextUtils.equals(response, "true")) {
+                        Toast.makeText(mContext, "发送成功", Toast.LENGTH_SHORT).show();
                         setResult(RESULT_SEND);
                         finish();
-                    }else{
-                        Toast.makeText(mContext,"发送失败",Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(mContext, "发送失败", Toast.LENGTH_SHORT).show();
                     }
                     break;
             }
@@ -210,27 +210,28 @@ public class PerformChatActivity extends BaseActivity implements ImagePickerAdap
         @Override
         public void onError(String errorMsg, String url, int actionId) {
             hideProgressDialog();
-            Toast.makeText(mContext,errorMsg,Toast.LENGTH_SHORT).show();
+            Toast.makeText(mContext, errorMsg, Toast.LENGTH_SHORT).show();
         }
     };
 
 
-    private void uploadContent(String attchemnts){
+    private void uploadContent(String attchemnts) {
 
         Chat chat = new Chat();
         //chat.setTitle(mTitle);
         chat.setContent(UnicodeUtils.string2Unicode(mContent));
         chat.setAttachments(attchemnts);
-        chat.setToUserId(Long.parseLong(mQueryUser.getUserId()));
+        if (null != mQueryUser)
+            chat.setToUserId(Long.parseLong(mQueryUser.getUserId()));
         chat.setByUserId(Long.parseLong(getmUser().getUserId()));
-        chat.setIsPublic(mPublicChex.isChecked()?"Y":"N");
+        chat.setIsPublic(mPublicChex.isChecked() ? "Y" : "N");
         chat.setState("A");
-        RequestManager.getInstance().postHeader(Config.BASE_URL+Config.URL_TALK_ADDCHAT, JSON.toJSONString(chat),mListener,ACTION_CONTENT);
+        RequestManager.getInstance().postHeader(Config.BASE_URL + Config.URL_TALK_ADDCHAT, JSON.toJSONString(chat), mListener, ACTION_CONTENT);
     }
 
     public void send(View view) {
 
-        if (null == mQueryUser && !isPulic){
+        if (null == mQueryUser && !isPulic) {
             Toast.makeText(mContext, "请选择想要提问的人", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -242,7 +243,7 @@ public class PerformChatActivity extends BaseActivity implements ImagePickerAdap
         }*/
 
         mContent = mChatContentEdt.getText().toString().trim();
-        if (TextUtils.isEmpty(mContent)){
+        if (TextUtils.isEmpty(mContent)) {
             Toast.makeText(mContext, "请输入内容", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -251,10 +252,10 @@ public class PerformChatActivity extends BaseActivity implements ImagePickerAdap
         if (0 < mSelImageList.size()) {
             RequestMap map = new RequestMap();
             for (int i = 0; i < mSelImageList.size(); i++) {
-                map.put("chatAttach_Img_" + i,new File(mSelImageList.get(i).path));
+                map.put("chatAttach_Img_" + i, new File(mSelImageList.get(i).path));
             }
             RequestManager.getInstance().upload(Config.BASE_URL + Config.URL_ATTACHMENT, map, mListener, ACTION_ATTCHMENT);
-        }else{
+        } else {
             uploadContent("");
         }
 

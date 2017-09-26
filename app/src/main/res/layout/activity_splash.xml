@@ -14,11 +14,25 @@
 
 
     <ImageView
+        android:id="@+id/sp_lg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="147dp"
         android:src="@mipmap/sp_lg" />
+
+
+    <TextView
+        android:id="@+id/tip_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:textColor="@color/white"
+        android:text="@string/splash_tip"
+        android:layout_below="@id/sp_lg"
+        android:layout_marginTop="49dp"
+        android:layout_marginRight="28dp"
+        android:layout_alignParentRight="true"/>
 
     <ImageView
         android:layout_width="wrap_content"

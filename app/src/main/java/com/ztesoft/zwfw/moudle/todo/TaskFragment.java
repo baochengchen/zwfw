@@ -116,7 +116,7 @@ public class TaskFragment extends BaseFragment {
 
     private void requestData() {
 
-        RequestManager.getInstance().postHeader(Config.BASE_URL + Config.URL_QRYWORKLIST + "?page=" + curPage + "&size=20", "{}", new RequestManager.RequestListener() {
+        RequestManager.getInstance().postHeader(Config.BASE_URL + Config.URL_QRYWORKLIST + "?page=" + curPage + "&size=20", "{\"linkCodeList\":[\"04-01\", \"04-02\", \"02-02\"],\"isNotContainLinkCode\":true}", new RequestManager.RequestListener() {
             @Override
             public void onRequest(String url, int actionId) {
             }

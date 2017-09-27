@@ -14,9 +14,9 @@ public class Config {
     //http://10.45.10.134
    // public static final String BASE_URL = "http://220.163.118.118";
 
-     public static final String BASE_URL = "http://192.168.50.110/portal";
+    // public static final String BASE_URL = "http://192.168.50.110/portal";
 
-    // public static final String BASE_URL = "http://192.168.50.109:8080/portal";
+     public static final String BASE_URL = "http://192.168.50.109:8080/portal";
 
     // public static final String BASE_URL = "http://192.168.0.107:8080/portal";
 
